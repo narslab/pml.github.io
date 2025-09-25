@@ -65,6 +65,28 @@ summary {
   z-index: 100;
   width: 180px !important;
   position: fixed;
+  
+  .site-title {
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+    padding: 0.5rem 0.75rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    hyphens: auto;
+    
+    // Option to replace with shorter text
+    // Uncomment the lines below and modify the content to use a custom shorter title
+    /*
+    text-indent: -9999px;
+    &::before {
+      content: "CEE 616: PML";
+      text-indent: 0;
+      display: block;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    */
+  }
 }
 
 .main-content-wrap {

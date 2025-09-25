@@ -15,11 +15,11 @@ A PDF of the syllabus is available [here](/assets/syllabus/CEE616-Syllabus-Fall-
 ### Meeting Times
 **In-person Lectures:** Tu and Th 11:30am--12:45pm at E-Lab 325  
 **Credit Hours:** 3  
-**Office Hours:** Tu/We 2:20pm--3:30pm at Marston 214D (or Zoom)
+**Office Hours:** Tu/We 2:20pm--3:20pm at Marston 214D (or Zoom)
 
 ### Instructor
 **Name:** Jimi Oke  
-**Email:** [jboke@umass.edu](mailto:jboke@umass.edu)  
+**Email:** [jimi@umass.edu](mailto:jboke@umass.edu)  
 **Office:** 214D Marston Hall
 
 *Please allow up to 48 hours for a response to your email. Be sure to put "CEE616" in the subject to ensure a prompt response.*
@@ -120,6 +120,7 @@ In accordance with Title IX of the Education Amendments of 1972 that prohibits g
 This course is broadly organized around 5 modules. The schedule may be adapted over the duration of the semester to suit the needs of the class. Readings will be provided in lecture notes and on Moodle.
 
 ### Module 1: Foundations
+
 | Day | Date | Topic | Assignments |
 |-----|------|--------|-------------|
 | Tu | Sep 2 | Introduction | |
@@ -130,6 +131,7 @@ This course is broadly organized around 5 modules. The schedule may be adapted o
 | Th | Sep 18 | Optimization | |
 
 ### Module 2: Linear Methods
+
 | Day | Date | Topic | Assignments |
 |-----|------|--------|-------------|
 | Tu | Sep 23 | Linear discriminant analysis | PS1 due; PS2 assigned |
@@ -141,6 +143,7 @@ This course is broadly organized around 5 modules. The schedule may be adapted o
 | Tu | Oct 14 | **Exam I (take-home; no class)** | PS2 due |
 
 ### Module 3: Deep Neural Networks (DNNs)
+
 | Day | Date | Topic | Assignments |
 |-----|------|--------|-------------|
 | Th | Oct 16 | NNs for structured data I (MLP, backpropagation) | PS3 assigned |
@@ -149,6 +152,7 @@ This course is broadly organized around 5 modules. The schedule may be adapted o
 | Tu | Oct 28 | NNs for sequences (RNNs) | |
 
 ### Module 4: Nonparametric Methods
+
 | Day | Date | Topic | Assignments |
 |-----|------|--------|-------------|
 | Th | Oct 30 | Exemplar-based methods (KNN, KDE, LOESS) | PS3 due; PS4 assigned |
@@ -158,6 +162,7 @@ This course is broadly organized around 5 modules. The schedule may be adapted o
 | Tu | Nov 25 | **Exam II (take-home; no class)** | PS4 due |
 
 ### Module 5: Unsupervised Learning
+
 | Day | Date | Topic | Assignments |
 |-----|------|--------|-------------|
 | Tu | Dec 2 | Principal components analysis & Factor analysis | Proposal due; PS5 assigned |

@@ -1,6 +1,6 @@
 
 %\documentclass[smaller,handout]{beamer}
-\def\bmode{0} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+\def\bmode{2} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
 \if 0\bmode
 \documentclass[smaller]{beamer}
 \else \if 1\bmode
@@ -1091,6 +1091,7 @@ Note that the null hypothesis for the tests is: $H_0 : \bm w_i = 0$ (i.e.\ no de
     \[
     \text{BCE} = -[1 \times \log(0.9) + 0 \times \log(0.1)] = -\log(0.9) \approx 0.105 \quad (\text{low loss - good!})
     \] \pause
+    
     \item If the email is spam (y=1) but you predict only 10\% probability of spam (p=0.1), find the BCE. \pause
     \[
     \text{BCE} = -[1 \times \log(0.1) + 0 \times \log(0.9)] = -\log(0.1) \approx 2.303 \quad (\text{high loss - bad!})

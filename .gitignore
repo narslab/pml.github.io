@@ -8,6 +8,10 @@ _site/
 node_modules/
 vendor/
 
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
 # LaTeX auxiliary files
 *.aux
 *.bbl

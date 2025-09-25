@@ -1,12 +1,11 @@
 ---
-layout: page
-title: CEE 260/MIE 273 Probability and Statistics in Engineering
+layout: home
+title: CEE 616: Probabilistic Machine Learning
 nav_exclude: true
 permalink: /:path/
 seo:
   type: Course
-  name: Probs and Stats
----
+  name: CEE 616: Probabilistic Machine Learning
 
 # Just the Class
 

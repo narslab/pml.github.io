@@ -8,96 +8,159 @@ description: Course Syllabus
 # Syllabus
 
 ## PDF
-A PDF of the syllabus is available [here](/assets/syllabus/syllabus-fa25.pdf).
+A PDF of the syllabus is available [here](/assets/syllabus/CEE616-Syllabus-Fall-2025.pdf).
 
-## Description
+## Personnel and Logistics
 
-The Probability and Statistics in Engineering course introduces students to probability and statistics, emphasizing their importance and utility in solving problems relevant to civil, environmental, mechanical, and industrial engineering. Core areas covered include:
+### Meeting Times
+**In-person Lectures:** Tu and Th 11:30am--12:45pm at E-Lab 325  
+**Credit Hours:** 3  
+**Office Hours:** Tu/We 2:20pm--3:30pm at Marston 214D (or Zoom)
 
-- Basic probability concepts
-- The role of uncertainty in engineering design
-- Sampling and inference (hypothesis testing, confidence intervals, ANOVA)
-- Probability distribution model fitting and testing
-- Regression and correlation analyses
+### Instructor
+**Name:** Jimi Oke  
+**Email:** [jboke@umass.edu](mailto:jboke@umass.edu)  
+**Office:** 214D Marston Hall
 
-## Objectives
+*Please allow up to 48 hours for a response to your email. Be sure to put "CEE616" in the subject to ensure a prompt response.*
 
-CEE 260/MIE 273 aims to introduce statistical methods in engineering and develop your ability to analytically apply these methods in your engineering practice.
+## Course Information
 
-## Outcomes
+### Description
+This course covers core concepts in machine learning (models and algorithms) from a **probabilistic perspective**. Key topics include:
 
-By the end of this course, you will:
+- Linear methods for regression and classification (including flexible functional forms)
+- Deep neural networks for structured data, sequences and images
+- Nonparametric methods: kernels, support vector machines, decision trees
+- Unsupervised learning (dimensionality reduction, clustering)
 
-- Understand fundamental concepts of probability, such as independence, expectation, error propagation, and density functions
-- Identify, apply, and evaluate appropriate probability models for different systems
-- Use statistical methods to describe processes and make inferences about systems from data
-- Perform regression analyses, test hypotheses, and calculate confidence intervals to solve engineering problems
-- Develop and apply computational and numerical approaches to quantify uncertainty
-- Gain proficiency with Python for statistical analysis
+Applications to various subdisciplines will be highlighted, especially in transportation, environmental, structural and industrial engineering. Hands-on programming in Python (R will also be supported) throughout the course will enable students to analyze and train models on real-world datasets. Through this course, students will understand the potential of machine learning in civil, environmental and industrial engineering, among other disciplines, as well as learn to create and train models from data to solve challenging problems.
 
-## Textbook
+### Objectives
+- Understand the theory behind fundamental ML models and algorithms and apply them to engineering problems
+- Develop and train ML models for various problems in engineering and beyond
+- Learn to use Python or similar programming language (e.g. R) to execute ML models
 
-**Required Text:**  
-Diez, David, Cetinkaya-Rundel, Mine, and Barr, Christopher. *OpenIntro Statistics* (4th Ed.), 2019.  
-[https://leanpub.com/openintro-statistics](https://leanpub.com/openintro-statistics)
+### Texts
+The primary texts for this course are:
 
-**Supplementary Reading:**  
-William Navidi. *Statistics for Engineers and Scientists*. Fifth Edition, McGraw-Hill Education, 2020.
+- **Murphy, K. (2022).** *Probabilistic Machine Learning: An Introduction*. MIT Press. (This text is freely available at [https://probml.github.io/pml-book/book1.html](https://probml.github.io/pml-book/book1.html). Abbreviated as **PMLI** in lecture slides and handouts.)
 
-**Other Resource:**  
-Kunin et al. [Seeing Theory](https://seeing-theory.brown.edu/index.html)
+- **Goulet, J.-A. (2020)** *Probabilistic Machine Learning for Civil Engineers*, MIT Press. (This text is freely available at [http://profs.polymtl.ca/jagoulet/Site/Goulet_web_page_BOOK.html](http://profs.polymtl.ca/jagoulet/Site/Goulet_web_page_BOOK.html). Abbreviated as **PMLCE** in lecture slides and handouts.)
 
-## Prerequisite
+- **Hastie, T., Tibshirani, R., & Friedman, J. (2017).** *The Elements of Statistical Learning: Data Mining, Inference and Prediction*. Springer, New York, NY. Second Edition. (This text is freely available at [https://web.stanford.edu/~hastie/ElemStatLearn/](https://web.stanford.edu/~hastie/ElemStatLearn/). Abbreviated as **ESL** in lecture slides and handouts.)
 
-MATH 132 (or equivalent).
+**Supplementary text:**
+- **Goodfellow, I., Bengio, Y. & Courville, A. (2016).** *Deep Learning*, MIT Press. (This text is freely available at [https://www.deeplearningbook.org/](https://www.deeplearningbook.org/). Abbreviated as **DL** in lecture slides and handouts.)
 
-## Policies
+Any other recommended or required reading will be provided on Moodle.
 
-The goal is to introduce you to the fundamentals of probability and statistics within an engineering context. Slides will be used and annotated electronically in class, and made available prior to lectures. The course aims to foster an equitable and inclusive learning environment that encourages curiosity and active learning. You are expected to come prepared, having completed readings and homework, and to engage with new material. Frequent questions will be asked, and you are encouraged to ask questions as well.
+### Prerequisites
+College-level knowledge of probability, statistics, linear algebra and calculus. Some programming experience in any language is helpful, but you should be ready to get up to speed with any necessary technical skills. Familiarity with Python/R is encouraged.
 
-### Overview of Assessments
+## Policies and Values
+I will use slides in the classroom, and annotate them electronically when possible. These slides will be available to you prior to the lecture. I will endeavor to foster an equitable and inclusive learning environment that will spark your curiosity and challenge you learn actively. I strongly urge you to come to class prepared, having done the reading, ready to reflect on your homework or problem set and engage with new material. I will ask frequent questions of you, and will also expect you to ask as many questions as possible.
 
-You will be evaluated based on in-class activities, problem sets, labs, a midterm, and a project. The breakdown is as follows:
+### Assessments and Grading
+There will be no grading on a curve. Consistent with this, after drop date, students who remain in this class are not in jeopardy of seeing their grades change due to the change in class composition.
 
-| Assessment            | Number | Unit % | Total % | Explanation           |
-|-----------------------|--------|--------|---------|-----------------------|
-| In-Class Activities   | 24     | 1      | 20      | 4 absences excused    |
-| Problem Sets (PS)     | 9      | 4      | 36      |                       |
-| Labs                  | 8      | 2      | 14      | lowest one dropped    |
-| Midterm Exam          | 1      | 12     | 10      |                       |
-| Regression Project    | 1      | 20     | 20      |                       |
-| **TOTAL**             |        |        | **100** |                       |
+| Assessment | Value (%) |
+|------------|-----------|
+| Problem Sets (5) | 50 |
+| Midterm Exam 1 | 15 |
+| Midterm Exam 2 | 15 |
+| Project | 20 |
+| **TOTAL** | **100** |
 
-
-Grades are assigned individually, with no predetermined grade spread or curve. After the drop date, grades will not change due to class composition. The grading scale is:
+Final letter grades will be based on the following scale:
 
 | Grade | Range (%) |
 |-------|-----------|
-| A     | 93–100    |
-| A–    | 90–92     |
-| B+    | 87–89     |
-| B     | 83–86     |
-| B–    | 80–82     |
-| C+    | 77–79     |
-| C     | 73–76     |
-| C–    | 70–72     |
-| D     | 60–69     |
-| F     | ≤60       |
+| A | 93-100 |
+| A- | 90-92 |
+| B+ | 87-89 |
+| B | 83-86 |
+| B- | 80-82 |
+| C+ | 77-79 |
+| C | 73-76* |
+| C- | 70-72* |
+| D | 60-69* |
+| F | ≤59 |
 
-### In-class Activities
-
-Each lecture includes an activity to be completed individually or in groups, such as short readings, interactive quizzes/polls, or worksheets. **Please bring your laptop to all lectures.**
+*Note: Graduate students cannot earn grades of C-, D or D+, so scores lower than 73% are Failing grades for Graduate students.*
 
 ### Problem Sets
+Five problem sets will be assigned. Submission will be online (PDFs and other supporting code; or Jupyter notebooks) via Moodle. Each will be worth 10% of your total grade. **Late problem sets will automatically attract a 25% penalty and will not be accepted more than 4 days beyond the due date** (excepting prior permission).
 
-Problem sets are assigned weekly and due Tuesdays at 12:59pm via Gradescope. Solutions are posted after the due date. Some problem sets will also include a guided Python problem (Jupyter Notebook/Colab) with clear objectives. Assignments help you master key probabilistic and statistical functions in Python and practice visualization. You will submit an `.ipynb` (Jupyter Notebook/Colab) file with your responses. Follow instructions carefully for efficient and fair evaluation.
+### Midterms
+There will be 2 take-home midterms, which will be open-resource. Previous exams may be available for practice.
 
-**Note:** Late problem sets will not be graded except for emergencies, illness (with proof), or prior permission for exigencies.
+### Programming
+Some lectures will incorporate engineering applications of machine learning concepts using Python. Problem sets will also involve some coding in Python. I recommend installing [JupyterLab](https://jupyter.org/). You are welcome to use other languages/platforms such as [R/RStudio](https://rstudio.com/products/rstudio/download/) or Matlab for your assignments. However, I cannot guarantee the same level of support for Matlab in particular.
 
-### Exam
-
-The midterm is a take-home, open-book exam, typically with a 2-hour completion window. Submit as a PDF document.
+### Computing Resource
+Having a laptop is not a requirement for this course. However, if you own one and are able to bring it to the classroom, it may improve your learning experience during the programming segments of the lecture.
 
 ### Project
+The term project will be worth 20% of your total grade. You are encouraged to start thinking about the concepts and methods you would like to investigate further in a real-world setting. I will ask you to submit a project proposal (individually or with a partner or two of your choice) that applies two of the modeling approaches covered in class to a relevant problem. This may be related to your own research as well. Further guidance will be provided midway through the semester. The final exam time will be devoted to in-class presentations of each project.
 
-The project is a structured assignment focused on linear regression, completed in groups of 5. Detailed instructions will be provided after the midterm. Deliverables include a proposal, report, and presentation.
+### Attendance and Participation
+You are expected to show up to every class (either virtually or in-person), in the absence of any emergencies or illness (please email me ahead of time if any situations arise).
+
+### Academic Honesty Policy Statement
+Since the integrity of the academic enterprise of any institution of higher education requires honesty in scholarship and research, academic honesty is required of all students at the University of Massachusetts Amherst. Academic dishonesty including but not limited to cheating, fabrication, plagiarism, and facilitating dishonesty, is prohibited in all programs of the University. Appropriate sanctions may be imposed on any student who has committed an act of academic dishonesty. For more information about what constitutes academic dishonesty, please see the Dean of Students' website: [https://www.umass.edu/honesty/](https://www.umass.edu/honesty/)
+
+### Disability Statement
+The University of Massachusetts Amherst is committed to making reasonable, effective and appropriate accommodations to meet the needs of students with disabilities and help create a barrier-free campus. If you are in need of accommodation for a documented disability, register with Disability Services to have an accommodation letter sent to your faculty. For more information, consult the Disability Services website at [http://www.umass.edu/disability/](http://www.umass.edu/disability/).
+
+### Title IX Statement
+In accordance with Title IX of the Education Amendments of 1972 that prohibits gender-based discrimination in educational settings that receive federal funds, the University of Massachusetts Amherst is committed to providing a safe learning environment for all students, free from all forms of discrimination, including sexual assault, sexual harassment, domestic violence, dating violence, stalking, and retaliation. A summary of the available Title IX resources (confidential and non-confidential) can be found at: [https://www.umass.edu/titleix/resources](https://www.umass.edu/titleix/resources). If you need immediate support, you are not alone. Free and confidential support is available 24 hours a day/7 days a week/365 days a year at the SASA Hotline [413-545-0800](tel:4135450800).
+
+## Schedule
+This course is broadly organized around 5 modules. The schedule may be adapted over the duration of the semester to suit the needs of the class. Readings will be provided in lecture notes and on Moodle.
+
+### Module 1: Foundations
+| Day | Date | Topic | Assignments |
+|-----|------|--------|-------------|
+| Tu | Sep 2 | Introduction | |
+| Th | Sep 4 | Probability | |
+| Tu | Sep 9 | Statistics | PS1 assigned |
+| Th | Sep 11 | Decision theory; Information theory | |
+| Tu | Sep 16 | Linear Algebra | |
+| Th | Sep 18 | Optimization | |
+
+### Module 2: Linear Methods
+| Day | Date | Topic | Assignments |
+|-----|------|--------|-------------|
+| Tu | Sep 23 | Linear discriminant analysis | PS1 due; PS2 assigned |
+| Th | Sep 25 | Logistic regression | |
+| Tu | Sep 30 | Linear regression (OLS, WLS) | |
+| Th | Oct 2 | Ridge and Lasso regression | |
+| Tu | Oct 7 | Splines and generalized additive models (GAMs) | |
+| Th | Oct 9 | Generalized linear models (GLMs) | |
+| Tu | Oct 14 | **Exam I (take-home; no class)** | PS2 due |
+
+### Module 3: Deep Neural Networks (DNNs)
+| Day | Date | Topic | Assignments |
+|-----|------|--------|-------------|
+| Th | Oct 16 | NNs for structured data I (MLP, backpropagation) | PS3 assigned |
+| Tu | Oct 21 | NNs for structured data II (training, regularization) | |
+| Th | Oct 23 | NNs for images (CNNs) | |
+| Tu | Oct 28 | NNs for sequences (RNNs) | |
+
+### Module 4: Nonparametric Methods
+| Day | Date | Topic | Assignments |
+|-----|------|--------|-------------|
+| Th | Oct 30 | Exemplar-based methods (KNN, KDE, LOESS) | PS3 due; PS4 assigned |
+| Th | Nov 6 | Gaussian processes | Project proposal assigned |
+| Tu | Nov 18 | Support vector machines | |
+| Th | Nov 20 | Trees and ensemble methods | |
+| Tu | Nov 25 | **Exam II (take-home; no class)** | PS4 due |
+
+### Module 5: Unsupervised Learning
+| Day | Date | Topic | Assignments |
+|-----|------|--------|-------------|
+| Tu | Dec 2 | Principal components analysis & Factor analysis | Proposal due; PS5 assigned |
+| Th | Dec 4 | Clustering (HAC, KMeans, MM) | |
+| Tu | Dec 9 | Autoencoders (AEs, VAEs) | PS5 due (Th) |
+| TBD | TBD | **Project Presentations** | |

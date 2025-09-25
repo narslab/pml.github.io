@@ -1,0 +1,567 @@
+\documentclass[11pt,twoside]{article}
+\usepackage{etex}
+\newcommand{\num}{6{} }
+
+\raggedbottom
+
+%\usepackage[tracking]{microtype}
+
+%\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+%\linespread{1.025}              % Palatino leads a little more leading
+
+% Euler for math and numbers
+%\usepackage[euler-digits,small]{eulervm}
+%\AtBeginDocument{\renewcommand{\hbar}{\hslash}}
+
+%geometry (sets margin) and other useful packages
+\usepackage{geometry}
+\geometry{top=1in, left=1in,right=1in,bottom=1in}
+ \usepackage{graphicx,booktabs,calc}
+
+%=== GRAPHICS PATH ===========
+%\graphicspath{{./140408-Images/}}
+% Marginpar width
+%Marginpar width
+\newcommand{\pts}[1]{\marginpar{ \small\hspace{0pt} \textit{[#1]} } } 
+\setlength{\marginparwidth}{.5in}
+%\reversemarginpar
+%\setlength{\marginparsep}{.02in}
+
+%% Fonts
+% \usepackage{fourier}
+% \usepackage[T1]{pbsi}
+
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+
+\usepackage{rotating, hanging}
+\usepackage{pdflscape}
+%% Cite Title
+%\usepackage[style=numeric,url=false,eprint=false,maxbibnames=99,maxcitenames=2]{biblatex}
+%\addbibresource{bib/references.bib}
+%\addbibresource{../bib/references.bib}
+%%% Counters
+\usepackage{chngcntr,mathtools}
+\counterwithout{figure}{section}
+\counterwithout{table}{section}
+
+\numberwithin{equation}{section}
+
+%% Captions
+\usepackage{caption}
+\captionsetup{
+  labelsep=quad,
+  justification=raggedright,
+  labelfont=sc
+}
+
+%AMS-TeX packages
+\usepackage{amssymb,amsmath,amsthm} 
+\usepackage{bm}
+\usepackage[mathscr]{eucal}
+\usepackage{colortbl}
+\usepackage{color}
+
+
+\usepackage{epstopdf,subfigure,hyperref,enumerate,polynom,polynomial}
+\usepackage{multirow,minitoc,fancybox,array,multicol}
+
+\definecolor{slblue}{rgb}{0,.3,.62}
+\hypersetup{
+    colorlinks,%
+    citecolor=blue,%
+    filecolor=blue,%
+    linkcolor=blue,
+    urlcolor=slblue
+}
+
+%%%TIKZ
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{arrows,shapes,positioning}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shadows,automata}
+\usetikzlibrary{patterns}
+%\usetikzlibrary{circuits.ee.IEC}
+\usetikzlibrary{decorations.text}
+% For Sagnac Picture
+\usetikzlibrary{%
+    decorations.pathreplacing,%
+    decorations.pathmorphing%
+}
+
+%
+%Redefining sections as problems
+%
+\makeatletter
+\newenvironment{question}{\@startsection 
+	{section}
+	{1}
+	{-.2em}
+	{-3.5ex plus -1ex minus -.2ex}
+    	{1.3ex plus .2ex}
+    	{\pagebreak[3]%forces pagebreak when space is small; use \eject for better results
+	\large\bf\noindent{Question }
+	}
+	}
+	%{\vspace{1ex}\begin{center} \rule{0.3\linewidth}{.3pt}\end{center}}
+	%\begin{center}\large\bf \ldots\ldots\ldots\end{center}}
+\makeatother
+
+%
+%Fancy-header package to modify header/page numbering 
+%
+%\renewcommand{\chaptermark}[1]{ \markboth{#1}{} }
+\renewcommand{\sectionmark}[1]{ \markright{#1}{} }
+
+\usepackage{fancyhdr,etoolbox}
+\pagestyle{fancy}
+\newcommand{\headrulecolor}[1]{\patchcmd{\headrule}{\hrule}{\color{#1}\hrule}{}{}}
+\newcommand{\footrulecolor}[1]{\patchcmd{\footrule}{\hrule}{\color{#1}\hrule}{}{}}
+%\addtolength{\headwidth}{\marginparsep} %these change header-rule width
+%\addtolength{\headwidth}{\marginparwidth}
+%\fancyheadoffset{30pt}
+%\fancyfootoffset{30pt}
+\fancyhead[LO,RE]{\small\color{gray}  \it \nouppercase{\leftmark}}
+\fancyhead[RO,LE]{\small\color{gray} \thepage} 
+\fancyfoot[RO,LE]{\small\color{gray} CEE 616} 
+\fancyfoot[LO,RE]{\small\color{gray}  Oke} 
+\cfoot{} 
+\renewcommand{\headrulewidth}{0.1pt} 
+\renewcommand{\footrulewidth}{0.1pt}
+%\setlength\voffset{-0.25in}
+%\setlength\textheight{648pt}
+\footrulecolor{gray!50}
+\headrulecolor{gray!50}
+\usepackage{paralist}
+
+
+%%% FORMAT PYTHON CODE
+\usepackage{listings}
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{8} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{8}  % for normal
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+\usepackage{tipa}
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+language=Python,
+basicstyle=\footnotesize\ttm,
+otherkeywords={self},             % Add keywords here
+keywordstyle=\footnotesize\ttb\color{deepblue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\footnotesize\ttb\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false            % 
+}}
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+
+\newcommand{\osn}{\oldstylenums}
+\newcommand{\dg}{^{\circ}}
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+\newcommand{\pt}{\phantom}
+\newcommand{\tf}{\therefore}
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\fr}{\frac}
+\newcommand{\dfr}{\dfrac}
+\newcommand{\ul}{\underline}
+\newcommand{\tn}{\tabularnewline}
+\newcommand{\nl}{\newline}
+\newcommand\relph[1]{\mathrel{\phantom{#1}}}
+\newcommand{\cm}{\checkmark}
+\newcommand{\ol}{\overline}
+\newcommand{\rd}{\color{red}}
+\newcommand{\bl}{\color{blue}}
+\newcommand{\pl}{\color{purple}}
+\newcommand{\og}{\color{orange!90!black}}
+\newcommand{\gr}{\color{green!40!black}}
+\newcommand{\nin}{\noindent}
+\newcommand{\la}{\lambda}
+\renewcommand{\th}{\theta}
+\newcommand{\al}{\alpha}
+\newcommand{\G}{\Gamma}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,thick,inner sep=1pt] (char) {\small #1};}}
+
+\newcommand{\bc}{\begin{compactenum}[\quad--]}
+\newcommand{\ec}{\end{compactenum}}
+
+\newcommand{\p}{\partial}
+\newcommand{\pd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpd}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\pdd}[2]{\frac{\partial^2{#1}}{\partial{#2}^2}}
+
+\newcommand{\zkr}{Z(k_{r})}
+\newcommand{\zkb}{Z(k_{b})}
+\newcommand{\zkl}{Z(k_{l})}
+\newcommand{\ztot}{Z_{\mathrm{tot}}}
+\newcommand{\alp}{\alpha_{\text{prec}}}
+\newcommand{\alo}{\alpha_{\text{orig}}}
+\newcommand{\als}{\alpha_{\text{succ}}}
+\newcommand{\sep}{\mathrm{sec}_{\text{prec}}}
+\newcommand{\seo}{\mathrm{sec}_{\text{orig}}}
+\newcommand{\ses}{\mathrm{sec}_{\text{succ}}}
+\newcommand{\dir}{\mathrm{dir}}
+\newcommand{\ali}{\alpha_{i}}
+\newcommand{\nw}{N\"{o}llenburg and Wolff}
+\newcommand{\incg}{\includegraphics}
+\newenvironment{solution}
+{\medskip\par\quad\quad\begin{minipage}[c]{.8\textwidth}}{\medskip\end{minipage}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+ 
+\title{Department of Civil and Environmental Engineering\\ University of Massachusetts Amherst\\
+  {\bf CEE 616: Probabilistic Machine Learning} \\
+Fall 2025 {\sc Course Syllabus}
+}
+% \author{Jimi Oke}
+\date{}
+\maketitle
+
+\thispagestyle{empty}
+
+\tableofcontents
+%\listoftables
+
+~
+\thispagestyle{empty}
+\vfill
+\begin{center}
+  \includegraphics[width=1in]{umass_seal}
+  
+
+\end{center}
+
+\eject
+\section{Personnel and Logistics}
+
+\subsection{Meeting Times}
+\textbf{In-person Lectures:} Tu and Th 11:30am--12:45am at E-Lab 325\\
+\textbf{Credit Hours:} 3\\
+\textbf{Office Hours:} Tu/We 2:20p,--3:30pm at Marston 214D (or Zoom)
+
+\subsection{Instructor}
+\textbf{Name:}  Jimi Oke\footnote{Approximate  pronunciation of last name in \href{https://americanipachart.com/}{IPA}: /\textipa{O"kE} or ``aw-KEH''}\\
+\textbf{Email:} \href{mailto:jimi@umass.edu}{jboke@umass.edu}\footnote{Please allow up to 48 hours for a response to your email. Be sure to put ``CEE616'' in the subject to ensure a prompt response.}\\
+\textbf{Office:} 214D Marston Hall\\
+
+%\noindent{\it Note: for the purposes of this class, you may address me as ``Prof.\ Oke'' or ``Dr.\ Oke''.}
+% \begin{quote}
+%   \it You don't need a question to come to office hours. You can just come by to say hello.
+%   \footnote{Greg Mankiw, Professor of Economics at Harvard, 2017. \url{https://news.harvard.edu/gazette/story/2017/12/professors-examine-the-realities-of-office-hours/}.}
+% \end{quote}
+
+
+\section{Course Information}
+\subsection{Description}
+This course covers  core concepts in machine learning (models and algorithms) from a \textbf{probabilistic perspective}.
+Key topics include:
+
+\begin{itemize}
+\item linear methods for regression and classification (including flexible functional forms)
+\item deep neural networks for structured data, sequences and images
+\item nonparametric methods: kernels, support vector machines, decision trees
+\item unsupervised learning (dimensionality reduction, clustering)
+\end{itemize}
+Applications to various subdisciplines will be highlighted, especially in transportation, environmental, structural and industrial engineering.
+Hands-on programming in Python (R will also be supported) throughout the course will enable students to analyze and train models on real-world datasets.
+Through this course, students will understand the potential of machine learning in civil, environmental and industrial engineering, among other disciplines, as well as learn to create and train models from data to solve challenging problems.
+
+\subsection{Objectives}
+\begin{itemize}
+\item Understand the theory behind fundamental ML models and algorithms and apply them to engineering problems
+\item Develop and train ML models for various problems in engineering and beyond
+\item Learn to use Python or similar programming language (e.g.\ R) to execute ML models
+\end{itemize}
+\vfill
+
+
+% \subsection{Outcomes}
+% In this course, you will:
+% \begin{itemize}
+% \item Understand the fundamental concepts of model fitting and linear regression methods
+% \item Recognize when to use classification approaches instead of regression
+% \item Learn how to address uncertainty in modeling via cross-validation and bootstrapping
+% \item Understand core methods for model selection and regularization
+% \item Learn nonlinear regression approaches and recognize when to apply them over linear methods
+% \item Develop a working knowledge of ensemble learning methods via decision trees, bagging, random forests and boosting
+% \item Understand and apply support vector machines
+% \item Survey unsupervised learning methods with a focus on principal components analysis, k-means clustering and hierarchical agglomerative clustering
+% \item Gain a basic understanding of neural networks and their applications to regression, classification, pattern recognition, etc
+% \item Use big data and machine learning concepts to solve real-world engineering problems
+% \end{itemize}
+
+\subsection{Texts}
+The primary texts for this course are:
+
+\begin{itemize}
+\item Murphy, K. (2022). \textit{Probabilistic Machine Learning: An Introduction}. MIT Press. (This text is freely available at \url{https://probml.github.io/pml-book/book1.html}. Abbreviated as \textbf{PMLI} in lecture slides and handouts.)
+
+\item Goulet, J.-A.\ (2020) \textit{Probabilistic Machine Learning for Civil Engineers}, MIT Press. (This text is freely available at \url{http://profs.polymtl.ca/jagoulet/Site/Goulet_web_page_BOOK.html}. Abbreviated as \textbf{PMLCE} in  lecture slides and handouts.)
+
+\item   Hastie, T., Tibshirani, R., \& Friedman, J. (2017). \textit{The Elements of Statistical Learning: Data Mining, Inference and Prediction}. Springer, New York, NY. Second Edition. (This text, among other resources, is also freely available from the authors at \url{https://web.stanford.edu/~hastie/ElemStatLearn/}. Abbreviated as \textbf{ESL} in  lecture slides and handouts.)
+\end{itemize}
+Supplementary text:
+\begin{itemize}
+  
+\item Goodfellow, I., Bengio, Y. \& Courville, A. (2016). \textit{Deep Learning}, MIT Press. (This text is freely available at \url{https://www.deeplearningbook.org/}. Abbreviated as \textbf{DL} in lecture slides and handouts.)
+  
+% \item  James, G., Witten, D., Hastie, T., \& Tibshirani, R. (2017). \textit{An Introduction to Statistical Learning with Applications in R}. Springer, New York. (The text, among other resources is freely available from the author at \url{https://www.statlearning.com/}. Abbreviated as \textbf{ISL} in the schedule  and lecture notes.)
+
+% \item Hyndman, R. J. \&  Athanasopoulos, G. (2018). \textit{Forecasting: Principles and Practice}. OTexts. (This text is freely available at \url{https://otexts.com/fpp2/}. Abbreviated as \textbf{FPP} in the schedule and lecture notes.)
+
+% \item Shumway \& Stoffer (2016). Time Series Analysis and Its Applications: With R Examples. Edition 4 New York:
+%   Springer (Required chapters are linked in schedule.)
+\end{itemize}
+Any other recommended or required reading will be provided on Moodle.
+
+
+
+\subsection{Prerequisites}
+College-level knowledge of probability, statistics, linear algebra and calculus.
+Some programming experience in any language is helpful, but you should be ready to get up to speed with any necessary technical skills.
+Familiarity with Python/R is encouraged.
+
+\section{Policies and Values}
+I will use slides in the classroom, and annotate them electronically when possible.  These slides will be available to
+you prior to the lecture.  I will endeavor to foster an equitable and inclusive learning environment that will spark
+your curiosity and challenge you learn actively.  I strongly urge you to come to class prepared, having done the
+reading, ready to reflect on your homework or problem set and engage with new material.  I will ask frequent questions
+of you, and will also expect you to ask as many questions as possible.  Further specifics on class policies and values
+are as follows.
+
+\subsection{Assessments and grading}
+There will be no grading on a curve.
+Consistent with this, after drop date, students who remain in this class are not in jeopardy of seeing their grades change due to the change in class composition.
+The breakdown is provided in \autoref{tab:comp}.
+
+\begin{table}[h!]
+  \centering
+    \caption{Course components and grade breakdown}
+  \label{tab:comp}
+  \begin{tabular}{l   c}\toprule
+    \bf Assessment   & \bf Value (\%) \\ \midrule
+    Problem Sets (5)   &   50\\
+    Midterm Exam 1      &   15 \\
+    Midterm Exam 2      & 15 \\
+    Project     &   20 \\ \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\eject
+
+\noindent Final letter grades will be based on the scale shown in \autoref{tab:scale}. 
+
+
+\begin{table}[h!]\centering
+  \caption{Grading scale}
+\label{tab:scale}
+\begin{tabular}{l l}\toprule
+ \bf Grade & \bf Range (\%) \\\midrule
+  A & 93-100\%   \\
+  A$-$ & 90--92 \\
+  B$+$ & 87--89 \\
+  B &   83--86 \\
+  B$-$ & 80-82 \\
+  C$+$  & 77--79\\
+  C   & 73-76$^*$ \\
+  C$-$ & 70-72$^*$ \\
+  D & 60-69$^*$ \\
+  F &  $\le$ 59\\\bottomrule
+\end{tabular}
+\end{table}
+\noindent $^*$Note: Graduate students cannot earn grades of C$-$, D or D$+$, so scores lower than 73\% are \textit{Failing} grades for Graduate students.
+
+
+
+
+\subsection{Problem sets}
+Five problem sets will be assigned.  Submission will be online (PDFs and other supporting code; or Jupyter notebooks) via Moodle.  Each will be worth 10\% of your
+total grade.  \textit{Late problem sets will automatically attract a 25\% penalty and will not be accepted more than 4 days beyond the due date} (excepting prior permission).
+
+\subsection{Midterms}
+There will be 2 take-home midterms, which will be
+open-resource. Previous exams may be available for practice.
+
+\subsection{Programming}
+Some lectures will incorporate engineering applications of machine learning concepts using  Python.
+Problem sets will also involve some coding in Python.
+I recommend installing \href{https://jupyter.org/}{JupyterLab}.
+You are welcome to use other languages/platforms such as \href{https://rstudio.com/products/rstudio/download/}{R/RStudio} or Matlab for your assignments.
+However, I cannot guarantee the same level of support for Matlab in particular.
+
+\subsection{Computing resource}
+Having a laptop is not a requirement for this course.
+However, if you own one and are able to bring it to the classroom, it may improve your learning experience during the programming segments of the lecture.
+
+\subsection{Project}
+The term project will be worth 20\% of your total grade.  You are encouraged to start thinking about the concepts and
+methods you would like to investigate further in a real-world setting.   I will ask you to submit a
+project proposal (individually or with a partner or two of your choice) that applies two of the modeling approaches covered in class to a relevant problem.  This may be related to your own research as well.   Further guidance will be provided midway through the
+semester.  The final exam time will be devoted to in-class presentations of each project. 
+
+\subsection{Attendance and participation}
+You are expected to show up to every class (either virtually or in-person), in the absence of any emergencies or illness (please email me ahead of time if any situations arise).
+% Active learning is an important component of the course, and your participation grade is 5\% of the total.
+
+\subsection{Academic Honesty Policy Statement}
+Since the integrity of the academic enterprise of any institution of higher education requires
+honesty in scholarship and research, academic honesty is required of all students at the
+University of Massachusetts Amherst. Academic dishonesty including but not limited to
+cheating, fabrication, plagiarism, and facilitating dishonesty, is prohibited in all programs of
+the University. Appropriate sanctions may be imposed on any student who has committed
+an act of academic dishonesty. Instructors should take reasonable steps to address academic
+misconduct. Any person who has reason to believe that a student has committed academic
+dishonesty should bring such information to the attention of the appropriate course
+instructor as soon as possible. Instances of academic dishonesty not related to a specific
+course should be brought to the attention of the appropriate department Head or Chair. The
+procedures outlined below are intended to provide an efficient and orderly process by which
+action may be taken if it appears that academic dishonesty has occurred and by which
+students may appeal such actions. Since student are expected to be familiar with this policy
+and the commonly accepted standards of academic integrity, ignorance of such standards is
+not normally sufficient evidence of lack of intent.
+For more information about what constitutes academic dishonesty, please see the Dean of
+Students’ website: \url{https://www.umass.edu/honesty/}
+
+\subsection{Disability Statement}
+The University of Massachusetts Amherst is committed to making reasonable, effective and
+appropriate accommodations to meet the needs of students with disabilities and help create a
+barrier-free campus. If you are in need of accommodation for a documented disability,
+register with Disability Services to have an accommodation letter sent to your faculty. It is
+your responsibility to initiate these services and to communicate with faculty ahead of time
+to manage accommodations in a timely manner. For more information, consult the
+Disability Services website at \url{http://www.umass.edu/disability/}.
+
+\subsection{Title IX Statement}
+In accordance with Title IX of the Education Amendments of 1972 that prohibits gender-based discrimination in
+educational settings that receive federal funds, the University of Massachusetts Amherst is committed to
+providing a safe learning environment for all students, free from all forms of discrimination, including
+sexual assault, sexual harassment, domestic violence, dating violence, stalking, and retaliation. This
+includes interactions in person or online through digital platforms and social media. Title IX also protects
+against discrimination on the basis of pregnancy, childbirth, false pregnancy, miscarriage, abortion, or
+related conditions, including recovery. There are resources here on campus to support you. A summary of the
+available Title IX resources (confidential and non-confidential) can be found at the following link:
+\url{https://www.umass.edu/titleix/resources}. You do not need to make a formal report to access them. If you need
+immediate support, you are not alone. Free and confidential support is available 24 hours a day/7 days a
+week/365 days a year at the SASA Hotline \href{tel:4135450800}{413-545-0800}.
+
+\section{Schedule}
+This course is broadly organized around 5 modules. The schedule (see \autoref{tab:compsyl} on the next page) may be adapted over the duration of the semester to suit the needs of the class.
+Readings will be provided in lecture notes and on Moodle.
+
+% \subsection{Important dates}
+% \begin{itemize}
+% \item No class on the following dates:
+%   \begin{itemize}
+%   \item Wednesday, February 22 (Monday schedule followed)
+%   \item Wednesday, March 15 and Friday, March 17 (Spring Break)
+%   \item Wednesday, March 29 (Exam I)
+%   \item Wednesday, May 17 (Exam II)
+%   \end{itemize}
+% \item Last day of class: Wednesday, May 12
+% \item Project presentations: Wednesday, May 24 (8:00--11:00am)
+% \end{itemize}
+%\appendix
+
+
+%\newgeometry{left=.9cm,bottom=.9cm}
+
+%\begin{landscape}
+
+
+%\thispagestyle{empty}
+% \usepackage{booktabs}
+%\vfill
+\begin{table}[h!]\small
+\centering
+%\refstepcounter{table}
+\caption{Course schedule}
+\label{tab:compsyl}
+\begin{tabular}{cllll}
+\toprule
+\bf Day & \bf  Date & \bf L/N & \bf Topic                                             &\bf Assignments    \\%                             & \bf Reading       \\ 
+\midrule
+\multicolumn{4}{l}{\bf Module 1: Foundations}                                                     \\
+\midrule  
+Tu       & Sep 2     & 1a      & Introduction                                        &                   \\ 
+Th       & Sep 4     & 1b      & Probability                                           &                                \\ 
+Tu       & Sep 9     & 1c      & Statistics                                            &    PS1 assigned                            \\
+Th       & Sep 11    & 1d      & Decision theory; Information theory                   &                                \\
+Tu       & Sep 16    & 1e      & Linear Algebra                                        &                                \\
+Th       & Sep 18    & 1f      & Optimization                                          &          \\
+\midrule
+\multicolumn{4}{l}{\bf Module 2: Linear Methods}                                \\
+\midrule
+Tu       & Sep 23    & 2a      & Linear discriminant analysis                          & PS1 due; PS2 assigned          \\
+Th       & Sep 25    & 2b      & Logistic regression                                   &                                \\
+Tu       & Sep 30    & 2c      & Linear regression (OLS, WLS)                          &                                \\ 
+Th       & Oct 2     & 2d      & Ridge and Lasso regression                            &                                \\ 
+Tu       & Oct 7     & 2e      & Splines and generalized additive models (GAMs)        &                                \\
+Th       & Oct 9     & 2f      & Generalized linear models (GLMs)                      &                               \\
+\midrule
+Tu     & Oct 14    & E1      & Exam I (take-home; no class)                          & PS2 due                                       \\% &                 \\ 
+\midrule
+\multicolumn{4}{l}{\bf Module 3: Deep Neural Networks (DNNs)}                                                    \\\midrule
+Th       & Oct 16    & 3a      & NNs for structured data I (MLP, backpropagation)             & PS3 assigned                             \\
+Tu       & Oct 21    & 3b      & NNs for structured data II (training, regularization) &                                \\
+Th       & Oct 23    & 3c      & NNs for images (CNNs)                                 &                                \\
+Tu       & Oct 28    & 3d      & NNs for sequences (RNNs)                              &           \\
+\midrule
+\multicolumn{4}{l}{\bf Module 4:  Nonparametric Methods}                                                                  \\\midrule
+Th       & Oct 30    & 4a      & Exemplar-based methods (KNN, KDE, LOESS)              & PS3 due; PS4 assigned      \\
+Th       & Nov 6     & 4b      & Gaussian processes                                    & Project proposal assigned                               \\
+Tu       & Nov 18    & 4c      & Support vector machines                               &                                \\
+Th       & Nov 20    & 4d      & Trees and ensemble methods                            &               \\
+\midrule
+Tu       & Nov 23    &  E2     &  Exam II (take-home; no class)                        &  PS4 due  \\%                                     &  \\ 
+\midrule
+\multicolumn{4}{l}{\bf Module 5: Unsupervised Learning}                                                               \\\midrule
+Tu       & Dec 2     & 5a      & Principal components analysis \& Factor analysis                   &  Proposal due; PS5 assigned                              \\ 
+Th       & Dec 4     & 5b      &  Clustering (HAC, KMeans, MM)                                  &                                \\
+Tu       & Dec 9     & 5c      &  Autoencoders (AEs, VAEs)                             &     PS5 due (Th)                    \\ \midrule
+       & TBD    &         &  Project Presentations                         &                         \\ 
+\bottomrule
+\end{tabular}
+
+\end{table}
+%\end{landscape}
+ 
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

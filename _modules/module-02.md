@@ -1,10 +1,10 @@
 ---
-title: Module 2 Probability
+title: Module 2 Linear Methods
 ---
 
 Sep 11
-: **LECTURE 2a**{: .label .label-blue }[Events and Set Operations](/assets/lectures/M2-Probability/M2a-Events-Set-Operations-Handout.pdf)
-  :  [Echo360 Video](https://echo360.org/lesson/G_cfa36933-c0df-42df-a2b7-d31e4be7f9a2_47c3b0d1-758e-4090-99ce-7fc3cdd96573_2025-09-11T13:00:00.000_2025-09-11T14:15:00.000/classroom)
+: **LECTURE 2a**{: .label .label-blue }[Logistic Regression](/assets/lectures/M2-Linear-Methods/L2b-Logistic-Regression-Handout.pdf)
+  :  [Echo360 Video](#)
 
 
 Sep 16

@@ -13,5 +13,5 @@ Thu, Sep 25
 
 
 Tue, Sep 30
-: **LECTURE 2C**{: .label .label-blue }[Linear Regression (OLS/WLS)](#)
+: **LECTURE 2C**{: .label .label-blue }[Linear Regression (OLS/WLS)](/assets/lectures/M2-Linear-Methods/L2c-Linear-Regression-Handout.pdf)
   :  [Echo360 Video](#)

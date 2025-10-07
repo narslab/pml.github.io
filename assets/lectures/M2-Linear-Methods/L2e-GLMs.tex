@@ -1,0 +1,883 @@
+%\documentclass[smaller,handout]{beamer}
+%\documentclass[smaller,handout]{beamer}
+\def\bmode{0} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+\if 0\bmode
+\documentclass[smaller]{beamer}
+\else \if 1\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout-Notes\space\jobname}
+\documentclass[smaller,handout]{beamer}
+\usepackage{handoutWithNotes}
+\pgfpagesuselayout{2 on 1 with notes}[letterpaper, landscape, border shrink=4mm]
+\else \if 2\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout\space\jobname}
+\documentclass[smaller,handout]{beamer}
+\fi
+\fi
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\coursetitle}{CEE 697M: Probabilistic Machine Learning}
+\newcommand{\longlecturetitle}{M2 Linear Methods: Splines, GAMs and GLMs}
+\newcommand{\shortlecturetitle}{L2e: Generalized Linear Models}
+\newcommand{\instructor}{Jimi Oke}
+\newcommand{\lecturedate}{October  7, 2025}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ 
+% \usepackage[T1]{fontenc} 
+% \usepackage{lmodern} 
+%\usepackage{etex}
+ %\newcommand{\num}{6{} }
+
+% \usetheme[
+%   outer/progressbar=foot,
+%   outer/numbering=fraction,
+%   block=fill,
+%   inner/subsectionpage=progressbar
+% ]{metropolis}
+\usetheme{Madrid}
+\useoutertheme[subsection=false]{miniframes} % Alternatively: miniframes, infolines, split
+\useinnertheme{circles}
+% %\useoutertheme{Frankfurt}
+% \usecolortheme{beaver}
+% %\useoutertheme{crane}
+% %\useoutertheme{metropolis}
+\usepackage[backend=biber,style=authoryear,maxcitenames=2,maxbibnames=99,safeinputenc,url=false, eprint=false]{biblatex}
+%\addbibresource{bib/references.bib}
+% \AtEveryCitekey{\iffootnote{{\tiny}\tiny}{\tiny}}
+
+% %\usepackage{pgfpages}
+% %\setbeameroption{hide notes} % Only slides
+% %\setbeameroption{show only notes} % Only notes
+% %\setbeameroption{hide notes} % Only notes
+% %\setbeameroption{show notes on second screen=right} % Both
+
+% % \usepackage[sfdefault]{Fira Sans}
+
+% % \setsansfont[BoldFont={Fira Sans}]{Fira Sans Light}
+% % \setmonofont{Fira Mono}
+
+% %\usepackage{fira}
+% %\setsansfont{Fira}
+% %\setmonofont{Fira Mono}
+% % To give a presentation with the Skim reader (http://skim-app.sourceforge.net) on OSX so
+% % that you see the notes on your laptop and the slides on the projector, do the following:
+% % 
+% % 1. Generate just the presentation (hide notes) and save to slides.pdf
+% % 2. Generate onlt the notes (show only nodes) and save to notes.pdf
+% % 3. With Skim open both slides.pdf and notes.pdf
+% % 4. Click on slides.pdf to bring it to front.
+% % 5. In Skim, under "View -> Presentation Option -> Synhcronized Noted Document"
+% %    select notes.pdf.
+% % 6. Now as you move around in slides.pdf the notes.pdf file will follow you.
+% % 7. Arrange windows so that notes.pdf is in full screen mode on your laptop
+% %    and slides.pdf is in presentation mode on the projector.
+
+% % Give a slight yellow tint to the notes page
+% \setbeamertemplate{note page}{\pagecolor{yellow!5}\insertnote}\usepackage{palatino}
+
+% %\usetheme{metropolis}
+% %\usecolortheme{beaver}
+ \usepackage{tipa}
+% \usepackage{enumerate}
+\definecolor{darkcandyapplered}{HTML}{A40000}
+\definecolor{lightcandyapplered}{HTML}{e74c3c}
+
+% %\setbeamercolor{title}{fg=darkcandyapplered}
+
+% \definecolor{UBCblue}{rgb}{0.04706, 0.13725, 0.26667} % UBC Blue (primary)
+% \definecolor{UBCgrey}{rgb}{0.3686, 0.5255, 0.6235} % UBC Grey (secondary)
+
+% % \setbeamercolor{palette primary}{bg=darkcandyapplered,fg=white}
+% % \setbeamercolor{palette secondary}{bg=darkcandyapplered,fg=white}
+% % \setbeamercolor{palette tertiary}{bg=darkcandyapplered,fg=white}
+% % \setbeamercolor{palette quaternary}{bg=darkcandyapplered,fg=white}
+% % \setbeamercolor{structure}{fg=darkcandyapplered} % itemize, enumerate, etc
+% % \setbeamercolor{section in toc}{fg=darkcandyapplered} % TOC sections
+% % \setbeamercolor{frametitle}{fg=darkcandyapplered,bg=white} % TOC sections
+% % \setbeamercolor{title in head/foot}{bg=white,fg=white} % TOC sections
+% % \setbeamercolor{button}{fg=darkcandyapplered} % TOC sections
+
+% % % Override palette coloring with secondary
+% % \setbeamercolor{subsection in head/foot}{bg=lightcandyapplered,fg=white}
+
+%\usecolortheme{crane}
+% \makeatletter
+% \setbeamertemplate{headline}{%
+%   \begin{beamercolorbox}[colsep=1.5pt]{upper separation line head}
+%   \end{beamercolorbox}
+%   \begin{beamercolorbox}{section in head/foot}
+%     \vskip1pt\insertsectionnavigationhorizontal{\paperwidth}{}{}\vskip1pt
+%   \end{beamercolorbox}%
+%   \ifbeamer@theme@subsection%
+%     \begin{beamercolorbox}[colsep=1.5pt]{middle separation line head}
+%     \end{beamercolorbox}
+%     \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+%       leftskip=.3cm,rightskip=.3cm plus1fil]{subsection in head/foot}
+%       \usebeamerfont{subsection in head/foot}\insertsubsectionhead
+%     \end{beamercolorbox}%
+%   \fi%
+%   \begin{beamercolorbox}[colsep=1.5pt]{lower separation line head}
+%   \end{beamercolorbox}
+% }
+% \makeatother
+
+% Reduce size of frame box
+\setbeamertemplate{frametitle}{%
+    \nointerlineskip%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.0ex,dp=0.6ex]{frametitle}
+        \hspace*{1ex}\insertframetitle%
+    \end{beamercolorbox}%
+}
+
+
+%\setbeamercolor{frametitle}{bg=darkcandyapplered!80!black!90!white}
+%\setbeamertemplate{frametitle}{\bf\insertframetitle}
+
+%\setbeamercolor{footnote mark}{fg=darkcandyapplered}
+%\setbeamercolor{footnote}{fg=darkcandyapplered!70}
+%\Raggedbottom
+%\setbeamerfont{page number in head/foot}{size=\tiny}
+%\usepackage[tracking]{microtype}
+
+
+% %\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+% %\linespread{1.025}              % Palatino leads a little more leading
+
+% % Euler for math and numbers
+% %\usepackage[euler-digits,small]{eulervm}
+% %\AtBeginDocument{\renewcommand{\hbar}{\hslash}}
+\usepackage{graphicx,multirow,booktabs}
+\usepackage{animate}
+\usepackage{media9}
+
+
+% %\mode<presentation> { \setbeamercovered{transparent} }
+
+\setbeamertemplate{navigation symbols}{}
+\makeatletter
+\def\beamerorig@set@color{%
+  \pdfliteral{\current@color}%
+  \aftergroup\reset@color
+}
+\def\beamerorig@reset@color{\pdfliteral{\current@color}}
+\makeatother
+
+
+% %=== GRAPHICS PATH ===========
+\graphicspath{{./m2-images/}}
+% % Marginpar width
+% %Marginpar width
+% %\setlength{\marginparsep}{.02in}
+
+
+% %% Captions
+% % \usepackage{caption}
+% % \captionsetup{
+% %   labelsep=quad,
+% %   justification=raggedright,
+% %   labelfont=sc
+% % }
+
+% \setbeamerfont{caption}{size=\footnotesize}
+% \setbeamercolor{caption name}{fg=darkcandyapplered}
+
+% %AMS-TeX packages
+
+\usepackage{amssymb,amsmath,amsthm,mathtools} 
+\usepackage{bm}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+% \usepackage{color}
+
+% %https://tex.stackexchange.com/a/31370/2269
+\usepackage{mathtools,cancel}
+
+\renewcommand{\CancelColor}{\color{red}} %change cancel color to red
+
+\makeatletter
+\let\my@cancelto\cancelto %copy over the original cancelto command
+\newcommand<>{\cancelto}[2]{\alt#3{\my@cancelto{#1}{#2}}{\mathrlap{#2}\phantom{\my@cancelto{#1}{#2}}}}
+% redefine the cancelto command, using \phantom to assure that the
+% result doesn't wiggle up and down with and without the arrow
+\makeatother
+
+
+% %\usepackage{comment}
+% %\usepackage{hyperref,enumerate}
+% \usepackage{minitoc,array}
+
+% \definecolor{slblue}{rgb}{0,.3,.62}
+% % \hypersetup{
+% %     colorlinks,%
+% %     citecolor=blue,%
+% %     filecolor=blue,%
+% %     linkcolor=blue,
+% %     urlcolor=slblue
+% % }
+
+% \usepackage{epstopdf}
+% \epstopdfDeclareGraphicsRule{.gif}{png}{.png}{convert gif:#1 png:\OutputFile}
+% \AppendGraphicsExtensions{.gif}
+
+% %\usepackage{listings}
+
+% %%% TIKZ
+% \usepackage{forest}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+%\usepackage{pgfgantt}
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{fit,arrows,shapes,positioning,shapes.geometric}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shadows,automata}
+\usetikzlibrary{patterns}
+\usetikzlibrary{trees,mindmap,backgrounds}
+%\usetikzlibrary{circuits.ee.IEC}
+\usetikzlibrary{decorations.text}
+% % For Sagnac Picture
+% \usetikzlibrary{%
+%     decorations.pathreplacing,%
+%     decorations.pathmorphing%
+% }
+% \tikzset{no shadows/.style={general shadow/.style=}}
+% %
+% %\usepackage{paralist}
+
+% \tikzset{
+%   font=\Large\sffamily\bfseries,
+%   red arrow/.style={
+%     midway,red,sloped,fill, minimum height=3cm, single arrow, single arrow head extend=.5cm, single arrow head indent=.25cm,xscale=0.3,yscale=0.15,
+%     allow upside down
+%   },
+%   black arrow/.style 2 args={-stealth, shorten >=#1, shorten <=#2},
+%   black arrow/.default={1mm}{1mm},
+%   tree box/.style={draw, rounded corners, inner sep=1em},
+%   node box/.style={white, draw=black, text=black, rectangle, rounded corners},
+% }
+
+% %%% FORMAT PYTHON CODE
+% %\usepackage{listings}
+% % Default fixed font does not support bold face
+% \DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{8} % for bold
+% \DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{8}  % for normal
+
+% % Custom colors
+% \definecolor{deepblue}{rgb}{0,0,0.5}
+% \definecolor{deepred}{rgb}{0.6,0,0}
+% \definecolor{deepgreen}{rgb}{0,0.5,0}
+
+% %\usepackage{animate}
+
+% % Python style for highlighting
+% % \newcommand\pythonstyle{\lstset{
+% % language=Python,
+% % basicstyle=\footnotesize\ttm,
+% % otherkeywords={self},             % Add keywords here
+% % keywordstyle=\footnotesize\ttb\color{deepblue},
+% % emph={MyClass,__init__},          % Custom highlighting
+% % emphstyle=\footnotesize\ttb\color{deepred},    % Custom highlighting style
+% % stringstyle=\color{deepgreen},
+% % frame=tb,                         % Any extra options here
+%     % showstringspaces=false            % 
+% % }}
+
+% % % Python environment
+% % \lstnewenvironment{python}[1][]
+% % {
+% % \pythonstyle
+% % \lstset{#1}
+% % }
+% % {}
+
+% % % Python for external files
+% % \newcommand\pythonexternal[2][]{{
+% % \pythonstyle
+% % \lstinputlisting[#1]{#2}}}
+
+% % Python for inline
+% % 
+% % \newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+% %\usepackage{algorithm2e}
+
+\newcommand{\eps}{\epsilon}
+\newcommand{\bX}{\mb X}
+\newcommand{\by}{\mb y}
+\newcommand{\bbe}{\bm\beta}
+\newcommand{\beps}{\bm\epsilon}
+\newcommand{\bY}{\mb Y}
+
+\newcommand{\osn}{\oldstylenums}
+\newcommand{\dg}{^{\circ}}
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+\newcommand{\pt}{\phantom}
+\newcommand{\tf}{\therefore}
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\fr}{\frac}
+\newcommand{\dfr}{\dfrac}
+\newcommand{\ul}{\underline}
+\newcommand{\tn}{\tabularnewline}
+\newcommand{\nl}{\newline}
+\newcommand\relph[1]{\mathrel{\phantom{#1}}}
+\newcommand{\cm}{\checkmark}
+\newcommand{\ol}{\overline}
+\newcommand{\rd}{\color{red}}
+\newcommand{\bl}{\color{blue}}
+\newcommand{\pl}{\color{purple}}
+\newcommand{\og}{\color{orange!90!black}}
+\newcommand{\gr}{\color{green!40!black}}
+\newcommand{\dca}{\color{darkcandyapplered}}
+\newcommand{\nin}{\noindent}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,thick,inner sep=1pt] (char) {\small #1};}}
+
+\newcommand{\bc}{\begin{compactenum}[\quad--]}
+\newcommand{\ec}{\end{compactenum}}
+
+\newcommand{\p}{\partial}
+\newcommand{\pd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpd}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\pdd}[2]{\frac{\partial^2{#1}}{\partial{#2}^2}}
+\newcommand{\pde}[3]{\frac{\partial^2{#1}}{\partial{#2}\partial{#3}}}
+\newcommand{\nmfr}[3]{\Phi\left(\frac{{#1} - {#2}}{#3}\right)}
+\newcommand{\Err}{\text{Err}}
+\newcommand{\err}{\text{err}}
+
+%\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+%\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+%%%% GREEK LETTER SHORTCUTS %%%%%
+\newcommand{\la}{\lambda}
+\renewcommand{\th}{\theta}
+\newcommand{\al}{\alpha}
+\newcommand{\G}{\Gamma}
+\newcommand{\si}{\sigma}
+\newcommand{\Si}{\Sigma}
+
+
+\pgfmathdeclarefunction{poiss}{1}{%
+  \pgfmathparse{(#1^x)*exp(-#1)/(x!)}%
+  }
+
+\pgfmathdeclarefunction{gauss}{2}{%
+  \pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+\pgfmathdeclarefunction{expo}{2}{%
+  \pgfmathparse{#1*exp(-#1*#2)}%
+}
+
+\pgfmathdeclarefunction{expocdf}{2}{%
+  \pgfmathparse{1 -exp(-#1*#2)}%
+}
+
+\newcommand{\mb}{\mathbb}
+\newcommand{\mc}{\mathcal}
+\newcommand{\tr}{^{\top}}
+\newcommand{\pe}{\pause}
+% \usepackage{pst-plot}
+
+% \usepackage{pstricks-add}
+% \usepackage{auto-pst-pdf}   
+
+% \psset{unit = 3}
+
+% \def\target(#1,#2){%
+%  {\psset{fillstyle = solid}
+%   \rput(#1,#2){%
+%     \pscircle[fillcolor = white](0.7,0.7){0.7}
+%     \pscircle[fillcolor = blue!60](0.7,0.7){0.5}
+%     \pscircle[fillcolor = white](0.7,0.7){0.3}
+%     \pscircle[fillcolor = red!80](0.7,0.7){0.1}}}}
+% \def\dots[#1](#2,#3){%
+%     \psRandom[
+%       dotsize = 2pt,
+%       randomPoints = 25
+%     ](!#2 #1 0.04 sub sub #3 #1 0.04 sub sub)%
+%      (!#2 #1 0.04 sub add #3 #1 0.04 sub add)%
+%      {\pscircle[linestyle = none](#2,#3){#1}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title[\shortlecturetitle]{ {\normalsize \coursetitle}
+  \\ \longlecturetitle}
+\date[\lecturedate]{\footnotesize \lecturedate}
+\author{{\bf \instructor}}
+\institute[UMass Amherst]{
+%\titlegraphic{\hfill
+  \begin{tikzpicture}[baseline=(current bounding box.center)]
+    \node[anchor=base] at (-7,0) (its) {\includegraphics[scale=.3]{UMassEngineering_vert}} ;
+  \end{tikzpicture}
+  % \hfill\includegraphics[height=1.5cm]{logo}
+}
+
+%https://tex.stackexchange.com/questions/55806/mindmap-tikzpicture-in-beamer-reveal-step-by-step
+  \tikzset{
+    invisible/.style={opacity=0},
+    visible on/.style={alt={#1{}{invisible}}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    },
+  }
+
+
+% https://tex.stackexchange.com/questions/446468/labels-with-arrows-for-an-equation
+% https://tex.stackexchange.com/a/402466/121799
+\newcommand{\tikzmark}[3][]{
+\ifmmode
+\tikz[remember picture,baseline=(#2.base)] \node [inner sep=0pt,#1](#2) {$#3$};
+\else
+\tikz[remember picture,baseline=(#2.base)] \node [inner sep=0pt,#1](#2) {#3};
+\fi
+}
+
+% \lstset{language=matlab,
+%                 basicstyle=\scriptsize\ttfamily,
+%                 keywordstyle=\color{blue}\ttfamily,
+%                 stringstyle=\color{blue}\ttfamily,
+%                 commentstyle=\color{gray}\ttfamily,
+%                 morecomment=[l][\color{gray}]{\#}
+%               }
+
+
+              
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+
+ 
+ 
+
+
+\section{Exponential family}
+  \begin{frame}
+    \frametitle{The exponential family}
+    \pause
+
+    A probability distribution belongs to the exponential family if its density can be modeled as:
+
+    \begin{equation}
+      p(\bm y |\bm \eta) =   \fr{1}{Z(\bm \eta)} h(\bm y) \exp\lt[ \bm \eta\tr\mathcal{T} (\bm y)\rt]
+      \pause = 
+       h(\bm y) \exp\lt[\bm \eta\tr\mathcal{T} (\bm y) - A(\bm\eta)\rt]
+    \end{equation}
+    \pause
+
+    where:
+    \begin{itemize}
+      \item $Z(\bm \eta)$ is the partition function (normalization constant) \pause
+      \item $h(\bm y)$ is the base measure (scaling constant; typically 1)\pause
+      \item $\bm \eta$ are the natural/canonical parameters \pause
+      \item $A(\bm \eta) = \ln Z(\bm \eta)$ is the log-partition function \pause
+    \end{itemize}
+  \pause
+
+  The log-likelihood is then given by:
+  \pause
+  \begin{equation}
+    \log p(\bm y |\bm \eta) = \log h(\bm y) + \bm \eta\tr\mathcal{T} (\bm y) - A(\bm\eta) + \text{const}
+  \end{equation}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Properties of exponential family}\pause
+
+\begin{itemize}
+  \item Generalization: 
+  we define $\bm\eta = f(\phi)$, thus:
+  \begin{equation}
+    p (\bm y |\bm\phi) = h(\bm y) \exp\lt[f(\bm \phi)\tr\mathcal{T} (\bm y) - A(f(\bm\phi))\rt]
+  \end{equation}
+  \pause
+  \item If $f(\bm\phi)$ is nonlinear, then the model is in the curved exponential family\pause
+  \item If $\bm\eta = f(\bm\phi) = \bm\phi$, the model is in \textbf{canonical form} \pause 
+  \item If $\mathcal{T}(\bm y) = \bm y$, the model is in the natural exponential family \pause
+  \begin{equation}
+    p(\bm y|\bm \eta) = h (\bm y) \exp\lt[\bm \eta\tr \bm y - A(\bm \eta)\rt]
+  \end{equation}
+\end{itemize}  
+  
+  \end{frame}
+
+\begin{frame}
+  \frametitle{Bernoulli distribution in exponential family form (1/2)}
+\pause
+
+  The Bernoulli distribution is given by:
+  \begin{equation}
+    p(y|\mu) = \mu^{y}(1 - \mu)^{1 - y}, \quad y \in \{0,1\}, \quad 0 < \mu < 1
+  \end{equation}
+  \pause
+  where $\mu = \mathbb{E}(y)$ is the probability of success. \pause Rewriting: \pause
+  \begin{eqnarray*}
+    p(y|\mu) &=& (1 - \mu) \lt(\fr{\mu}{1 - \mu}\rt)^{y} \pause
+             =\pause (1 - \mu) \exp\lt[y\log\lt(\fr{\mu}{1 - \mu}\rt)\rt] \\ \pause
+             &=& {\gr (1 - \mu)} \exp\lt[{\pl y} {\rd \log\lt(\fr{\mu}{1 - \mu}\rt)} - {\bl 0}\rt]
+  \end{eqnarray*}
+  \pause
+
+  Comparing to the exponential family form:
+  \begin{eqnarray*}
+    \gr h(y) &=& \gr 1 - \mu  \quad \pause \text{(base measure)}\\ \pause
+    \pl \mathcal{T}(y) &=& \pl y \quad \pause \text{(sufficient statistic)}\\ \pause
+    \rd \eta &=& \rd \log\lt(\fr{\mu}{1 - \mu}\rt) \quad \pause \text{(natural parameter)} \\ \pause
+    \bl A(\eta) &=& \bl 0 \quad \pause \text{(log-partition function)}
+  \end{eqnarray*}
+  
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Cumulant generating function}
+\pause
+\begin{itemize}
+  \item Cumulants $\kappa_n(\bm y)$ are functions of the central moments of a distribution \pause
+  \item For example, $\kappa_1(\bm y) = \mathbb{E}(\bm y)$ and $\kappa_2(\bm y) = \mathbb{V}(\bm y)$ \pause
+  \item Higher order cumulants are polynomial functions of the central moments \pause
+  \item The cumulants of a distribution are defined by the cumulant generating function (CGF):
+    \begin{equation}
+      K_{\bm y}(t) = \log \mathbb{E}(\exp(t\bm y))
+    \end{equation}
+    \pause
+    where $\mathbb{E}(\exp(t\bm y))$ is the moment generating function (MGF) of $\bm x$ \pause
+
+\item In the exponential family, the log-partition function $A(\bm\eta)$ is the CGF of the sufficient statistics $\mathcal{T}(\bm y)$ \pause
+  \item Thus, the cumulants can be obtained by differentiating $A(\bm\eta)$:
+    \begin{eqnarray*}
+      \kappa_1(\mathcal{T}(\bm y)) &=& \mathbb{E}(\mathcal{T}(\bm y)) = \nabla_{\bm\eta} A(\bm\eta) \\ \pause
+      \kappa_2(\mathcal{T}(\bm y)) &=& \text{Cov}(\mathcal{T}(\bm y)) = \nabla^2_{\bm\eta} A(\bm\eta)
+    \end{eqnarray*}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Unique global maximum of the likelihood}\pause
+
+  From the CGF properties, we have: 
+  \begin{equation}
+    \nabla^2_{\bm\eta} A(\bm\eta) = \text{Cov}(\mathcal{T}(\bm y)) > 0
+  \end{equation}
+  This implies that the log-partition function $A(\bm\eta)$ is strictly convex. \pause Thus, the log-likehood
+  \pause
+
+  \begin{equation}
+    \log p(\bm y |\bm \eta) = \log h(\bm y) + \bm \eta\tr\mathcal{T} (\bm y) - A(\bm\eta) + \text{const}
+  \end{equation}
+  
+  is guaranteed to have a unique global maximum.
+
+\end{frame}
+\section{GLMs}
+
+\begin{frame}
+  \frametitle{The generalized linear model (GLM)}
+  \label{glm}
+  \pause
+
+  \begin{itemize}
+  \item Conventional linear regression models have the form:
+    \begin{equation}
+      p(y|\bm x, \bm w) \sim \mathcal{N}(y| \bm x\tr \bm w, \sigma^{2})
+    \end{equation}
+    \pause where \pause
+    \begin{itemize}
+    \item $y_{i}$ is a continuous response
+    \item $\bm x_{i}$ is a vector of quantitative and/or qualitative explanatory variables
+    \end{itemize}
+    \pause
+
+  \item Generalized linear models (GLMs) were introduced to extend this framework to allow $y_{i}$ to be modeled by other \href{https://people.eecs.berkeley.edu/~jordan/courses/260-spring10/other-readings/chapter8.pdf}{exponential family distributions} besides the normal/Gaussian, e.g.
+    \begin{itemize}
+    \item exponential
+    \item binomial/multinomial (with fixed number of trials)
+    \item Poisson
+    \end{itemize}
+  \pause
+
+\item In the GLM framework: \pause
+  \begin{itemize}
+  \item The mean of $y_{i}$ is given by $\mu_{i}$
+  \item $\mu_{i}$ can be specified by a nonlinear function of $\bm x_{i}\tr \bm w$
+  \item Note that the simple linear regression is a special case of GLM in which 
+  $\mu_{i} = \bm x_{i}\tr \bm w$ and $y_{i}$ follows a Gaussian distribution
+  \end{itemize}
+    \end{itemize}
+
+    \pause
+
+    \hyperlink{recap}{\beamerbutton{Back to Recap}}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{GLM formulation}\pause
+
+    The GLM is a version of the exponential family distribution in which the natural parameters $\eta_n$ are a {\bf linear function} of the output. \pause It is given by:\pause
+
+    \begin{equation}
+      p(y_n |\bm x_n, \bm w, \sigma^2) = \exp\lt[ \fr{y_n\eta_n - A(\eta_n)}{\sigma^2} + \log h(y_n,\sigma^2) \rt]
+    \end{equation}
+    \pause
+    where:
+    \pause
+    \begin{itemize}
+    \item $\eta_n = \bm w \tr \bm x_n$ is the natural parameter (input) \pause
+    %\item $\mu_n = E(y_n) = g^{-1}(\eta_n)$ is the mean of $y_n$ \pause
+    %\item $g(\cdot)$ is the link function \pause
+    \item $y_n  = \mathcal{T}(y_n)$ is the sufficient statistic \pause
+    \item $A(\eta_n)$ is the log-partition function (or log normalizer)\pause
+    \item $h(y_n,\sigma^  2)$ is the base measure \pause
+    \item $\sigma^2$ is the dispersion parameter (typically known or set to 1)
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Link and mean functions}\pause
+
+
+
+    Recalling that the mean and variance of the sufficient statistics $\mathcal{T}(y_n) = y_n$ are given by the first and second derivatives of the log-partition function $A(\eta_n)$, we have:
+    \pause
+  \begin{eqnarray}
+    \mathbb{E}(y_n |\bm x_n ,\bm w, \sigma^2) &=& A'(\eta_n) = \pause \ell^{-1}(\eta_n)  \\\pause
+    \text{Var}(y_n|\bm x_n ,\bm w, \sigma^2) &=& A''(\eta_n)\sigma^2 \pause
+  \end{eqnarray}
+    
+  \pause
+  We define the \textbf{mean function} as 
+  \begin{equation}\mu_n = \ell^{-1}(\eta_n) \end{equation} \pause 
+  and the \textbf{link function} as its inverse: 
+  \begin{equation}
+    g(\mu_n) = \ell(\mu_n) = \eta_n
+  \end{equation}
+  \pause The link function is thus the inverse of the mean function.
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Linear regression (1/2)}
+
+    \pause
+
+    Linear regression has the form:
+
+    \begin{equation}
+      p(y_n |\bm x_n, \bm w, \sigma^2) = \fr{1}{\sqrt{2\pi\sigma^2}} \exp\lt(-\fr{1}{2\sigma^2}(y_n - \bm w \tr \bm x_n)^2\rt)
+    \end{equation}
+    \pause
+    Taking logs: \pause
+    \begin{equation}
+      \log p(y_n |\bm x_n, \bm w, \sigma^2) = -\fr{1}{2}\log(2\pi\sigma^2) - \fr{1}{2\sigma^2}(y_n - \bm w \tr \bm x_n)^2
+    \end{equation}\pause
+
+    Setting $\eta_n = \bm w \tr \bm x_n$, we can write in GLM form as:
+    \begin{equation}
+        \log p(y_n|\bm x_n, \bm w, \sigma^2) = \fr{y_n \eta_n - \eta_n^2/2}{\sigma^2} - \fr12 \lt( \fr{y_n^2}{\sigma^2} + \log(2\pi\sigma^2) \rt)
+    \end{equation}
+    \pause
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Linear regression (2/2)}
+      If we set: \pause 
+    \begin{eqnarray}
+       A(\eta_n) &=& \eta_n^2/2 \\\pause
+       h(y_n,\sigma^2) &=& \fr{1}{\sqrt{2\pi\sigma^2}} \exp\lt(-\fr{1}{2\sigma^2}y_n^2\rt)
+    \end{eqnarray}\pause
+   then we can write:\pause
+    \begin{equation}
+     \log p(y_n |\bm x_n, \bm w, \sigma^2) = \fr{y_n \eta_n - A(\eta_n)}{\sigma^2} + \log h(y_n,\sigma^2)
+    \end{equation}
+    \pause
+    And thus, the cumulants are given by:
+    \begin{eqnarray}
+      \mathbb{E}(y_n |\bm x_n ,\bm w, \sigma^2) &=& A'(\eta_n) \pause = \eta_n = \bm w \tr \bm x_n \\
+      \text{Var}(y_n|\bm x_n ,\bm w, \sigma^2) &=& A''(\eta_n)\sigma^2 = \sigma^2
+    \end{eqnarray}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{GLM components}
+
+    \pause
+
+    A GLM can be considered as consisting of three parts: \pause
+
+    \begin{itemize}
+    \item \textbf{Random component:} this is the probability distribution of the response variable \pause
+    \item \textbf{Systematic component:} specifies the explanatory variables within the linear combination of their coefficients ($\bm X\bm w $)\pause
+    \item \textbf{Link function $\bm{g(\mu)}$:} defines the relationship between the random and systematic components: \pause
+      \begin{itemize}
+      \item Simple linear regression ({\bf identity} link function): \pause
+        \begin{equation}
+          g(\mu_{n}) = g(\mathbb{E}(y_{n })) = \bm x_{n}\tr \bm w 
+        \end{equation}
+        \pause
+      \item Binary logistic regression ({\bf logit} link function): \pause
+        \begin{equation}
+          g(\mu_{n}) = g(p(\bm x_{n})) = \pause \text{logit} (p(\bm x_{n})) = \pause
+          \ln\lt(\fr{p(\bm x_{n})}{1 - p(\bm x_{n})} \rt) = \pause \bm x_{n}\tr \bm w 
+        \end{equation}
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+
+
+  \begin{frame}
+    \frametitle{Assumptions of GLM}
+    \pause
+    \begin{itemize}
+    \item The observations of the response variable $\bm y$  are i.i.d.
+      \pause
+    \item Response variable $y_{n}$ is typically exponentially distributed (not restricted to being normally distributed) \pause
+      \begin{itemize}
+      \item Implies that errors need not be normally distributed (but should be independent)
+      \end{itemize}
+    \item Link function is linear with respect to the coefficients ($ w _{d}$)\pause
+      \begin{itemize}
+      \item Relationship between response and explanatory variables does not have to be linear \pause
+      \item Explanatory variables can be nonlinear transformations of original values (as in simple linear regression)
+      \end{itemize}
+      \pause
+    \item Variance may not homogeneous (i.e.\ homoscedasticity is not a requirement)\pause
+    \item Parameters are estimated via MLE 
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Commonly used GLM models and their components}
+
+    \pause
+    \begin{center}\small
+      \begin{tabular}{l p{.7in} l }\toprule
+      \bf Model & \bf Random component& \bf Link function   \\\midrule
+      Linear regression & Gaussian & Identity: $g(\mu_n) = \mu_{n} =  \bm w \tr \bm x_{n}$ \\\midrule
+      Binary logistic regression & Bernoulli & Logit:  $g(\mu_{n}) = \log\lt(\fr{\mu_{n}}{1 - \mu_{n}}\rt)$ \\\midrule
+      Probit regression & Bernoulli & Probit: $g(\mu_{n}) = \Phi^{-1}(\mu_{n})$ \\\midrule
+      Multinomial logit/logistic  & Categorical & Multinomial logit: $g(\mu_{nc}) = \log\lt(\fr{\mu_{nc}}{\mu_{nC}}\rt)$ \\\midrule
+      Poisson regression & Poisson & Log: $g(\mu_{n}) = \log(\mu_{n})$ \\\bottomrule
+      \end{tabular}
+    \end{center}
+
+    \pause
+
+    Note that in all cases, the link function always results in:
+    \begin{equation}
+      g(\mu_i) = w\tr x_{i}
+    \end{equation}
+    \pause Its job is to ``link'' the response to the systematic component via a suitable transformation that results in a linear function of the $ w $'s.
+  \end{frame}
+
+
+\section{Fitting a GLM}
+
+\begin{frame}
+  \frametitle{MLE of GLM parameters}
+\pause
+The negative log-likelihood (ignoring constant terms) is given by\pause
+
+
+\begin{equation}
+  \text{NLL}(\bm w) = -\log p(\mathcal{D}|\bm w) = -\sum_{n=1}^{N} \log p(y_n |\bm x_n, \bm w) = \sum_{n=1}^{N} \fr{A(\eta_n)}{\sigma^2} - \fr{y_n\eta_n}{\sigma^2}
+\end{equation}
+\pause
+
+If we set $\ell_n = \eta_n y_n - A(\eta_n)$, then the NLL can be written as:
+\pause
+\begin{equation}
+  \text{NLL}(\bm w) = -\sum_{n=1}^{N} \fr{\ell_n}{\sigma^2}
+\end{equation}
+\pause
+where $\eta_n = \bm w \tr \bm x_n$. \pause
+
+The gradient of the NLL is then given by:
+\pause
+
+\begin{equation}
+  \bm g_n  = \sum_{n=1}^{N} \fr{y_n -\mu_n }{\sigma^2} \bm x_n
+\end{equation}
+\pause
+where $\mu_n = A'(\eta_n) = \ell^{-1}(\eta_n)$ is the mean function.
+
+\end{frame}
+  % \begin{frame}
+  %   \frametitle{Further reading on GLMs}
+  %   \pause
+
+  %   \begin{itemize}
+  %   \item German Rodriguez's lecture notes on GLMs: \url{https://data.princeton.edu/wws509/notes/}
+  %   \item Penn State: \url{https://online.stat.psu.edu/stat504/lesson/6/6.1} (Including more on logistic and multinomial logistic)
+  %   \end{itemize}
+  % \end{frame}
+
+% \begin{frame}
+%   \frametitle{Bias-variance tradeoff}
+%   \pause
+%   Given a simple case with $n=100$ observations of $x_{i},y_{i}$ where:
+%   \begin{eqnarray*}
+%     Y &=& f(X) + \epsilon \\\pause
+%     f(X) &=& \fr{\sin(12(X+0.2))}{X + 0.2}
+%   \end{eqnarray*}
+%   \pause
+%   with $X \sim U(0,1)$ and $\epsilon \sim \mathcal{N}(0,1)$.
+%   \pause
+%   \medskip
+%   The covariance is given by:
+%   \begin{equation}
+%     Cov(\bm{\hat f}) = \bm S_{\la}Cov(\bm y)\bm S_{\la}\tr  = \pause \bm S_{\la}\bm S_{\la}\tr 
+%   \end{equation}
+%   \pause
+%   The bias is given by:\pause
+%   \begin{equation}
+%     \text{Bias}(\hat{\bm f}) = \bm f - E(\bm{\hat f}) = \pause \bm f - E(\bm S_{\la}\bm y) = \pause \bm f - \bm S_{\la}\bm f
+%   \end{equation}
+% \end{frame}
+
+% \begin{frame}
+%   \frametitle{Bias-variance tradeoff (cont.)}
+%   \pause
+%   We can then write the expected prediction error (EPE) as:\pause
+%   \begin{eqnarray}
+%     \begin{split}
+%       EPE(\hat f_{\la}) &= E(Y - \hat f_{\la}(X))^{2} \\\pause
+%       &= Var(Y) + {\pl E\lt[\text{Bias}^{2}(\hat f_{\la}(X)) + Var(\hat f_{\la}(X)) \rt]}\\\pause
+%       &= \sigma^{2} + {\pl MSE(\hat f_{\la})}
+%     \end{split}
+%   \end{eqnarray}
+%   \pause
+%   This explicitly shows the bias-variance tradeoff. \pause
+%   \medskip
+  
+%   However, we do not know the true $f(X)$, as we have here. Thus, we can use \textbf{\bl cross-validation} to estimate this:\pause
+%   \begin{eqnarray}\bl
+%     CV(\hat f_{\la}) &\bl = \fr1n \sum_{i=1}^{n} (y_{i} - \hat f_{\la}^{-i}(x_{i}))^{2} \\\pause
+%                      &\bl =  \fr1n\sum_{i=1}^{n} \lt( \fr{y_{i} -\hat f_{\la}(x_{i})}{1 - S_{\la}(i,i)}\rt)
+%   \end{eqnarray}
+% \end{frame}
+% \begin{frame}
+%   \frametitle{Cross-validation estimate of test error}\pause
+%    \visible<2->{
+%     \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=.5\textwidth,trim={1cm 5cm 1cm 2cm},clip]{ESL5-9}
+%     \caption{$EPE(\la)$ and estimate $CV(\la)$ and  smoothing spline fits for various $df_{\la}$. In this case the CV estimate is biased (above the EPE curve). Generally, however, CV produces unbiased estimates of the extra-sample (test) error.}}
+%   \end{figure}
+% \end{frame}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

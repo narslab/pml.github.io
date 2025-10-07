@@ -12,10 +12,11 @@ Thu, Sep 25
   :  [Echo360 Video](#)
 
 
-Tue, Sep 30
+Thu, Oct 2
 : **LECTURE 2C**{: .label .label-blue }[Linear Regression (OLS/WLS)](/assets/lectures/M2-Linear-Methods/L2c-Linear-Regression-Handout.pdf)
-  :  [Echo360 Video](#)
+  :   
 
 Tue, Oct 7
 : **LECTURE 2E**{: .label .label-blue }[Generalized Linear Models](/assets/lectures/M2-Linear-Methods/L2e-GLMs-Handout.pdf)
-  :  [Echo360 Video](#)
+  :
+: **NOTEBOOK**{: .label .label-activity}[GLM - Poisson and Logistic](/assets/notebooks/GLM.ipynb)

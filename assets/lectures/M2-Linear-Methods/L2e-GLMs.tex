@@ -1,6 +1,6 @@
 %\documentclass[smaller,handout]{beamer}
 %\documentclass[smaller,handout]{beamer}
-\def\bmode{0} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+\def\bmode{2} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
 \if 0\bmode
 \documentclass[smaller]{beamer}
 \else \if 1\bmode
@@ -479,6 +479,7 @@
       \item $Z(\bm \eta)$ is the partition function (normalization constant) \pause
       \item $h(\bm y)$ is the base measure (scaling constant; typically 1)\pause
       \item $\bm \eta$ are the natural/canonical parameters \pause
+      \item $\mathcal{T}(\bm y)$ are the sufficient statistics \pause
       \item $A(\bm \eta) = \ln Z(\bm \eta)$ is the log-partition function \pause
     \end{itemize}
   \pause
@@ -658,7 +659,7 @@
   \begin{equation}\mu_n = \ell^{-1}(\eta_n) \end{equation} \pause 
   and the \textbf{link function} as its inverse: 
   \begin{equation}
-    g(\mu_n) = \ell(\mu_n) = \eta_n
+    g(\mu_n) = \ell(\mu_n)  
   \end{equation}
   \pause The link function is thus the inverse of the mean function.
   \end{frame}
@@ -773,7 +774,7 @@
 
     Note that in all cases, the link function always results in:
     \begin{equation}
-      g(\mu_i) = w\tr x_{i}
+      g(\mu_n) = w\tr x_{n}
     \end{equation}
     \pause Its job is to ``link'' the response to the systematic component via a suitable transformation that results in a linear function of the $ w $'s.
   \end{frame}
@@ -800,11 +801,11 @@ If we set $\ell_n = \eta_n y_n - A(\eta_n)$, then the NLL can be written as:
 \pause
 where $\eta_n = \bm w \tr \bm x_n$. \pause
 
-The gradient of the NLL is then given by:
+The gradient of the NLL (for a single term) is then given by:
 \pause
 
 \begin{equation}
-  \bm g_n  = \sum_{n=1}^{N} \fr{y_n -\mu_n }{\sigma^2} \bm x_n
+  \bm g_n  =   \fr{y_n -\mu_n }{\sigma^2} \bm x_n
 \end{equation}
 \pause
 where $\mu_n = A'(\eta_n) = \ell^{-1}(\eta_n)$ is the mean function.

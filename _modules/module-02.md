@@ -20,3 +20,8 @@ Tue, Oct 7
 : **LECTURE 2E**{: .label .label-blue }[Generalized Linear Models](/assets/lectures/M2-Linear-Methods/L2e-GLMs-Handout.pdf)
   :
 : **NOTEBOOK**{: .label .label-activity}[GLM - Poisson and Logistic](/assets/notebooks/GLM.ipynb)
+
+Tue, Oct 9
+: **LECTURE 2D**{: .label .label-blue }[Ridge and Lasso Regression](/assets/lectures/M2-Linear-Methods/L2d-Ridge-and-Lasso-Regression-Handout.pdf)
+  :
+: **NOTEBOOK**{: .label .label-activity}[Ridge and Lasso](#)

@@ -1,5 +1,5 @@
 %\documentclass[smaller,handout]{beamer}
-%\documentclass[smaller,handout]{beamer}
+% \documentclass[smaller,handout]{beamer}
 \def\bmode{2} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
 \if 0\bmode
 \documentclass[smaller]{beamer}
@@ -460,7 +460,7 @@
  
 
 
-\section{Exponential family}
+\section{Backgrounnd: Exponential family}
   \begin{frame}
     \frametitle{The exponential family}
     \pause
@@ -593,37 +593,36 @@
     \end{equation}
     \pause where \pause
     \begin{itemize}
-    \item $y_{i}$ is a continuous response
-    \item $\bm x_{i}$ is a vector of quantitative and/or qualitative explanatory variables
-    \end{itemize}
+     \item $y_{n}$ is a continuous response
+     \item $\bm x_{n}$ is a vector of quantitative and/or qualitative explanatory variables
+     \end{itemize}
+     \pause
+
+    \item Generalized linear models (GLMs) were introduced to extend this framework to allow $y_{n}$ to be modeled by other \href{https://people.eecs.berkeley.edu/~jordan/courses/260-spring10/other-readings/chapter8.pdf}{exponential family distributions} besides the normal/Gaussian, e.g.
+     \begin{itemize}
+     \item exponential
+     \item binomial/multinomial (with fixed number of trials)
+     \item Poisson
+     \end{itemize}
     \pause
 
-  \item Generalized linear models (GLMs) were introduced to extend this framework to allow $y_{i}$ to be modeled by other \href{https://people.eecs.berkeley.edu/~jordan/courses/260-spring10/other-readings/chapter8.pdf}{exponential family distributions} besides the normal/Gaussian, e.g.
+  \item In the GLM framework: \pause
     \begin{itemize}
-    \item exponential
-    \item binomial/multinomial (with fixed number of trials)
-    \item Poisson
+    \item The mean of $y_{n}$ is given by $\mu_{n}$
+    \item $\mu_{n}$ can be specified by a nonlinear function of $\bm x_{n}\tr \bm w$
+    \item Note that the simple linear regression is a special case of GLM in which 
+    $\mu_{n} = \bm x_{n}\tr \bm w$ and $y_{n}$ follows a Gaussian distribution
     \end{itemize}
-  \pause
-
-\item In the GLM framework: \pause
-  \begin{itemize}
-  \item The mean of $y_{i}$ is given by $\mu_{i}$
-  \item $\mu_{i}$ can be specified by a nonlinear function of $\bm x_{i}\tr \bm w$
-  \item Note that the simple linear regression is a special case of GLM in which 
-  $\mu_{i} = \bm x_{i}\tr \bm w$ and $y_{i}$ follows a Gaussian distribution
   \end{itemize}
-    \end{itemize}
+  %  \pause
 
-    \pause
-
-    \hyperlink{recap}{\beamerbutton{Back to Recap}}
+   % \hyperlink{recap}{\beamerbutton{Back to Recap}}
   \end{frame}
 
   \begin{frame}
     \frametitle{GLM formulation}\pause
 
-    The GLM is a version of the exponential family distribution in which the natural parameters $\eta_n$ are a {\bf linear function} of the output. \pause It is given by:\pause
+    The GLM is a version of the exponential family distribution in which the natural parameters $\eta_n$ are a {\bf linear function} of the output.\footnote{The technical name of the GLM form of the distribution is the \textbf{exponential dispersion model/family, often abbreviated as ``EDM.''}} \pause It is given by:\pause
 
     \begin{equation}
       p(y_n |\bm x_n, \bm w, \sigma^2) = \exp\lt[ \fr{y_n\eta_n - A(\eta_n)}{\sigma^2} + \log h(y_n,\sigma^2) \rt]
@@ -638,7 +637,7 @@
     \item $y_n  = \mathcal{T}(y_n)$ is the sufficient statistic \pause
     \item $A(\eta_n)$ is the log-partition function (or log normalizer)\pause
     \item $h(y_n,\sigma^  2)$ is the base measure \pause
-    \item $\sigma^2$ is the dispersion parameter (typically known or set to 1)
+    \item $\sigma^2$ is the {\bf dispersion parameter}  (typically known or set to 1)
     \end{itemize}
   \end{frame}
 
@@ -651,7 +650,7 @@
     \pause
   \begin{eqnarray}
     \mathbb{E}(y_n |\bm x_n ,\bm w, \sigma^2) &=& A'(\eta_n) = \pause \ell^{-1}(\eta_n)  \\\pause
-    \text{Var}(y_n|\bm x_n ,\bm w, \sigma^2) &=& A''(\eta_n)\sigma^2 \pause
+    \mathbb{V}(y_n|\bm x_n ,\bm w, \sigma^2) &=& A''(\eta_n)\sigma^2 \pause
   \end{eqnarray}
     
   \pause
@@ -661,7 +660,7 @@
   \begin{equation}
     g(\mu_n) = \ell(\mu_n)  
   \end{equation}
-  \pause The link function is thus the inverse of the mean function.
+  \pause The link function\footnote{In most textbooks, the link function is denoted as $g(\mu)$, while Murphy uses $\ell(\mu)$.} is thus the inverse of the mean function, and its role is to map the mean output/response $\mu_n$ to the linear predictor $\eta_n = \bm w \tr \bm x_n$.
   \end{frame}
 
   \begin{frame}
@@ -704,8 +703,11 @@
       \mathbb{E}(y_n |\bm x_n ,\bm w, \sigma^2) &=& A'(\eta_n) \pause = \eta_n = \bm w \tr \bm x_n \\
       \text{Var}(y_n|\bm x_n ,\bm w, \sigma^2) &=& A''(\eta_n)\sigma^2 = \sigma^2
     \end{eqnarray}
+    \pause
+    Thus, the mean function is $\mu_n = \ell^{-1}(\eta_n) = \eta_n$ and the link function is $g(\mu_n) = \ell(\mu_n) = \mu_n$ (identity link function).
   \end{frame}
 
+  \section{Link functions}
   \begin{frame}
     \frametitle{GLM components}
 
@@ -714,19 +716,19 @@
     A GLM can be considered as consisting of three parts: \pause
 
     \begin{itemize}
-    \item \textbf{Random component:} this is the probability distribution of the response variable \pause
+    \item \textbf{Random component:} this is the probability distribution of the response variable $p(\bm y|\bm X, \bm w)$\pause
     \item \textbf{Systematic component:} specifies the explanatory variables within the linear combination of their coefficients ($\bm X\bm w $)\pause
     \item \textbf{Link function $\bm{g(\mu)}$:} defines the relationship between the random and systematic components: \pause
       \begin{itemize}
       \item Simple linear regression ({\bf identity} link function): \pause
         \begin{equation}
-          g(\mu_{n}) = g(\mathbb{E}(y_{n })) = \bm x_{n}\tr \bm w 
+          g(\mu_{n}) = g(\mathbb{E}(y_{n })) = \bm w\tr \bm x_n
         \end{equation}
         \pause
       \item Binary logistic regression ({\bf logit} link function): \pause
         \begin{equation}
           g(\mu_{n}) = g(p(\bm x_{n})) = \pause \text{logit} (p(\bm x_{n})) = \pause
-          \ln\lt(\fr{p(\bm x_{n})}{1 - p(\bm x_{n})} \rt) = \pause \bm x_{n}\tr \bm w 
+          \ln\lt(\fr{p(\bm x_{n})}{1 - p(\bm x_{n})} \rt) = \pause \bm w\tr \bm x_n
         \end{equation}
       \end{itemize}
     \end{itemize}
@@ -744,7 +746,7 @@
       \begin{itemize}
       \item Implies that errors need not be normally distributed (but should be independent)
       \end{itemize}
-    \item Link function is linear with respect to the coefficients ($ w _{d}$)\pause
+    \item Link function ($g(\mu_n)$) is linear with respect to the coefficients ($ w _{d}$)\pause
       \begin{itemize}
       \item Relationship between response and explanatory variables does not have to be linear \pause
       \item Explanatory variables can be nonlinear transformations of original values (as in simple linear regression)
@@ -759,14 +761,14 @@
     \frametitle{Commonly used GLM models and their components}
 
     \pause
-    \begin{center}\small
-      \begin{tabular}{l p{.7in} l }\toprule
-      \bf Model & \bf Random component& \bf Link function   \\\midrule
-      Linear regression & Gaussian & Identity: $g(\mu_n) = \mu_{n} =  \bm w \tr \bm x_{n}$ \\\midrule
-      Binary logistic regression & Bernoulli & Logit:  $g(\mu_{n}) = \log\lt(\fr{\mu_{n}}{1 - \mu_{n}}\rt)$ \\\midrule
-      Probit regression & Bernoulli & Probit: $g(\mu_{n}) = \Phi^{-1}(\mu_{n})$ \\\midrule
-      Multinomial logit/logistic  & Categorical & Multinomial logit: $g(\mu_{nc}) = \log\lt(\fr{\mu_{nc}}{\mu_{nC}}\rt)$ \\\midrule
-      Poisson regression & Poisson & Log: $g(\mu_{n}) = \log(\mu_{n})$ \\\bottomrule
+    \begin{center}\scriptsize
+      \begin{tabular}{l p{.6in} p{.5in} l }\toprule
+      \bf Model & \bf Random component& \bf Mean/output ($\mu_n$) & \bf Link function   \\\midrule
+      Linear regression & Gaussian & $\bm w \tr \bm x_{n}$ &  Identity: $g(\mu_n) = \mu_{n} =  \bm w \tr \bm x_{n}$ \\\midrule
+      Binary logistic regression & Bernoulli  & $\bm\sigma(\bm w \tr \bm x_{n})$ & Logit:  $g(\mu_{n}) = \log\lt(\fr{\mu_{n}}{1 - \mu_{n}}\rt)$ \\\midrule
+      Probit regression & Bernoulli & $\bm\sigma(\bm w \tr \bm x_{n})$ & Probit: $g(\mu_{n}) = \Phi^{-1}(\mu_{n})$ \\\midrule
+      Multinomial logit/logistic  & Categorical & $\mathcal{S}(\bm W \bm x_{n})$ & Multinomial logit: $g(\mu_{nc}) = \log\lt(\fr{\mu_{nc}}{\mu_{nC}}\rt)$ \\\midrule
+      Poisson regression & Poisson & $\exp(\bm w \tr \bm x_{n})$ & Log: $g(\mu_{n}) = \log(\mu_{n})$ \\\bottomrule
       \end{tabular}
     \end{center}
 
@@ -774,13 +776,92 @@
 
     Note that in all cases, the link function always results in:
     \begin{equation}
-      g(\mu_n) = w\tr x_{n}
+      g(\mu_n) = \bm w \tr \bm x_{n} = \eta_n
     \end{equation}
     \pause Its job is to ``link'' the response to the systematic component via a suitable transformation that results in a linear function of the $ w $'s.
   \end{frame}
 
 
-\section{Fitting a GLM}
+  \begin{frame}
+    \frametitle{Canonical and non-canonical link functions}
+
+    \pause
+
+    Link functions can be classified as either canonical or non-canonical: \pause
+    \begin{itemize}
+    \item Canonical link function: results in the  canonical/natural parameters $\theta$ of the random component (i.e. $\eta = g(\mu) = \theta$) \pause
+      \begin{itemize}
+      \item \textbf{identity} (linear regression): $g(\mu) = \mu$; $\mu$ is the canonical parameter of the Gaussian distribution
+      \item  \textbf{logit} (binary logistic regression): $g(\mu) = \log\lt(\fr{\mu}{1 - \mu}\rt)$; the logit is the canonical parameter of the Bernoulli distribution
+      \item \textbf{log} (Poisson regression): $g(\mu) = \log(\mu)$; $\log(\mu)$ is the canonical parameter of the Poisson distribution
+      \end{itemize}
+      \pause
+    \item Non-canonical link function: does not result in natural parameter of the random component/underlying distribution (i.e. $g(\mu_) \neq \mu_n$). \pause Examples:
+    \begin{itemize}
+      \item \textbf{probit} (binary probit regression): $g(\mu) = \Phi^{-1}(\mu)$; the probit is not the canonical parameter of the Bernoulli distribution
+      \item \textbf{complementary log-log} (binary regression): $g(\mu) = \log(-\log(1 - \mu))$; the complementary log-log is not the canonical parameter of the Bernoulli distribution
+    \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Canonical link function (another view)}\pause
+
+    Let $\theta$ be the natural parameter, $\eta$ the linear predictor, and $\mu$ the mean of the response variable. \pause
+    Recall:
+
+    \begin{eqnarray}
+      \mu &=& \mathbb{E}(y|\theta) = A'(\theta) \pause \\
+      \eta &=& \bm w \tr \bm x = g(\mu) = g(A'(\theta)) 
+    \end{eqnarray}
+    \pause
+
+    If the link function is canonical, then:
+    \begin{equation}
+      g(\mu) =  (A')^{-1}(\mu) = \theta
+    \end{equation}
+
+    If not:
+    \begin{equation}
+      g(\mu) = (A')^{-1}(\mu) \neq \theta
+    \end{equation}
+
+    
+  
+  \end{frame}
+
+  
+  \begin{frame}
+    \frametitle{Usage of canonical vs non-canonical link functions}
+
+    \pause
+
+    \begin{itemize}
+      \item Canonical link functions are simpler to estimate and have desirable statistical properties. \pause
+    \item Non-canonical link functions may be used when the canonical link does not provide a good fit to the data or when interpretability of the model is a priority. \pause
+    \item In certain cases (e.g. probit regression), the non-canonical link (inverse CDF) allows for more efficient computation of the likelihood (e.g. Gibbs sampling)
+    \end{itemize}
+    
+
+  \end{frame}
+
+  \section{Fitting a GLM}
+
+  \begin{frame}
+    \frametitle{Fitting a GLM}
+
+    \pause
+
+    The process of fitting a GLM involves the following steps:
+
+    \begin{itemize}
+    \item Specify the distribution of the response variable (e.g. Gaussian, Bernoulli, Poisson)
+    \item Choose a link function (canonical or non-canonical)
+    \item Estimate the model parameters (e.g. using MLE)
+    \item Assess the model fit (e.g. using residuals, AIC/BIC)
+    \end{itemize}
+
+  \end{frame}
 
 \begin{frame}
   \frametitle{MLE of GLM parameters}
@@ -793,10 +874,10 @@ The negative log-likelihood (ignoring constant terms) is given by\pause
 \end{equation}
 \pause
 
-If we set $\ell_n = \eta_n y_n - A(\eta_n)$, then the NLL can be written as:
+If we set $\mathcal{L}_n = \eta_n y_n - A(\eta_n)$, then the NLL can be written as:
 \pause
 \begin{equation}
-  \text{NLL}(\bm w) = -\sum_{n=1}^{N} \fr{\ell_n}{\sigma^2}
+  \text{NLL}(\bm w) = -\sum_{n=1}^{N} \fr{\mathcal{L}_n}{\sigma^2}
 \end{equation}
 \pause
 where $\eta_n = \bm w \tr \bm x_n$. \pause
@@ -811,71 +892,20 @@ The gradient of the NLL (for a single term) is then given by:
 where $\mu_n = A'(\eta_n) = \ell^{-1}(\eta_n)$ is the mean function.
 
 \end{frame}
-  % \begin{frame}
-  %   \frametitle{Further reading on GLMs}
-  %   \pause
 
-  %   \begin{itemize}
-  %   \item German Rodriguez's lecture notes on GLMs: \url{https://data.princeton.edu/wws509/notes/}
-  %   \item Penn State: \url{https://online.stat.psu.edu/stat504/lesson/6/6.1} (Including more on logistic and multinomial logistic)
-  %   \end{itemize}
-  % \end{frame}
+\section{Outlook}
+\begin{frame}
+  \frametitle{Summary}
 
-% \begin{frame}
-%   \frametitle{Bias-variance tradeoff}
-%   \pause
-%   Given a simple case with $n=100$ observations of $x_{i},y_{i}$ where:
-%   \begin{eqnarray*}
-%     Y &=& f(X) + \epsilon \\\pause
-%     f(X) &=& \fr{\sin(12(X+0.2))}{X + 0.2}
-%   \end{eqnarray*}
-%   \pause
-%   with $X \sim U(0,1)$ and $\epsilon \sim \mathcal{N}(0,1)$.
-%   \pause
-%   \medskip
-%   The covariance is given by:
-%   \begin{equation}
-%     Cov(\bm{\hat f}) = \bm S_{\la}Cov(\bm y)\bm S_{\la}\tr  = \pause \bm S_{\la}\bm S_{\la}\tr 
-%   \end{equation}
-%   \pause
-%   The bias is given by:\pause
-%   \begin{equation}
-%     \text{Bias}(\hat{\bm f}) = \bm f - E(\bm{\hat f}) = \pause \bm f - E(\bm S_{\la}\bm y) = \pause \bm f - \bm S_{\la}\bm f
-%   \end{equation}
-% \end{frame}
-
-% \begin{frame}
-%   \frametitle{Bias-variance tradeoff (cont.)}
-%   \pause
-%   We can then write the expected prediction error (EPE) as:\pause
-%   \begin{eqnarray}
-%     \begin{split}
-%       EPE(\hat f_{\la}) &= E(Y - \hat f_{\la}(X))^{2} \\\pause
-%       &= Var(Y) + {\pl E\lt[\text{Bias}^{2}(\hat f_{\la}(X)) + Var(\hat f_{\la}(X)) \rt]}\\\pause
-%       &= \sigma^{2} + {\pl MSE(\hat f_{\la})}
-%     \end{split}
-%   \end{eqnarray}
-%   \pause
-%   This explicitly shows the bias-variance tradeoff. \pause
-%   \medskip
-  
-%   However, we do not know the true $f(X)$, as we have here. Thus, we can use \textbf{\bl cross-validation} to estimate this:\pause
-%   \begin{eqnarray}\bl
-%     CV(\hat f_{\la}) &\bl = \fr1n \sum_{i=1}^{n} (y_{i} - \hat f_{\la}^{-i}(x_{i}))^{2} \\\pause
-%                      &\bl =  \fr1n\sum_{i=1}^{n} \lt( \fr{y_{i} -\hat f_{\la}(x_{i})}{1 - S_{\la}(i,i)}\rt)
-%   \end{eqnarray}
-% \end{frame}
-% \begin{frame}
-%   \frametitle{Cross-validation estimate of test error}\pause
-%    \visible<2->{
-%     \begin{figure}[h!]
-%     \centering
-%     \includegraphics[width=.5\textwidth,trim={1cm 5cm 1cm 2cm},clip]{ESL5-9}
-%     \caption{$EPE(\la)$ and estimate $CV(\la)$ and  smoothing spline fits for various $df_{\la}$. In this case the CV estimate is biased (above the EPE curve). Generally, however, CV produces unbiased estimates of the extra-sample (test) error.}}
-%   \end{figure}
-% \end{frame}
-
-
+  \begin{itemize}
+    \item In the exponential family, the log-partition function $A(\theta)$ is the cumulant generating function of the sufficient statistics $\mathcal{T}(\bm y)$ \pause
+    \item The log-partition function is strictly convex, thus the likelihood has a unique global maximum \pause
+    \item GLMs are a flexible class of models that extend linear regression to handle non-normal response variables \pause
+    \item Link functions $g(\mu)$ map the mean of the response variable to the linear predictor $\eta=\bm w\tr \bm x$ \pause
+    \item Canonical link functions result in the natural parameters $\theta$ of the underlying distribution, while non-canonical link functions do not \pause
+    \item GLM parameters $\eta$ can be estimated via MLE using gradient-based optimization methods
+  \end{itemize}
+\end{frame}
 \end{document}
 
 %%% Local Variables:

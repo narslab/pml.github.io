@@ -187,12 +187,12 @@
 
 \medskip\hrule\medskip
 
-\nin {\small CEE 616: Probabilistic Machine Learning
-\hfill\textit{ 10.09.2025}}
+\nin {\small CEE 616: Data Mining and Machine Learning for Engineers
+\hfill\textit{ 10.02.2025}}
 
-\nin{\it \small Due October 16, 2025 at 11:59PM. Submit via Canvas as a PDF.}\\
+\nin{\it \small Due October 14, 2025 at 11:59PM. Submit via Canvas.}\\
 
-\nin The standard problems are worth a total of \textbf{48 points}.
+\nin The standard problems are worth a total of \textbf{93 points}, with \textbf{7 extra credit points} available.
 
 % \subsubsection*{Useful links}
 % \begin{itemize}
@@ -206,20 +206,20 @@
 % \end{itemize}
 
 
-% \subsubsection*{Submission instructions}
-% There are two options for submission:
-% \begin{enumerate}
-% \item JupyterLab Notebook. Please name your notebook as follows: \\ \texttt{<lastname>-<firstname>-PS2.ipynb}
-% \item R/Python/MATLAB script \textit{and} PDF document with supporting responses.
-%   Your PDF should have complete responses to all the questions (including all the required plots).
-%   Your script should be clearly commented, producing all the results and plots you show in your PDF document.
-%   The filenames should be in a similar format as described above.
-% \end{enumerate}
-% Whenever datasets are provided, be sure to leave the relative path and filenames as originally given in order to ensure that your scripts will run properly.
-% For instance, here, all the data sets are found in the \texttt{data} folder. So, when you call \texttt{read.csv()}, use the relative path, e.g. \texttt{data/Default.csv}.
-% This way, when you submit your work, you need not include the data. I will have the exact same folder and will be able to run all the scripts as the same path will be referenced.
+\subsubsection*{Submission instructions}
+There are two options for submission:
+\begin{enumerate}
+\item JupyterLab Notebook. Please name your notebook as follows: \\ \texttt{<lastname>-<firstname>-PS2.ipynb}
+\item R/Python/MATLAB script \textit{and} PDF document with supporting responses.
+  Your PDF should have complete responses to all the questions (including all the required plots).
+  Your script should be clearly commented, producing all the results and plots you show in your PDF document.
+  The filenames should be in a similar format as described above.
+\end{enumerate}
+Whenever datasets are provided, be sure to leave the relative path and filenames as originally given in order to ensure that your scripts will run properly.
+For instance, here, all the data sets are found in the \texttt{data} folder. So, when you call \texttt{read.csv()}, use the relative path, e.g. \texttt{data/Default.csv}.
+This way, when you submit your work, you need not include the data. I will have the exact same folder and will be able to run all the scripts as the same path will be referenced.
 
-% \eject
+\eject
 
 % \section*{Problem 1 \quad {\it Classification or regression?}}
 % ISLR Exercise 2.2 (p.\ 52). \pts{4pts}
@@ -243,24 +243,9 @@
 
 % \eject
 
-\section*{Problem 1 \quad {\it Gaussian discriminant analysis  (8 pts)}}
+\section*{Problem 1 \quad {\it Logistic regression (20 pts; 2 pts EC)}}
 
-\begin{enumerate}[\bf (a)]
-
-\item Assuming a distinct class covariance $\bm\Sigma_c$ in Gaussian discriminant analysis results in a quadratic  \pts{2} decision boundary (QDA), which can easily overfit the data. LDA, which assumes a common covariance $\bm\Sigma$ across classes, results in a linear decision boundary, and can thus prevent overfitting. List two other approaches to prevent overfitting in Gaussian discriminant analysis. 
-  
-\item Suppose we have features \pts{6} $x \in \mathbb{R}^D$, a two-class response with class sizes $n_1, n_2$ and the target coded as $\{-n/n_1, n/n_2\}$.
-Show that the LDA rule classifies to class 2 if
-\begin{equation}
- \label{eq:lda}
-  x^\intercal \hat{\bm{\Sigma}}^{-1}(\hat\mu_2 - \hat\mu_1) > \fr12(\hat\mu_2 + \hat\mu_1)^\intercal\hat{\bm{\Sigma}}^{-1}(\hat\mu_2 - \hat\mu_1) - \log(n_2/n_1),
-\end{equation}
-and class 1 otherwise. (\textit{Hint:} First write the priors $\pi_{1}$ and $\pi_{2}$. Then write the discriminant functions $\delta_{1}$ and $\delta_{2}$. Knowing that the LDA classifier assigns an observation to class 2 when $\delta_{2} > \delta_{1}$, expand this condition to obtain \eqref{eq:lda}.)
-
-\end{enumerate}
-
-
-\section*{Problem 2 \quad {\it Logistic regression I (4 pts)}}
+\subsection*{Part 1.1}
 In a binary logistic regression with a multiple predictors $\bm x^\intercal = (1, x_1,\ldots,x_D)$, \pts{4}
 the logistic function is given by:
 \begin{equation}
@@ -276,17 +261,63 @@ Using this function, show explicitly that the log-odds or logit function of $p(y
 
 % \subsection*{Part 2.2}
 % ISLR Exercise 4.6 (a) and (b). \pts{5pts}
-\section*{Problem 3 \quad {\it Logistic regression II (8 pts)}}
-{\bf PMLI} Exercise 10.2 (a) - (d)
+
+
+\section*{Problem 2 \quad {\it LDA  (13 pts)}}
+
+\begin{enumerate}[\bf (a)]
+\item Suppose we have features \pts{8} $x \in \mathbb{R}^D$, a two-class response with class sizes $n_1, n_2$ and the target coded as $\{-n/n_1, n/n_2\}$.
+Show that the LDA rule classifies to class 2 if
+\begin{equation}
+ \label{eq:lda}
+  x^\intercal \hat{\bm{\Sigma}}^{-1}(\hat\mu_2 - \hat\mu_1) > \fr12(\hat\mu_2 + \hat\mu_1)^\intercal\hat{\bm{\Sigma}}^{-1}(\hat\mu_2 - \hat\mu_1) - \log(n_2/n_1),
+\end{equation}
+and class 1 otherwise. (\textit{Hint:} First write the priors $\pi_{1}$ and $\pi_{2}$. Then write the discriminant functions $\delta_{1}$ and $\delta_{2}$. Knowing that the LDA classifier assigns an observation to class 2 when $\delta_{2} > \delta_{1}$, expand this condition to obtain \eqref{eq:lda}.)
+
+\item Estimate a \pts{5} linear discriminant analsysis model to predict \texttt{Default} based on \texttt{income} and \texttt{balance}.
+  Is this a better fit compared to logistic regression? Discuss.
+  
+\end{enumerate}
 
 
 
+\section*{Problem 3 \quad {\it Linear regression (20 pts)}}
+The goal of this problem  is to apply linear regression techniques  to analyze \textbf{average vehicle ownership per household} in Massachusetts.
+The data are from the 2010 United States Census, which has been complemented with information from the American Community Survey (conducted between 2005 and 2010).
 
- \section*{Problem 4 \quad {\it Ridge regression (8 pts)}}
-{\bf PMLI} Exercise 11.2 
+
+\subsection*{Part 3.1 {\it Model exploration}}
+For this part, you do not have to structure your analyses as listed below, as long as you cover all the required
+elements.  However, provide an organized summary of your analyses afterward.
+  %In each model, test that the four Ordinary Least Squares assumptions hold.
+  
+  \begin{enumerate}[\bf(a)]
+  \item  Based on an exploratory data analysis,\pts{3}
+    propose a model to explain the average number of vehicles per household, using the 321 towns in the training data set in\\ \texttt{Massachusetts\_Census\_Data\_training.csv}. (You may consider the techniques of \textit{subset selection}, \textit{ridge regression}, etc.)
+  \item  Briefly describe the thought \pts{3} and exploratory processes that you followed to arrive at this model selection.
+  \item Provide all the model estimates,\pts{3} their statistical significance, and all the goodness-of-fit indicators of for the  model, supported by one or more plots.
+    (You may use a table or simply list the relevant results.)
+
+  \end{enumerate}
+
+ 
+% In this assignment, you will use a multivariate linear regression model to forecast average vehicle ownership.
+% You will also test error structure formulations for weighted least squares and feasible weighted least squares.
+% Recall that the data to be used for forecasting are in the file 
+
+\subsection*{Part 3.2 {\it Forecasting and analyzing residuals}}
+You will now evaluate the performance of the models you estimated using the test set in\\ \texttt{Massachusetts\_Census\_Data\_test.csv}.
+We will refer to the model of best fit you earlier chose as $\mathscr{M}$.
+
+\begin{enumerate}[\bf(a)]
+\item Using $\mathcal{M}$, predict the \pts{3} average number of vehicles per household in the 30 test towns. Show your results as both a table and a plot. 
+\item Now, plot and analyze the residuals for all 321 towns using $\mathscr{M}$, \pts{3} indicating if the assumptions of normality and homoscedasticity hold. If not, discuss how these issues may be addressed.
+\item Provide confidence intervals of the predicted values using $\mathscr{M}$, \pts{3} and check if the observed average numbers of vehicles per household are within to the intervals.
+
+\end{enumerate}
 
 
-\section*{Problem 4 \quad {\it Exploration of ridge regression (8 pts)}}
+\section*{Problem 4 \quad {\it Exploration of shrinkage methods (14 pts; 5 pts EC)}}
 Consider the special case of performing regression \textit{without an intercept} on a design matrix $\bm X$ with $N$ rows (observations) and $D$ columns (features). The following relationships hold:
 \begin{align}
   \label{eq:0}
@@ -308,37 +339,123 @@ Consider the special case of performing regression \textit{without an intercept}
 \item The ridge regression estimate is given by: \pts{5}
   \begin{equation}
     \label{eq:2}
-    \hat{\bm w}^{R} = \arg\min_{{\bm w}}\lt[RSS^{R}({\bm w})\rt] = \arg\min_{{\bm w}}\lt\{ || (y_{j} - {\bm w}_{j})||^{2}_2 + \la ||{\bm w}_{j}||_2^{2}\rt\}
+    \hat{\bm w}^{R} = \arg\min_{{\bm w}}\lt[RSS^{R}({\bm w})\rt] = \arg\min_{{\bm w}}\lt\{\sum_{j=1}^{D} (y_{j} - {\bm w}_{j})^{2} + \la\sum_{j=1}^{D}{\bm w}_{j}^{2}\rt\}
   \end{equation}
   Show algebraically that the ridge solution is:
   \begin{equation}
-    \label{eq:ridge}
+    \label{eq:3}
     \hat{\bm w}_{j}^{R} = \fr{y_{j}}{1 + \la}
   \end{equation}
+  
 
+
+\item Assume that $D=2$ (2-dimensional problem with 2 observations), $y_{1}=5$, $y_{2}=1$ and $\lambda =1$. Using these values, create a three-dimensional plot of
+  $RSS^{R}({\bm w})$ \pts{3} as a function of ${\bm w}$. Include corresponding contour plots for clarity.
+  Confirm that the ridge solution is indeed given by \eqref{eq:3}.
+
+
+\item  The lasso estimate is given by: \pts{3}
+  \begin{equation}
+    \label{eq:4}
+    \hat{\bm w}^{L} = \arg\min_{{\bm w}}\lt[RSS^{L}({\bm w})\rt]
+    = \arg\min_{{\bm w}}\lt\{\sum_{j=1}^{D} (y_{j} - {\bm w}_{j})^{2} + \la\sum_{j=1}^{D}|{\bm w}_{j}|\rt\}
+  \end{equation}
+  The lasso solution is given by:
+  \begin{equation}
+    \label{eq:5}
+    \hat{\bm w}_{j}^{L} =
+    \begin{cases}
+      y_{j} - \fr\la2, & y_{j} > \fr\la2 \\
+      y_{j} + \fr\la2, & y_{j} < -\fr\la2 \\
+      0,               & |y_{j}| \le \fr\la2              
+    \end{cases}
+  \end{equation}
+ Using the same assumptions as in part (c), create a three-dimensional plot of $RSS^{L}({\bm w})$  
+  as a function of ${\bm w}$. Include corresponding contour plots for clarity.
+  Confirm that the lasso solution is indeed given by \eqref{eq:5}.
+
+  % \item \textbf{[Extra Credit]} \pts{5}
+  % Algebraically derive the lasso solution given by \eqref{eq:5}.
+  
+% \item[\bf EC] The elastic net estimate is given by:
+%   \begin{equation}
+%     \label{eq:4}
+%     \hat{\bm w}^{EN} = \arg\min_{{\bm w}}\lt[RSS^{EN}({\bm w})\rt]
+%     = \arg\min_{{\bm w}}\lt\{\sum_{j=1}^{p} (y_{j} - {\bm w}_{j})^{2} + \la\sum_{j=1}^{p}\lt(\alpha{\bm w}_{j}^{2} + (1-\alpha)|{\bm w}_{j}\rt)|\rt\}
+%   \end{equation}
+%   \begin{enumerate}[\bf (i)]
+%   \item Given the assumptions in \eqref{eq:0} still hold,  \pts{6pts} find the solution to the elastic net estimate.
+%   \item Create a three-dimensional plot of $RSS^{EN}({\bm w})$ as a function of ${\bm w}$ with $p=2$. \pts{3pts}
+%     Include corresponding contour plots for clarity.
+%     Use this plot to confirm your solution in (i) or to infer what it is.
+%   \end{enumerate}
 \end{enumerate}
 
 
- 
+\section*{Problem 5 \quad
+  {\it Comparing subset selection methods, ridge regression and the lasso (14 pts)}}
+From the Boston average monthly temperature dataset 
+we considered an exhaustive enumeration approach in selecting a subset of predictors (12 lag variables).
+The dataset is in the file: \texttt{data/boston\_monthly\_avg\_temps\_1978\_2019.csv}.
+
+\begin{enumerate}[\bf (a)]
+\item Now, apply \textit{any} of these three methods: \pts{5}
+  best subset selection, forward stepwise selection and backward stepwise
+  selection to estimate a model to predict monthly average temperature based on the lag variables in the training set.
+  Briefly describe the quality of your estimate and show the equation of the best estimated model.
+  Note the metric(s) you employ in selecting your model for each of the three cases.
+  Interpret the coefficients. Compute the prediction error using the test set.
+
+\item Implement ridge or lasso regression to predict monthly average temperature. Describe the quality of the fit and compute the test error. \pts{5}
+  Discuss how you selected the optimal hyperparameter $\la$. Include relevant diagnostic plots.
+  Briefly describe the quality of your estimate and show the equation of the best estimated model.
+  Compute the prediction error using the test set.
+  
+% \item Implement lasso regression to predict monthly average temperature. Describe the quality of the fit and compute the test error. \pts{5}
+%   Discuss how you selected the optimal hyperparameter $\la$. Include relevant diagnostic plots.
+%   Briefly describe the quality of your estimate and show the equation of the best estimated model.
+%   Compute the prediction error using the test set.
+  
+\item Summarize the performance of the two models in a table, \pts{4}
+  indicating the $R^{2}$, $MSE$, among other performance metrics of your choice.
+  Create a plot comparing the predicted values from both models compared to the observed.
+  Briefly discuss your observations.
+\end{enumerate}
+
 \bigskip
 
+%\section*{Pr
+\subsection*{Part 1.2}
+The figure below shows the scatter plot of \texttt{income} versus \texttt{balance} from the \texttt{Default} dataset (see Lecture 3a for a description of the dataset).
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=.6\textwidth]{income-balance}
+  \caption{Balance vs.\ income (Default dataset)}
+  \label{fig:1}
+\end{figure}
+\begin{enumerate}[\bf (a)]
+\item Estimate a logistic regression model to predict the probability of defaulting on credit card payments (assume \texttt{Default} = ``Yes'' is the positive class). \pts{3}
+  Write down the estimated logistic function and comment on the significance of the parameter estimates.
+\item Assuming a 50\% threshold,  use the logistic regression model to assign the default  status of the \pts{1} observations, i.e.:
+  \begin{equation}
+    \label{eq:3}
+    \Pr(\mathtt{default = Yes}|\bm x) > 0.5
+  \end{equation}
+\item Generate a plot similar to that in \autoref{fig:1} \pts{3} and show the decision boundary at the 50\% threshold.
+\item What are the overall error rate, sensitivity (recall) and precision of the classifier? \pts{3}
+\item Tabulate or plot the confusion matrix. \pts{2}
+\item How would you increase the sensitivity of your classifier? \pts{2}
+  Indicate the action you would take and show the new decision boundary in the same plot generated in part (c).
+\item Plot the receiver operating characteristics (ROC) curve based on the model \pts{2}
+  estimated in \textbf{(a)} and state the area under the curve (AUC).
+\item {\bf [Extra Credit]} What would be the shape of the ROC curve if the \texttt{default} response \pts{2}
+  did not depend in any way on \texttt{balance} and \texttt{income}? Why?
+\end{enumerate}  
 
-\section*{Problem 6 \quad {\it Poisson regression  (12 pts)}}
-The Poisson regression model is given by:
-\begin{equation}
-  p(y_n|\bm x_n, \bm w) = \text{Poi}(y_n|\exp(\bm w^\intercal \bm x_n)) = 
-  \fr{\exp(-\mu_n)\mu_n^{y_n}}{y_n!}
-  %\fr{\exp(-\exp(\bm w^\intercal \bm x_n))(\exp(\bm w^\intercal \bm x_n))^{y_n}}{y_n!}
-\end{equation}
-where $y_n \in \{0,1,2,\ldots\}$ is a count response, $\bm x_n$ is a vector of predictors, $\bm w$ is the weight vector and $\mu_n = \exp(\bm w^\intercal \bm x_n)$.
 
-\begin{enumerate}[\bf(a)]
-  \item Write the model in GLM form $\exp(y_n\eta_n - A(\eta_n) + h(y_n))$, identifying the canonical parameter $\eta_n$, the log partition function $A(\eta_n)$ and the base measure $h(y_n)$. \pts{8}
-  \item Derive the mean function $\ell^{-1}(\eta_n)$ by taking the derivative of $A(\eta_n)$. \pts{2}
-  \item What is the link function $\ell(\mu_n)$? \pts{1}
-  \item If the natural parameter of the Poisson distribution is $\eta_n = \log(\mu_n)$, is the link function canonical? \pts{1}
-\end{enumerate}
+\bigskip
 
+% \section*{Problem 6 \quad {\it Cross-validation  (10 pts)}}
 % Use $k$-fold ($k=5$ or $k=10$) cross-validation to compare the performance of the following models estimated to predict \texttt{Default} based on \texttt{income} and \texttt{balance}: KNN, logistic regression, LDA and QDA.
 % Summarize your results (cross-validation scores/accuracy) using a table and a plot.
 

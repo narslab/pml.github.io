@@ -25,3 +25,4 @@ Tue, Oct 9
 : **LECTURE 2D**{: .label .label-blue }[Ridge and Lasso Regression](/assets/lectures/M2-Linear-Methods/L2d-Ridge-and-Lasso-Regression-Handout.pdf)
   :
 : **NOTEBOOK**{: .label .label-activity}[Ridge and Lasso](#)
+: **PROBLEM SET 2**{: .label .label-red}[PDF](/assets/problem-sets/PS2.pdf), [LaTeX](/assets/problem-sets/PS2.tex); **Due: 10/16, midnight**

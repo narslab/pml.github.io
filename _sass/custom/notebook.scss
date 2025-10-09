@@ -1,0 +1,134 @@
+/* Notebook page styling */
+.notebook-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  border: 1px solid #e9ecef;
+}
+
+.notebook-controls .btn {
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.notebook-controls .btn-primary {
+  background-color: #0366d6;
+  color: white;
+  border-color: #0366d6;
+}
+
+.notebook-controls .btn-primary:hover {
+  background-color: #0256cc;
+  border-color: #0256cc;
+  text-decoration: none;
+}
+
+.notebook-controls .btn-outline-primary {
+  background-color: transparent;
+  color: #0366d6;
+  border-color: #0366d6;
+}
+
+.notebook-controls .btn-outline-primary:hover {
+  background-color: #0366d6;
+  color: white;
+  text-decoration: none;
+}
+
+.notebook-controls .btn-outline-success {
+  background-color: transparent;
+  color: #28a745;
+  border-color: #28a745;
+}
+
+.notebook-controls .btn-outline-success:hover {
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+}
+
+.notebook-description {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-left: 4px solid #0366d6;
+  border-radius: 0 4px 4px 0;
+}
+
+.notebook-content {
+  margin-top: 20px;
+}
+
+/* Jupyter notebook cell styling */
+.jupyter-notebook-container {
+  border: 1px solid #d1d5da;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.jupyter-cell {
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.jupyter-cell:last-child {
+  border-bottom: none;
+}
+
+.jupyter-input {
+  background-color: #f6f8fa;
+  padding: 10px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.jupyter-output {
+  padding: 10px;
+  background-color: white;
+}
+
+/* Code highlighting in notebooks */
+.jupyter-notebook-container pre {
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.jupyter-notebook-container code {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+}
+
+/* Make notebooks responsive */
+@media (max-width: 768px) {
+  .notebook-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .notebook-controls .btn {
+    justify-content: center;
+  }
+  
+  .jupyter-input,
+  .jupyter-output {
+    padding: 8px;
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,40 @@
+---
+layout: default
+---
+
+<h1>{{ page.title }}</h1>
+
+<div class="notebook-controls">
+  {% if page.notebook_path %}
+  <a href="{{ site.baseurl }}/{{ page.notebook_path }}" class="btn btn-primary" download>
+    📥 Download Notebook
+  </a>
+  <a href="https://nbviewer.org/github/{{ site.github.owner_name }}/{{ site.github.repository_name }}/blob/main/{{ page.notebook_path }}" 
+     class="btn btn-outline-primary" target="_blank">
+    👁️ View in nbviewer
+  </a>
+  <a href="https://colab.research.google.com/github/{{ site.github.owner_name }}/{{ site.github.repository_name }}/blob/main/{{ page.notebook_path }}" 
+     class="btn btn-outline-success" target="_blank">
+    🚀 Open in Colab
+  </a>
+  {% endif %}
+</div>
+
+{% if page.description %}
+<div class="notebook-description">
+  {{ page.description | markdownify }}
+</div>
+{% endif %}
+
+<div class="notebook-content">
+  {{ content }}
+</div>
+
+{% if page.notebook_html %}
+<div class="notebook-embedded">
+  <h2>📓 Notebook Preview</h2>
+  <div class="notebook-html-container">
+    {% include {{ page.notebook_html }} %}
+  </div>
+</div>
+{% endif %}

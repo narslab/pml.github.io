@@ -1,0 +1,164 @@
+/* Notebook page styling */
+.notebook-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  border: 1px solid #e9ecef;
+}
+
+.notebook-controls .btn {
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.notebook-controls .btn-primary {
+  background-color: #0366d6;
+  color: white;
+  border-color: #0366d6;
+}
+
+.notebook-controls .btn-primary:hover {
+  background-color: #0256cc;
+  border-color: #0256cc;
+  text-decoration: none;
+}
+
+.notebook-controls .btn-outline-primary {
+  background-color: transparent;
+  color: #0366d6;
+  border-color: #0366d6;
+}
+
+.notebook-controls .btn-outline-primary:hover {
+  background-color: #0366d6;
+  color: white;
+  text-decoration: none;
+}
+
+.notebook-controls .btn-outline-success {
+  background-color: transparent;
+  color: #28a745;
+  border-color: #28a745;
+}
+
+.notebook-controls .btn-outline-success:hover {
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+}
+
+.notebook-description {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-left: 4px solid #0366d6;
+  border-radius: 0 4px 4px 0;
+}
+
+.notebook-content {
+  margin-top: 20px;
+}
+
+/* Embedded notebook styling */
+.notebook-embedded {
+  margin-top: 30px;
+  border-top: 2px solid #e1e4e8;
+  padding-top: 20px;
+}
+
+.notebook-embedded h2 {
+  color: #24292e;
+  margin-bottom: 15px;
+  font-size: 1.5em;
+}
+
+.notebook-html-container {
+  border: 1px solid #d1d5da;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: white;
+  padding: 15px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* Override notebook HTML styles for better integration */
+.notebook-html-container .jp-Notebook {
+  background-color: transparent;
+}
+
+.notebook-html-container .jp-Cell {
+  border: none;
+  margin-bottom: 15px;
+}
+
+.notebook-html-container .jp-InputArea {
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  padding: 10px;
+}
+
+.notebook-html-container .jp-OutputArea {
+  background-color: white;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.notebook-html-container pre {
+  background-color: transparent !important;
+  border: none !important;
+  font-size: 13px;
+  line-height: 1.45;
+  overflow-x: auto;
+  margin: 0;
+}
+
+.notebook-html-container code {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* Syntax highlighting adjustments */
+.notebook-html-container .highlight {
+  background-color: transparent !important;
+}
+
+/* Make notebooks responsive */
+@media (max-width: 768px) {
+  .notebook-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .notebook-controls .btn {
+    justify-content: center;
+  }
+  
+  .notebook-html-container {
+    font-size: 12px;
+    max-height: 400px;
+  }
+  
+  .notebook-html-container pre {
+    font-size: 11px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+}

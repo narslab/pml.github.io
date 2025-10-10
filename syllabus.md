@@ -8,7 +8,7 @@ description: Course Syllabus
 # Syllabus
 
 ## PDF
-A PDF of the syllabus is available [here](/assets/syllabus/CEE616-Syllabus-Fall-2025.pdf).
+A PDF of the syllabus is available [here](/assets/syllabus/syllabus.pdf).
 
 ## Personnel and Logistics
 
@@ -19,7 +19,7 @@ A PDF of the syllabus is available [here](/assets/syllabus/CEE616-Syllabus-Fall-
 
 ### Instructor
 **Name:** Jimi Oke  
-**Email:** [jimi@umass.edu](mailto:jboke@umass.edu)  
+**Email:** [jboke@umass.edu](mailto:jboke@umass.edu)  
 **Office:** 214D Marston Hall
 
 *Please allow up to 48 hours for a response to your email. Be sure to put "CEE616" in the subject to ensure a prompt response.*

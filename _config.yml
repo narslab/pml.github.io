@@ -94,17 +94,3 @@ compress_html:
 liquid:
   error_mode: strict
   strict_filters: true
-
-navigation:
-  - title: Schedule
-    url: /
-  - title: Calendar
-    url: /calendar/
-  - title: Resources
-    url: /resources/
-  - title: Notebooks
-    url: /notebooks/
-  - title: Announcements
-    url: /announcements/
-  - title: Staff
-    url: /staff/

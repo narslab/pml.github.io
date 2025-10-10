@@ -102,6 +102,8 @@ navigation:
     url: /calendar/
   - title: Resources
     url: /resources/
+  - title: Notebooks
+    url: /notebooks/
   - title: Announcements
     url: /announcements/
   - title: Staff

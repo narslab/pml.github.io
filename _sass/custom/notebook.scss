@@ -60,6 +60,19 @@
   text-decoration: none;
 }
 
+.notebook-controls .btn-outline-secondary {
+  background-color: transparent;
+  color: #6c757d;
+  border-color: #6c757d;
+  font-size: 12px;
+}
+
+.notebook-controls .btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: white;
+  text-decoration: none;
+}
+
 .notebook-description {
   margin-bottom: 20px;
   padding: 15px;

@@ -19,11 +19,6 @@ description: A modern, highly customizable, responsive Jekyll template for cours
 author: Jimi Oke
 baseurl: '' # the subpath of your site, e.g. /blog
 url: 'https://pml.narslab.org' # the base hostname & protocol for your site, e.g. http://example.com
-
-# GitHub repository information
-github:
-  owner_name: narslab
-  repository_name: pml.github.io
 exclude: 
   - "Gemfile"
   - "Gemfile.lock"
@@ -43,7 +38,6 @@ color_scheme: light
 search_enabled: true
 heading_anchors: true
 permalink: pretty
-
 aux_links:
   Jimi Oke:
     - 'https://people.umass.edu/jimi'

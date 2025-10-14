@@ -19,7 +19,7 @@ A PDF of the syllabus is available [here](/assets/syllabus/syllabus.pdf).
 
 ### Instructor
 **Name:** Jimi Oke  
-**Email:** [jboke@umass.edu](mailto:jboke@umass.edu)  
+**Email:** [jimi@umass.edu](mailto:jimi@umass.edu)  
 **Office:** 214D Marston Hall
 
 *Please allow up to 48 hours for a response to your email. Be sure to put "CEE616" in the subject to ensure a prompt response.*

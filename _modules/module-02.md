@@ -19,3 +19,8 @@ Thu, Oct 9
 : **LECTURE 2D**{: .label .label-blue }[Ridge and Lasso Regression](/assets/lectures/M2-Linear-Methods/L2d-Ridge-and-Lasso-Regression-Handout.pdf)
   : **PROBLEM SET 2**{: .label .label-red}[PDF](/assets/problem-sets/PS2.pdf), [LaTeX](/assets/problem-sets/PS2.tex); **Due: 10/16**
 : **NOTEBOOK**{: .label .label-activity}[Ridge and Lasso](/notebooks/ridge-lasso-notebook/)
+
+<!-- Tue, Oct 14
+: **LECTURE 2F**{: .label .label-blue }[Ridge and Lasso Regression](/assets/lectures/M2-Linear-Methods/L2d-Ridge-and-Lasso-Regression-Handout.pdf)
+  : **PROBLEM SET 2**{: .label .label-red}[PDF](/assets/problem-sets/PS2.pdf), [LaTeX](/assets/problem-sets/PS2.tex); **Due: 10/16**
+: **NOTEBOOK**{: .label .label-activity}[Ridge and Lasso](/notebooks/M) -->

@@ -1,0 +1,1507 @@
+%\documentclass[smaller,handout]{beamer}
+%\documentclass[smaller,handout]{beamer}
+\def\bmode{0} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+\if 0\bmode
+\documentclass[smaller]{beamer}
+\else \if 1\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout-Notes\space\jobname}
+\documentclass[smaller,handout]{beamer}
+\usepackage{handoutWithNotes}
+\pgfpagesuselayout{2 on 1 with notes}[letterpaper, landscape, border shrink=4mm]
+\else \if 2\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout\space\jobname}
+\documentclass[smaller,handout]{beamer}
+\fi
+\fi
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\coursetitle}{CEE 697M: Probabilistic Machine Learning}
+\newcommand{\longlecturetitle}{M2 Linear Methods: Splines, GAMs and GLMs}
+\newcommand{\shortlecturetitle}{L2e: Splines and  Generalized Additive Models}
+\newcommand{\instructor}{Jimi Oke}
+\newcommand{\lecturedate}{Wed, Mar 29, 2023}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ 
+% \usepackage[T1]{fontenc} 
+% \usepackage{lmodern} 
+%\usepackage{etex}
+ %\newcommand{\num}{6{} }
+
+% \usetheme[
+%   outer/progressbar=foot,
+%   outer/numbering=fraction,
+%   block=fill,
+%   inner/subsectionpage=progressbar
+% ]{metropolis}
+\usetheme{Madrid}
+\useoutertheme[subsection=false]{miniframes} % Alternatively: miniframes, infolines, split
+\useinnertheme{circles}
+% %\useoutertheme{Frankfurt}
+% \usecolortheme{beaver}
+% %\useoutertheme{crane}
+% %\useoutertheme{metropolis}
+\usepackage[backend=biber,style=authoryear,maxcitenames=2,maxbibnames=99,safeinputenc,url=false, eprint=false]{biblatex}
+%\addbibresource{bib/references.bib}
+% \AtEveryCitekey{\iffootnote{{\tiny}\tiny}{\tiny}}
+
+% %\usepackage{pgfpages}
+% %\setbeameroption{hide notes} % Only slides
+% %\setbeameroption{show only notes} % Only notes
+% %\setbeameroption{hide notes} % Only notes
+% %\setbeameroption{show notes on second screen=right} % Both
+
+% % \usepackage[sfdefault]{Fira Sans}
+
+% % \setsansfont[BoldFont={Fira Sans}]{Fira Sans Light}
+% % \setmonofont{Fira Mono}
+
+% %\usepackage{fira}
+% %\setsansfont{Fira}
+% %\setmonofont{Fira Mono}
+% % To give a presentation with the Skim reader (http://skim-app.sourceforge.net) on OSX so
+% % that you see the notes on your laptop and the slides on the projector, do the following:
+% % 
+% % 1. Generate just the presentation (hide notes) and save to slides.pdf
+% % 2. Generate onlt the notes (show only nodes) and save to notes.pdf
+% % 3. With Skim open both slides.pdf and notes.pdf
+% % 4. Click on slides.pdf to bring it to front.
+% % 5. In Skim, under "View -> Presentation Option -> Synhcronized Noted Document"
+% %    select notes.pdf.
+% % 6. Now as you move around in slides.pdf the notes.pdf file will follow you.
+% % 7. Arrange windows so that notes.pdf is in full screen mode on your laptop
+% %    and slides.pdf is in presentation mode on the projector.
+
+% % Give a slight yellow tint to the notes page
+% \setbeamertemplate{note page}{\pagecolor{yellow!5}\insertnote}\usepackage{palatino}
+
+% %\usetheme{metropolis}
+% %\usecolortheme{beaver}
+ \usepackage{tipa}
+% \usepackage{enumerate}
+\definecolor{darkcandyapplered}{HTML}{A40000}
+\definecolor{lightcandyapplered}{HTML}{e74c3c}
+
+% %\setbeamercolor{title}{fg=darkcandyapplered}
+
+% \definecolor{UBCblue}{rgb}{0.04706, 0.13725, 0.26667} % UBC Blue (primary)
+% \definecolor{UBCgrey}{rgb}{0.3686, 0.5255, 0.6235} % UBC Grey (secondary)
+
+% % \setbeamercolor{palette primary}{bg=darkcandyapplered,fg=white}
+% % \setbeamercolor{palette secondary}{bg=darkcandyapplered,fg=white}
+% % \setbeamercolor{palette tertiary}{bg=darkcandyapplered,fg=white}
+% % \setbeamercolor{palette quaternary}{bg=darkcandyapplered,fg=white}
+% % \setbeamercolor{structure}{fg=darkcandyapplered} % itemize, enumerate, etc
+% % \setbeamercolor{section in toc}{fg=darkcandyapplered} % TOC sections
+% % \setbeamercolor{frametitle}{fg=darkcandyapplered,bg=white} % TOC sections
+% % \setbeamercolor{title in head/foot}{bg=white,fg=white} % TOC sections
+% % \setbeamercolor{button}{fg=darkcandyapplered} % TOC sections
+
+% % % Override palette coloring with secondary
+% % \setbeamercolor{subsection in head/foot}{bg=lightcandyapplered,fg=white}
+
+%\usecolortheme{crane}
+% \makeatletter
+% \setbeamertemplate{headline}{%
+%   \begin{beamercolorbox}[colsep=1.5pt]{upper separation line head}
+%   \end{beamercolorbox}
+%   \begin{beamercolorbox}{section in head/foot}
+%     \vskip1pt\insertsectionnavigationhorizontal{\paperwidth}{}{}\vskip1pt
+%   \end{beamercolorbox}%
+%   \ifbeamer@theme@subsection%
+%     \begin{beamercolorbox}[colsep=1.5pt]{middle separation line head}
+%     \end{beamercolorbox}
+%     \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+%       leftskip=.3cm,rightskip=.3cm plus1fil]{subsection in head/foot}
+%       \usebeamerfont{subsection in head/foot}\insertsubsectionhead
+%     \end{beamercolorbox}%
+%   \fi%
+%   \begin{beamercolorbox}[colsep=1.5pt]{lower separation line head}
+%   \end{beamercolorbox}
+% }
+% \makeatother
+
+% Reduce size of frame box
+\setbeamertemplate{frametitle}{%
+    \nointerlineskip%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.0ex,dp=0.6ex]{frametitle}
+        \hspace*{1ex}\insertframetitle%
+    \end{beamercolorbox}%
+}
+
+
+%\setbeamercolor{frametitle}{bg=darkcandyapplered!80!black!90!white}
+%\setbeamertemplate{frametitle}{\bf\insertframetitle}
+
+%\setbeamercolor{footnote mark}{fg=darkcandyapplered}
+%\setbeamercolor{footnote}{fg=darkcandyapplered!70}
+%\Raggedbottom
+%\setbeamerfont{page number in head/foot}{size=\tiny}
+%\usepackage[tracking]{microtype}
+
+
+% %\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+% %\linespread{1.025}              % Palatino leads a little more leading
+
+% % Euler for math and numbers
+% %\usepackage[euler-digits,small]{eulervm}
+% %\AtBeginDocument{\renewcommand{\hbar}{\hslash}}
+\usepackage{graphicx,multirow,booktabs}
+\usepackage{animate}
+\usepackage{media9}
+
+
+% %\mode<presentation> { \setbeamercovered{transparent} }
+
+\setbeamertemplate{navigation symbols}{}
+\makeatletter
+\def\beamerorig@set@color{%
+  \pdfliteral{\current@color}%
+  \aftergroup\reset@color
+}
+\def\beamerorig@reset@color{\pdfliteral{\current@color}}
+\makeatother
+
+
+% %=== GRAPHICS PATH ===========
+\graphicspath{{./images/}}
+% % Marginpar width
+% %Marginpar width
+% %\setlength{\marginparsep}{.02in}
+
+
+% %% Captions
+% % \usepackage{caption}
+% % \captionsetup{
+% %   labelsep=quad,
+% %   justification=raggedright,
+% %   labelfont=sc
+% % }
+
+% \setbeamerfont{caption}{size=\footnotesize}
+% \setbeamercolor{caption name}{fg=darkcandyapplered}
+
+% %AMS-TeX packages
+
+\usepackage{amssymb,amsmath,amsthm,mathtools} 
+\usepackage{bm}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+% \usepackage{color}
+
+% %https://tex.stackexchange.com/a/31370/2269
+\usepackage{mathtools,cancel}
+
+\renewcommand{\CancelColor}{\color{red}} %change cancel color to red
+
+\makeatletter
+\let\my@cancelto\cancelto %copy over the original cancelto command
+\newcommand<>{\cancelto}[2]{\alt#3{\my@cancelto{#1}{#2}}{\mathrlap{#2}\phantom{\my@cancelto{#1}{#2}}}}
+% redefine the cancelto command, using \phantom to assure that the
+% result doesn't wiggle up and down with and without the arrow
+\makeatother
+
+
+% %\usepackage{comment}
+% %\usepackage{hyperref,enumerate}
+% \usepackage{minitoc,array}
+
+% \definecolor{slblue}{rgb}{0,.3,.62}
+% % \hypersetup{
+% %     colorlinks,%
+% %     citecolor=blue,%
+% %     filecolor=blue,%
+% %     linkcolor=blue,
+% %     urlcolor=slblue
+% % }
+
+% \usepackage{epstopdf}
+% \epstopdfDeclareGraphicsRule{.gif}{png}{.png}{convert gif:#1 png:\OutputFile}
+% \AppendGraphicsExtensions{.gif}
+
+% %\usepackage{listings}
+
+% %%% TIKZ
+% \usepackage{forest}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+%\usepackage{pgfgantt}
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{fit,arrows,shapes,positioning,shapes.geometric}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shadows,automata}
+\usetikzlibrary{patterns}
+\usetikzlibrary{trees,mindmap,backgrounds}
+%\usetikzlibrary{circuits.ee.IEC}
+\usetikzlibrary{decorations.text}
+% % For Sagnac Picture
+% \usetikzlibrary{%
+%     decorations.pathreplacing,%
+%     decorations.pathmorphing%
+% }
+% \tikzset{no shadows/.style={general shadow/.style=}}
+% %
+% %\usepackage{paralist}
+
+% \tikzset{
+%   font=\Large\sffamily\bfseries,
+%   red arrow/.style={
+%     midway,red,sloped,fill, minimum height=3cm, single arrow, single arrow head extend=.5cm, single arrow head indent=.25cm,xscale=0.3,yscale=0.15,
+%     allow upside down
+%   },
+%   black arrow/.style 2 args={-stealth, shorten >=#1, shorten <=#2},
+%   black arrow/.default={1mm}{1mm},
+%   tree box/.style={draw, rounded corners, inner sep=1em},
+%   node box/.style={white, draw=black, text=black, rectangle, rounded corners},
+% }
+
+% %%% FORMAT PYTHON CODE
+% %\usepackage{listings}
+% % Default fixed font does not support bold face
+% \DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{8} % for bold
+% \DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{8}  % for normal
+
+% % Custom colors
+% \definecolor{deepblue}{rgb}{0,0,0.5}
+% \definecolor{deepred}{rgb}{0.6,0,0}
+% \definecolor{deepgreen}{rgb}{0,0.5,0}
+
+% %\usepackage{animate}
+
+% % Python style for highlighting
+% % \newcommand\pythonstyle{\lstset{
+% % language=Python,
+% % basicstyle=\footnotesize\ttm,
+% % otherkeywords={self},             % Add keywords here
+% % keywordstyle=\footnotesize\ttb\color{deepblue},
+% % emph={MyClass,__init__},          % Custom highlighting
+% % emphstyle=\footnotesize\ttb\color{deepred},    % Custom highlighting style
+% % stringstyle=\color{deepgreen},
+% % frame=tb,                         % Any extra options here
+%     % showstringspaces=false            % 
+% % }}
+
+% % % Python environment
+% % \lstnewenvironment{python}[1][]
+% % {
+% % \pythonstyle
+% % \lstset{#1}
+% % }
+% % {}
+
+% % % Python for external files
+% % \newcommand\pythonexternal[2][]{{
+% % \pythonstyle
+% % \lstinputlisting[#1]{#2}}}
+
+% % Python for inline
+% % 
+% % \newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+% %\usepackage{algorithm2e}
+
+\newcommand{\eps}{\epsilon}
+\newcommand{\bX}{\mb X}
+\newcommand{\by}{\mb y}
+\newcommand{\bbe}{\bm\beta}
+\newcommand{\beps}{\bm\epsilon}
+\newcommand{\bY}{\mb Y}
+
+\newcommand{\osn}{\oldstylenums}
+\newcommand{\dg}{^{\circ}}
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+\newcommand{\pt}{\phantom}
+\newcommand{\tf}{\therefore}
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\fr}{\frac}
+\newcommand{\dfr}{\dfrac}
+\newcommand{\ul}{\underline}
+\newcommand{\tn}{\tabularnewline}
+\newcommand{\nl}{\newline}
+\newcommand\relph[1]{\mathrel{\phantom{#1}}}
+\newcommand{\cm}{\checkmark}
+\newcommand{\ol}{\overline}
+\newcommand{\rd}{\color{red}}
+\newcommand{\bl}{\color{blue}}
+\newcommand{\pl}{\color{purple}}
+\newcommand{\og}{\color{orange!90!black}}
+\newcommand{\gr}{\color{green!40!black}}
+\newcommand{\dca}{\color{darkcandyapplered}}
+\newcommand{\nin}{\noindent}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,thick,inner sep=1pt] (char) {\small #1};}}
+
+\newcommand{\bc}{\begin{compactenum}[\quad--]}
+\newcommand{\ec}{\end{compactenum}}
+
+\newcommand{\p}{\partial}
+\newcommand{\pd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpd}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\pdd}[2]{\frac{\partial^2{#1}}{\partial{#2}^2}}
+\newcommand{\pde}[3]{\frac{\partial^2{#1}}{\partial{#2}\partial{#3}}}
+\newcommand{\nmfr}[3]{\Phi\left(\frac{{#1} - {#2}}{#3}\right)}
+\newcommand{\Err}{\text{Err}}
+\newcommand{\err}{\text{err}}
+
+%\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+%\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+%%%% GREEK LETTER SHORTCUTS %%%%%
+\newcommand{\la}{\lambda}
+\renewcommand{\th}{\theta}
+\newcommand{\al}{\alpha}
+\newcommand{\G}{\Gamma}
+\newcommand{\si}{\sigma}
+\newcommand{\Si}{\Sigma}
+
+
+\pgfmathdeclarefunction{poiss}{1}{%
+  \pgfmathparse{(#1^x)*exp(-#1)/(x!)}%
+  }
+
+\pgfmathdeclarefunction{gauss}{2}{%
+  \pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+\pgfmathdeclarefunction{expo}{2}{%
+  \pgfmathparse{#1*exp(-#1*#2)}%
+}
+
+\pgfmathdeclarefunction{expocdf}{2}{%
+  \pgfmathparse{1 -exp(-#1*#2)}%
+}
+
+\newcommand{\mb}{\mathbb}
+\newcommand{\mc}{\mathcal}
+\newcommand{\tr}{^{\top}}
+\newcommand{\pe}{\pause}
+% \usepackage{pst-plot}
+
+% \usepackage{pstricks-add}
+% \usepackage{auto-pst-pdf}   
+
+% \psset{unit = 3}
+
+% \def\target(#1,#2){%
+%  {\psset{fillstyle = solid}
+%   \rput(#1,#2){%
+%     \pscircle[fillcolor = white](0.7,0.7){0.7}
+%     \pscircle[fillcolor = blue!60](0.7,0.7){0.5}
+%     \pscircle[fillcolor = white](0.7,0.7){0.3}
+%     \pscircle[fillcolor = red!80](0.7,0.7){0.1}}}}
+% \def\dots[#1](#2,#3){%
+%     \psRandom[
+%       dotsize = 2pt,
+%       randomPoints = 25
+%     ](!#2 #1 0.04 sub sub #3 #1 0.04 sub sub)%
+%      (!#2 #1 0.04 sub add #3 #1 0.04 sub add)%
+%      {\pscircle[linestyle = none](#2,#3){#1}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title[\shortlecturetitle]{ {\normalsize \coursetitle}
+  \\ \longlecturetitle}
+\date[\lecturedate]{\footnotesize \lecturedate}
+\author{{\bf \instructor}}
+\institute[UMass Amherst]{
+%\titlegraphic{\hfill
+  \begin{tikzpicture}[baseline=(current bounding box.center)]
+    \node[anchor=base] at (-7,0) (its) {\includegraphics[scale=.3]{UMassEngineering_vert}} ;
+  \end{tikzpicture}
+  % \hfill\includegraphics[height=1.5cm]{logo}
+}
+
+%https://tex.stackexchange.com/questions/55806/mindmap-tikzpicture-in-beamer-reveal-step-by-step
+  \tikzset{
+    invisible/.style={opacity=0},
+    visible on/.style={alt={#1{}{invisible}}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    },
+  }
+
+
+% https://tex.stackexchange.com/questions/446468/labels-with-arrows-for-an-equation
+% https://tex.stackexchange.com/a/402466/121799
+\newcommand{\tikzmark}[3][]{
+\ifmmode
+\tikz[remember picture,baseline=(#2.base)] \node [inner sep=0pt,#1](#2) {$#3$};
+\else
+\tikz[remember picture,baseline=(#2.base)] \node [inner sep=0pt,#1](#2) {#3};
+\fi
+}
+
+% \lstset{language=matlab,
+%                 basicstyle=\scriptsize\ttfamily,
+%                 keywordstyle=\color{blue}\ttfamily,
+%                 stringstyle=\color{blue}\ttfamily,
+%                 commentstyle=\color{gray}\ttfamily,
+%                 morecomment=[l][\color{gray}]{\#}
+%               }
+
+
+              
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+
+ 
+\section{Introduction}
+\begin{frame}
+  \frametitle{Flexible linear methods}
+  \pause
+%  So far, the regression methods we have studied assume a strong linear relationship between the response and predictors.
+
+    In many cases, \textbf{flexibility} is required to obtain useful \textbf{linear} models:\pause
+
+    \pause
+
+
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{linvspoly}
+  \end{center}
+  \pause
+
+  \begin{itemize}
+  \item achieved via nonlinear transformations of the inputs\pe
+  \item models are still linear in the parameters $\bm w$, e.g.\pe
+    
+  \begin{itemize}[<+->]
+  \item polynomial regression
+  \item step functions: fitting a piecewise constant function
+  \item regression splines: piecewise polynomial fit
+  \item smoothing splines: regularization
+  \item generalized additive models (GAMs): deal with multiple predictors    
+  \item local regression: allow overlap
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Flexible linear methods: topics} 
+
+  \pause
+  Topics  covered in this module: \pause
+  \begin{itemize}
+  \item  Polynomial regression and basis functions (handout)
+  \item Splines, Generalized Additive Models and Generalized Linear Models (this lecture)
+  \item Kernel Methods and Local Regression (Lecture 4a)
+  \end{itemize}
+    \pause
+
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{pygam_basis}
+
+    {\tiny Source: \url{https://pygam.readthedocs.io/en/latest/notebooks/tour_of_pygam.html}}
+  \end{center}
+\end{frame}
+
+\section{Splines}
+\begin{frame}
+  \frametitle{Splines}
+ A spline is a piecewise polynomial function defined as a linear combination of \textbf{\pl basis functions} in $X$:
+  \begin{equation}
+    \label{eq:0}\pl
+    f(X) = \sum_{p}w_{p} b_{p}(x)
+  \end{equation}
+
+  Generally, the \textbf{\rd order $M$} (\textbf{\rd regression}) \textbf{\rd spline} is given by the \textbf{truncated power basis}:
+  \begin{eqnarray}
+    \label{eq:1}
+    b_{p}(x) &=& x^{m}, \quad m = 0, \ldots, M \\
+    b_{M+k}(x) &=& (X - \xi_{k})^{M}_{+}, k = 1, \ldots, K
+  \end{eqnarray}
+  \pause
+  where
+  \begin{equation}
+    \label{eq:2}
+    (x - \xi_{k} )_{+} =
+    \begin{cases}
+      x - \xi_{k}, & x \ge \xi_{k} \\
+      0 & \text{otherwise}
+    \end{cases}
+  \end{equation}
+  \pause
+  and $\xi_{k}$ are the knots. \pe
+  
+  In most cases, $M$ is taken as 0 (piecewise-constant), 1 (piecewise-linear) or 3 (cubic spline).
+\end{frame}
+
+\begin{frame}
+  \frametitle{Natural cubic splines}\pe
+  \begin{itemize} 
+  \item \textbf{Natural cubic splines} presume linearity at the boundaries and thus have the same number of basis functions as knots.    
+\pe
+  \item Basis functions are constrained at  \textbf{knots} ($\xi_k$) for continuity\pe
+  \item Their first derivatives are further constrained to be equal for smoothness
+  \end{itemize}
+  \pause
+  \begin{figure}[h!]
+    \centering
+    \includegraphics<5->[width=.7\textwidth,trim={0 15cm 0 4cm},clip]{ESL5-3}
+    \caption{Pointwise variance curves for 4 different models. $x \sim \mc{U}(0,1)$; error assumed constant}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Matrix representation of basis functions}
+  \pause
+  A more explicit way to write the $M$-th order \textbf{truncated power basis} expansion is: \pause
+  \begin{equation}
+    \label{eq:3}
+    f(x) =  w_{0,0} +  w_{0,1}x +\cdots+  w_{0,1}x^{M} \pe + \sum_{k=1}^{K} w_{k}(X - \xi_{k})^{M}_{+}
+  \end{equation}
+  If we let $b_{0,k}(x) = x^{k}$ for $k = 0,\ldots,M$, \pause and $b_{k}(x) = (x - \xi_{k})^{M}_{+}$ for $k = 1,\ldots,K$, \pause
+  then we can write in matrix form:\pause
+  \begin{equation}
+    \label{eq:4}
+    f(x)_{N\times 1} = \bm{B}_{N\times P} \bm{w}_{P\times 1}
+  \end{equation}
+  \pause where $\bm B$ is an $N\times P$ \pe or $N\times (M + K + 1)$ design matrix\pe
+  \begin{eqnarray}
+    \label{eq:5}
+    B_{np} &=& b_{p}(x_{n}), \quad \pause n = 1,\ldots, N \\\pause
+    p &=& (0,0), \ldots, (0,M), 1, \ldots , K
+  \end{eqnarray}
+  \pause
+  In this form, it can be easily seen that $\hat{\bm w}$ can be found via least squares.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Challenges in fitting a spline}
+  \pause
+  \begin{block}{Decisions}
+    \begin{itemize}[<+->]
+    \item How many knots do you need?
+    \item Where should you put the knots?
+    \end{itemize}
+  \end{block}
+  \pause
+  \begin{alertblock}{Challenge}
+    \begin{itemize}[<+->]
+    \item Risk of overfitting. Why?
+    \item How do we mitigate for this? \pause \textbf{\gr Regularization!}
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\section{Smoothing splines}
+\begin{frame}
+  \frametitle{Smoothing splines}
+  These avoid the problem of knot selection
+  \begin{itemize}
+  \item Smoothing splines use the \textit{maximal} set of knots
+  \item Obtained via regularization
+  \end{itemize}
+  \pause
+  We define a penalized loss function:\pause
+  \begin{equation}
+    \label{eq:6}
+    RSS(f,\la) = \sum_{n=1}^{N}\lt\{ y_{n} - f(x_{n})\rt\} + \la\int\{f''(t)\}^{2}dt
+  \end{equation}
+  Then the \textbf{\rd smoothing spline} is given by the function that minimizes this:\pause
+  \begin{equation}
+    \label{eq:7}\rd
+    \hat f(x) = \arg\min_{f} RSS(f,\la)
+  \end{equation}
+  \pause
+  where $\la$ is a nonnegative tuning parameter (or hyperparameter)\pause---roughness penalty.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Properties of smoothing splines}
+  \begin{itemize}[<+->]
+  \item Unique minimizer to $RSS(f,\la)$
+  \item Formulated as \textbf{natural cubic spline} with knots $\xi_k$ at unique values of $x_n$\pe
+  
+    \pe
+    \begin{equation}
+      \hat f(x) = \sum_{k=1}^K S_k(x)\hat w_k
+    \end{equation}
+    \pause where the $S_k(x)$ are the basis functions for the natural cubic splines:\pause
+    \begin{eqnarray}
+      \begin{split}
+        S_1(x) &= 1 \\[2mm]\pause
+        S_2(x) &= x \\\pause
+        S_{k+2}(x) &= d_k(x) - d_{K-1}(x); \pause\quad d_k(x) = \fr{(x- \xi_k)^3_{+} - (x - \xi_K)_+^3}{\xi_K - \xi_k}
+      \end{split}
+    \end{eqnarray}
+    \pe
+    \item If $N$ unique values in dataset, then $K = N$
+    \note[item]{These are natural splines, so the the basis functions have zero second and third derivative for $x\ge \xi_K$}
+    \note[item]{What is the value of $K$? That is, how many knots? }
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Smoothing spline estimation}
+  \pause
+  We can then write the penalized loss function as:\pause
+  \begin{equation}
+    RSS(\bm w,\lambda) = (\bm y - \bm S{\bm w})^T(\bm y - \bm S{\bm w}) + \la\bm{w}^T\bm{\Omega}{\bm w}
+  \end{equation}
+  \pause
+  where\pause
+  \begin{eqnarray}
+    S_{nk} &=& S_k(x_n) \\\pause
+    \Omega_{k',k} &=& \int S_{k'}''(t)S_k''(t)dt
+  \end{eqnarray}
+  \pause
+  As $\bm S$ and $\bm \Omega$ are constant in ${\bm w}$, we take the derivative and set to zero to obtain the
+  {\rd smoothing spline estimate}:\pause
+  \begin{equation}\rd 
+    \boxed{\hat{{\bm w}} = (\bm S^T\bm S + \la\bm\Omega)^{-1}\bm S^T\bm y}
+  \end{equation}
+  \pause
+  This is simply a generalized ridge regression!
+\end{frame}
+
+
+%\section{Parameter selection}
+\begin{frame}
+  \frametitle{Smoother matrix}
+  \pause
+  We can compactly write the \textit{fitted smoothing spline} as:\pause
+  \begin{equation}
+     \hat{\bm w} = {\gr \bm S (\bm S^T\bm S + \la\bm\Omega)^{-1}\bm S^T}\bm y = {\gr \bm S_\la} \bm y
+  \end{equation}\pause
+  where $\gr \bm S_\la$ is known as the \textbf{\gr smoother matrix}.
+  \pause
+  \medskip
+  
+  The number of effective degrees of freedom of a smoothing spline is given by:\pause
+  \begin{equation}
+    df_\la = \text{trace}(\bm S_\la)
+  \end{equation}
+  \pause
+  \visible<+->{
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[width=.6\textwidth,trim={0 13cm 11cm 10cm},clip]{ESL5-8}
+    \caption{Visualization of a smoother matrix. Reddish hues indicate higher values.}
+  \end{figure}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Eigendecomposition of smoother matrix}\pause
+      $\bm S_\la$ is symmetric and positive semidefinite, and can be factored as:\pause
+    \begin{equation}
+      \bm S_\la = \sum_{k=1}^K\fr{1}{1+\la d_k}\bm u_k\bm u_k^T =  \sum_{k=1}^K\rho_{k}(\la)\bm u_k\bm u_k^T
+    \end{equation}
+    \pause
+    where $d_k$ are the eigenvalues of the penalty matrix $\bm K$, such that:
+    \pause
+    \begin{equation}
+      \bm S_\la = (\bm I + \la\bm K)^{-1}
+    \end{equation}
+    \pause
+    and $\rho_{k}$ are the eigenvalues of $\bm S_{\la}$.  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Properties of the smoother matrix}
+  \pause
+  \begin{itemize}[<+->]
+  \item The first two eigenvalues of penalty matrix $\bm K$ are $0 = d_{1} = d_{2}$.
+  \item This implies that the first two eigenvalues of $\bm S_{\la}$ (corresponding to the 2-D eigenspace of functions linear in $x$) are always 1:\pause
+    \begin{equation}
+      \rho_{1}(\la) = \rho_{2}(\la) = \fr{1}{1 + \la(0)} = \pause 1
+    \end{equation}
+  \pause The linear basis functions are thus not penalized.\pause
+  \item {\rd For the corresponding smoother matrices of regression splines, all the eigenvalues are 1, i.e.\ no shrinking.}
+  \end{itemize}\pause
+    \begin{figure}[h!]
+    \centering
+    \visible<+->{\includegraphics[width=.3\textwidth,trim={0.9cm 4.5cm 10.7cm 15.9cm},clip]{ESL5-7}}\quad\quad
+    \visible<+->{\includegraphics[width=.3\textwidth,trim={10.7cm 4.5cm 0cm 15cm},clip]{ESL5-7}}
+    \caption{(Left) Eigenvalues of the smoother matrix for a smoothing spline fit.
+      (Right) Eigenvectors $\bm u_{k}$ are plotted versus $\bm x$ for $k=3,4,5,6$.}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Example: Estimating a response across different groups}
+  \pause
+ \visible<2->{
+    \begin{figure}[h!]
+    \centering
+    \includegraphics[width=.8\textwidth,trim={0 10cm 0cm 4cm},clip]{ESL5-6}
+    \caption{Estimating a smoothing spline for bone mineral density for male and female adolescents. $df_{\la}\approx 12$. The fitted splines shows that changes in BMD occur earlier in females than males.}
+  \end{figure}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Estimating blood pressure (two predictors)}
+   \visible<2->{
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[width=.8\textwidth,trim={0 10cm 0cm 4cm},clip]{ESL5-12}\pause
+    \caption{Estimating systolic blood pressure (response) as a function of obesity and age. Knots used are shown in red.}
+  \end{figure}  }
+\end{frame}
+
+% \begin{frame}
+%   \frametitle{Activity}
+  
+% \end{frame}
+
+
+\section{GAMs}
+\begin{frame}
+  \frametitle{Generalized additive models}
+  The \textbf{\bl generalized additive model} has the form:
+  \begin{equation}\bl
+    \label{eq:1}
+    \mb{E}(y|x_{1},x_{2},\ldots,x_{d}) = \alpha + f_{1}(x_{1}) + f_{2}(x_{2}) + \cdots + f_{D}(x_{D})
+  \end{equation}
+  \pause
+  where:
+  \begin{eqnarray*}
+    x_{1}, x_{2}, \cdots, x_{D} && \quad \pause \text{--- predictors} \\\pause
+    y && \quad \pause \text{--- outcome} \\\pause
+    f_{d} && \quad \text{--- unspecified smooth/nonparametric functions} \\ \pause
+                                && \quad \quad \text{e.g.\ basis functions} 
+  \end{eqnarray*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{GAMs: regression setting}
+  \pause
+  The multiple linear regression model is given by:\pause
+  \begin{equation}
+    \label{eq:2}
+    y = \pause {\pl w_{0}} \pause + {\og  w_{1}x_{1}} \pause + \cdots + \pause {\bl  w_{D}x_{D}} \pause + \epsilon
+  \end{equation}
+  \pause
+  The generalized additive movel replaces each linear term by a smooth/nonlinear function $f_{d}(x_{d})$:\pause
+  \begin{eqnarray}
+    \label{eq:3}
+    \begin{split}
+      y &= \pause {\pl \alpha} + \pause {\og f_{1}(x_{1}) } \pause  + \cdots + \pause {\bl f_{D}(x_{D})}  + \epsilon \\ \pause
+        &= \pause \alpha + \sum_{d=1}^{D}f_{d}(x_{d}) + \epsilon
+    \end{split}
+  \end{eqnarray}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Fitting additive models}
+  \pause
+  Additive models can be estimated in a similar fashion as smoothing splines. \pause
+  \medskip
+
+  The \textbf{penalized loss function} (PRSS) is given by:\pause
+  \begin{equation}
+    \label{eq:4}
+    PRSS(\alpha, f_{1}, f_{2}, \ldots, f_{D}) = \pause
+    \sum_{n=1}^{n}\lt( y_{n} -\alpha - \sum_{d=1}^{D}f_{d}(x_{nd})\rt)^{2} \pause
+    + \sum_{d=1}^{D}\la_{d}\int f_{d}''(t_{d})^{2}dt_{d}
+  \end{equation}
+  \pause
+  where $\la_{j} \ge 0$ are tuning parameters.\pause
+  \begin{itemize}[<+->]
+  \item The minimizing functions for $PRSS$ form an \textbf{additive cubic spline}:\\ \pause
+    each $\hat f_{d}$ is a cubic spline in $x_{d}$ with knots at each unique $x_{nd} = 1,\ldots, N$
+  \item To ensure uniqueness we must constrain the objective. \pause One possibility:\pause
+    \begin{equation}
+      \label{eq:5}
+      \sum_{n=1}^{N}f_{d}(x_{nd}) = 0 \quad \forall d \in\{1,\ldots,D\}
+    \end{equation}\pause
+    In this case, then the intercept estimate is the mean response:\pause
+    \begin{equation}
+    \hat\alpha = \fr1N\sum_{n=1}^{N}y_{n}\label{eq:6}
+  \end{equation}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Backfitting algorithm for additive model estimation}
+  \pause
+
+  \begin{enumerate}[<+->]
+  \item Initialize: \pause
+    \begin{eqnarray*}
+      \hat\alpha &=& \fr1N\sum_{n=1}^{N}y_{n} \\\pause
+      \hat f_{d} &=& 0,\quad \forall i,j
+    \end{eqnarray*}
+  \item Iterate $q$ times for $j = 1, 2, \ldots, p$:\pause
+    \begin{eqnarray*}
+      \hat f_{d} &\leftarrow& \bm S_{d}\lt[ \lt\{y_{n}-\hat\alpha - \sum_{d'\ne j}\hat f_{d'} (x_{id'})\rt\}_{1}^{N}\rt]\\ \pause
+      \hat f_{d} &\leftarrow& \hat f_{d} - \fr1N\sum_{n=1}^{N}\hat f_{d}(x_{ij})
+    \end{eqnarray*}\pause
+    until $|\hat f_{d}^{(q)} - \hat f_{d}^{(q-1)}| \le \mathtt{tol}$ (tolerance/stopping threshold).
+  \end{enumerate}
+  \pause
+  Note: $\bm S_{d}$ is the natural cubic spline smoother matrix
+\end{frame}
+
+\begin{frame}
+  \frametitle{Notes on  backfitting algorithm}
+  \begin{itemize}[<+->]
+  \item Analogous to multiple regression for linear models
+  \item The idea is to estimate a nonlinear function for each feature $x_{d}$ while keeping the other features constant
+  \item The initial value of $\hat\alpha = \ol{\bm y}$ remains unchanged during iterations
+  \item The update $\hat f_{d} \leftarrow \hat f_{d} - \fr1N\sum_{n=1}^{N}\hat f_{d}(x_{nd})$ is only required due to computational rounding, as otherwise, $\fr1N\sum_{n=1}^{N}\hat f_{d}(x_{nd})\sim 0$
+  \item The smoothing operator $\bm S_{d}$ can have several specifications, e.g.\pause
+    \begin{itemize}[<+->]
+    \item local polynomial regression 
+    \item kernel 
+    \item periodic 
+    \item $D$-order basis function projection 
+    \end{itemize}
+  \item $\bm S_{d}$ is specified as the natural cubic spline smoother matrix, and is given by:\pause
+    \begin{equation}
+      \label{eq:7}
+      \bm S_{d} = \bm N_{d} (\bm N_{d}\tr \bm N_{d} - \la\bm\Omega_{d})^{-1}\bm N_{d}\tr 
+    \end{equation}
+    \pause where $\bm N_{d}$ is the matrix of the natural cubic spline basis functions for feature $j$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Example: fitting a GAM to predict wages}
+  \pause
+  Three predictors: 2 continuous, 1 factor
+
+  \begin{figure}[h!]
+    \centering
+    \includegraphics<2->[width=\textwidth]{7-11}    
+    \caption{GAM estimate for Wage on year, age and education.}
+  \end{figure}
+  \pause
+%   Function call (using natural splines---no shrinkage):
+%   \begin{quote}\rd\small
+% \begin{verbatim}
+% gam1=lm(wage~ns(year,4)+ns(age,5)+education,data=Wage)
+% \end{verbatim}
+%   \end{quote}
+\end{frame}
+
+% \begin{frame}[fragile]
+%   \frametitle{GAMs examples on the Wage data (2)}
+%   \pause
+
+%   \begin{figure}[h!]
+%     \centering
+%     \includegraphics<2->[width=\textwidth]{7-12}    
+%     \caption{GAM estimate for Wage on year, age and education.}
+%   \end{figure}
+% %   \pause
+% %   Function call (using smoothing splines):
+% %   \begin{quote}\bl\small
+% % \begin{verbatim}
+% % gam.m3=gam(wage~s(year,4)+s(age,5)+education,data=Wage)
+% % par(mfrow=c(1,3))
+% % plot(gam.m3, se=TRUE,col="blue")
+% % \end{verbatim}
+% %   \end{quote}
+% \end{frame}
+
+\begin{frame}
+  \frametitle{GAMs: classification setting}
+  \pause
+  In logistic regression, we address classification by estimating the probability $p$, where: \pause
+  \begin{equation}
+    \label{eq:9}
+    p= p(y = 1|\bm x), \quad \text{(in the 0/1 binary case )}
+  \end{equation}
+  \pause
+    Recall that:
+  \begin{equation}
+    \label{eq:11}
+    1 - p = p(y = 0|\bm x)
+  \end{equation}
+  \pause and:\pause
+  \begin{equation}
+    \label{eq:12}
+    p = \pause \fr{1}{ 1 + e^{-( w_{0} +  w_{1}x_{1} + \cdots +  w_{p}x_{p})}}
+  \end{equation}
+  \pause
+  $p$ represents the \textbf{mean of response} $y_{n}$, and thus can be expressed as $\mu_{n}$
+  
+  The logit function is used as the \textit{link} between input $\bm x$ and $p$: \pause
+  \begin{equation}
+    \label{eq:10}
+   \text{logit(p)} = \log\lt(\fr{p}{1 - p}\rt) = \pause  w_{0} +  w_{1}x_{1} + \cdots +  w_{p}x_{p}
+  \end{equation}
+  \pause
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Additive logistic regression model}
+  \pause
+  In the additive case, we replace each linear term by a general functional form to obtain the \textbf{\bl logistic regression GAM}:\pause
+  \begin{equation}\bl
+    \label{eq:13}
+   \text{logit}(\mu)\pause =  \text{logit(p)}\pause = \alpha + f_{1}(x_{1}) + \cdots + f_{p}(x_{p})
+  \end{equation}
+  \pause
+  The additive model can be specified in a variety of ways, e.g:
+
+  \begin{itemize}[<+->]
+  \item Semiparametric:\pause
+    \begin{equation}
+      \label{eq:14}
+      \text{logit}(\mu) = \alpha + w\tr \bm x + f(\bm z)
+    \end{equation}
+  \item Interaction effects:\pause
+    \begin{equation}
+      \label{eq:15}
+      \text{logit}(\mu) =  f(\bm x) + g_{k}(\bm z)  
+    \end{equation}
+    \pause
+    ~ $k$ levels of input $\bm x$ against $\bm z$
+  \end{itemize}
+  \pause
+  \begin{alertblock}{Model estimation}\pause
+    The additive logistic regression model can also be solved via backfitting using iteratively reweighted least squares for the
+    model estimation in the second step (Newton-Raphson for maximum likelihood)\footnote{See ESL page 300 for a description of this algorithm.}
+\end{alertblock}
+\end{frame}
+
+
+\section{Summary}
+\begin{frame}
+  \frametitle{Piecewise-linear fit}
+  \pause
+  Piecewise-linear basis functions (2 knots); no continuity:
+  \begin{equation}
+    \begin{pmatrix}
+      h_{0,0}(x) = 1_{|x\le \xi_1|} & h_{1,0}(x) = 1_{|\xi_1\le x\le \xi_2|} & h_{2,0}(x) = 1_{|x\ge \xi_2|} \\
+      h_{0,1}(x) = 1_{|x\le \xi_1|}x & h_{1,1}(x) = 1_{|\xi_1\le x\le \xi_2|}x & h_{2,1}(x) = 1_{|x\ge \xi_2|}x 
+    \end{pmatrix}
+  \end{equation}
+  \pause
+  Generalizing to $D$-order polynomial with $K$ knots, this gives $(K+1)\times (D+1)$ parameters
+  \begin{itemize}[<+->]
+  \item Achieve continuity by imposing equality at the knots:
+    \pause
+    \begin{align}
+      \xi_1:  w_{0,0} + \xi_1 w_{0,1} &=  w_{1,0} + \xi_1 w_{1,1} \\
+      \xi_2:  w_{1,0} + \xi_1 w_{1,1} &=  w_{1,2} + \xi_2 w_{1,1} 
+    \end{align}
+  \item  This frees up 2 degrees of freedom
+  \item Only 4 basis functions are then needed
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Truncated-power basis}
+  \pause
+  \begin{itemize}[<+->]
+  \item For a piecewise-linear fit wtih 2 knots, continuity can be specified using the truncated-power basis:\pause
+    \begin{equation}
+      \begin{pmatrix}
+        h_0(x) = 1 & h_1(x) = x \\
+        h_2(x) = (x - \xi_1)_+ & h_3(x) = (x - \xi_2)_+
+      \end{pmatrix}
+    \end{equation}
+    \pause
+    where $(x-\xi_k)_+ =
+    \begin{cases}
+      x - \xi_k, & x \ge \xi_k \\
+      0, & \text{otherwise}
+    \end{cases}$
+  \item For an order $M$ polynomial, the number of basis functions required is thus:\pause
+    \begin{equation}
+      (K+1)\times(M+1) - K\times M = K + M +1 
+    \end{equation}
+
+  \end{itemize}
+\end{frame}
+\begin{frame}
+  \frametitle{Regression spline (truncated-power basis)}
+  \pause
+  \begin{itemize}[<+->]
+      \item General form of truncated-power basis:\pause
+    \begin{align}
+      h_m(x) &= x^m, \quad m = 0, \ldots, M \\\pause
+      h_{D+k}(x) &= (x - \xi_k)_{+}^D, \quad \pause k = 1, \ldots, K
+    \end{align}
+  \item Achieves both continuity and smoothness
+  \item Degrees of freedom (number of parameters):
+    \begin{equation}
+      (K + 1) \times(M+1) - K\times M = K + M + 1
+    \end{equation}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Natural cubic spline}
+  \pause
+  \begin{itemize}[<+->]
+  \item Reduces variance by ensuring linearity at the boundary knots
+  \item Two constraints at each boundary knot: $f''(x) = f'''(x) = 0$
+  \item Frees up 4 degrees of freedom
+  \item General representation:
+    \begin{align}
+      S_0(x) & = 1 \\ \pause
+      S_1(x) & = x \\ \pause
+      S_{1+k}(x) &=  d_k(x) - d_{K-1}(x) 
+    \end{align}
+    \pause where
+    \pause
+    \begin{equation}
+      d_k(x) = \fr{(x - \xi_k)_+^3 - (x - \xi_K)^3_+}{\xi_K - \xi_k}
+    \end{equation}
+  \item Recall: regression spline has $K+M+1$ basis functions
+  \item Here, $M = 3$, and since 4 are freed up, then $df = K + 3 + 1 - 4 = K$.
+  \item So, same number of basis functions as there are knots.
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Smoothing spline}
+  \pause
+  \begin{itemize}[<+->]
+  \item Introduce roughness penalty:
+    \begin{equation}
+      PRSS(\bm w,\la) = \sum_{i=1}^n\lt[y_n - f(x)\rt]^2 + \la\int\lt[f''(t)\rt]^2dt
+    \end{equation}
+  \item Solution is a shrunken (damped) natural cubic spline:
+    \pause
+    \begin{equation}
+      \hat f (x) = \sum_{k=1}^K S_k(x)\hat w_k 
+    \end{equation}
+  \item We can also write:\pause
+    \begin{equation}
+      PRSS(\bm w,\la) = (\bm y - \bm S{\bm w})^T(\bm y - \bm S{\bm w}) + \la{\bm w} ^T\bm \Omega {\bm w}
+    \end{equation}
+    \pause where $S_{nk} = S_k(x_n)$ and $\Omega_{k,k'} = \int S_k''(t)S_{k'}''(t)dt$
+  \item $\hat{{\bm w}} = (\bm S^T\bm S + \la\bm\Omega)^{-1}\bm{N}^T\bm y$ 
+  \item The smoothing spline is thus:
+    \begin{equation}
+      \hat{\bm f} = {\gr \bm S (\bm S^T\bm S + \la\bm\Omega)^{-1}\bm{N}^T}\bm y  = {\gr\bm S_\la }y
+    \end{equation}
+    \pause where $\gr \bm S_{\la}$ is the \textbf{\gr shrinking smoother}.
+  \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Reading}
+  \begin{itemize}
+  \item \textbf{PMLI} 11.5
+   \item  \textbf{ESL} 5.2-5 %; ISLR 7.4-5
+%  \item Next lecture: ESL 9.1; ISLR 7.6-7
+  \end{itemize}
+
+\end{frame}
+
+
+\appendix\addtocounter{part}{-1}
+\section{Appx: Piecewise functions}
+
+
+\frame{\frametitle{Piecewise functions: constant and linear formulations}\pause
+  \begin{itemize}
+  \item One constant per region:\pause
+    \begin{equation}
+      f(X)= \pause \sum\limits_{m=0}^{M-1}  w _m h_m(X) \pause =\sum\limits_{m=0}^{M-1}  w _m \mb{I}(\xi_{m} \leq X < \xi_{m+1})
+    \end{equation}
+    \pause
+    This is \textbf{piecewise constant}\pause
+
+    \medskip
+
+  \item One linear model per region:\pause
+    % \[f(z)=\sum\limits_{m=0}^{M-1}  w _{2m} h_m(z_j)+ w _{2m+1} h_m(z_j) z_j\]
+    \begin{equation}
+      f(X) = \pause \sum\limits_{m=0}^{M-1}\big[  w _{0,m}+ w _{1,m} X\big] \mb{I}(\xi_{m} \leq X < \xi_{m+1})
+    \end{equation}
+    \pause
+    This is \textbf{piecewise linear}
+  \end{itemize}
+}
+
+
+\frame{\frametitle{Piecewise functions (cont.)}\pause
+\begin{itemize}[<+->]
+\item Individual models follow same principles of \textit{linear regression}
+%\item Least squares estimation can be used to estimate the model
+\end{itemize}
+\pause
+\begin{figure}
+  \includegraphics<4->[width=2.5in]{ESLII_pieceWise1}
+
+%\includegraphics[width=1.3in]{piecewise_constant}
+%\includegraphics[width=1.3in]{piecewise_linear}
+\end{figure}
+
+\begin{minipage}[t]{.45\linewidth}\footnotesize
+    (Left) {\rd Piecewise constant }function (green) fitted to a simulated dataset whose true function is shown in blue.
+    Basis functions:
+    \begin{eqnarray*}
+      \rd h_{0}(X) &=& \mb{I}(X <\xi_{1})\\\pause
+      h_{1}(X) &=& \mb{I}(\xi_{1}\le X \le \xi_{2})\\\pause
+      h_{2}(X) &=& \mb{I}(\xi_{2}\le X)
+    \end{eqnarray*}
+  \end{minipage}\quad\pause
+\begin{minipage}[t]{.45\linewidth}\footnotesize
+     (Right) {\bl Piecewise linear} function (green) fitted to simulated dataset whose true function is shown in blue:
+    Basis functions:
+    \begin{eqnarray*}
+      \bl h_{0}(X) &=& \mb{I}(X <\xi_{1})\\\pause
+      h_{1}(X) &=& \mb{I}(\xi_{1}\le X \le \xi_{2}) \\\pause
+      h_{2}(X) &=& \mb{I}(\xi_{2}\le X)\\\pause
+      h_{3}(X)  &=& X\mb{I}(X <\xi_{1})\\\pause
+      h_{4}(X) &=& X\mb{I}(\xi_{1}\le X \le \xi_{2})\\\pause
+    \quad h_{5}(X) &=& X\mb{I}(\xi_{2}\le X)
+    \end{eqnarray*}
+
+  \end{minipage}
+  
+%In both cases, there are discontinuities at the knots.
+    
+}
+%\item The least squares estimate gives us $\hat  w _m=\bar y_m$
+%\item Each region defined as:
+%\end{itemize}
+%\[ h_m(z) = \mb{I}(\xi_m \leq z < \xi_{m+1})\]
+%where $I$ is the indicator function and $\xi_{m}$ is a boundary point (or \textbf{knot})\\
+%}
+
+
+\frame{
+  \frametitle{Piecewise-linear basis functions}\pause
+  \begin{itemize}[<+->]
+  \item To ensure continuity at the knots, we need to constrain the basis functions to be equal at both $\xi_{1}$ and $\xi_{2}$.
+  \item This means we lose 2 degrees of freedom and only need to fit $6-2=4$ basis functions.
+  \end{itemize}
+  
+  \pause
+  The basis functions for a continuous piecewise-linear fit with two knots are thus:\pause
+  % Redefine $h_m(z)$ to get a continuous model at the knots:\pause
+\begin{eqnarray}
+  h_0(X) &=&1\\\pause
+  h_1(X) &=&X\\\pause
+  h_2(X)&=&(X-\xi_1)_{+}\\\pause
+  h_3(X)&=&(X-\xi_2)_{+}
+\end{eqnarray}\pause
+
+where,\pause
+\begin{equation}
+(X-\xi_1)_{+}= \begin{cases}
+      X-\xi_1, & X\geq \xi_1 \\\pause
+      0, & \text{otherwise}
+   \end{cases}
+ \end{equation}
+ % \begin{center}
+ %   \includegraphics[width=1.5in]{ESLII_pieceWise_basis_func}
+ % \end{center}
+\pause
+ The model can then be written as: \pause \pl
+ \begin{equation}
+   y_{i} =  w _{0} +  w _{1}x_{i} +  w _{2}(x_{i} - \xi_{1})_{+} +  w _{3}(x_{i} - \xi_{2})_{+} + \epsilon_{i}
+ \end{equation}
+}
+
+\frame{
+  \frametitle{Piecewise-linear basis functions  (cont.)}\pause
+  \begin{itemize}
+  \item When entering a new region, the added linear component alters the slope
+    % \item Continuous at every point, but not smooth at all
+  \end{itemize}
+
+  
+  \begin{figure}
+\centering
+% \includegraphics[width=1.8in]{piecewise_linear_continuous.png}
+% \caption{$f(z)= w _0+ w _1z+ w _2(z-\xi_1)_{+}z+ w _3(z-\xi_2)_{+}z$}
+\includegraphics[width=3.5in, trim={2cm 8cm 0cm 12cm},clip]{ESL5-1}
+\caption{(Left): Piecewise-linear fit with continuity (but not smoothness) at the knots.
+  $\bl f(X)= w _0+ w _1X+ w _2(X-\xi_1)_{+}+ w _3(X-\xi_2)_{+}$.
+
+  (Right): Piecewise-linear fit with continuity at $\xi_{1}$. $\rd f(X) =  w _{2}(X-\xi_1)_{+}$}
+\end{figure}
+
+}
+
+\frame{
+\frametitle{Piecewise polynomials}\pause
+\begin{itemize}
+\item To achieve smoothness, we increase the degree of the polynomial, adding one \textbf{\rd truncated power basis function} per knot:
+  \begin{equation}
+    \rd h(X,\xi) = \pause (X - \xi)_{+}^{D} = \pause
+    \begin{cases}
+      (X-\xi)^{D},  & X> \xi\\ \pause
+      0, & \text{otherwise}
+    \end{cases}
+  \end{equation}
+  \pause
+  where $D$ is the degree of the piecewise polynomial
+\end{itemize}
+\pause
+\visible<+->{
+\begin{figure}
+\includegraphics[width=1.8in,trim={0cm 2cm 0 0},clip]{piecewise_continuous_poly.png}
+%\includegraphics[width=1.5in]{piecewise_poly.png}
+%\includegraphics[width=2in]{piecewise_poly_continuous.png}
+\caption{Piecewise-quadratic fit: $f(X)= w _0+ w _1X+ w _2X^2+ {\rd  w _3(X-\xi_1)_{+}^2+ w _4(X-\xi_2)_{+}^2}$}
+\end{figure}}
+
+}
+
+ 
+
+\frame{
+  \frametitle{Piecewise polynomials (cont.)}\pause
+  Generally, we can write the basis functions for a degree $D$ piecewise polynomial fit using the basis for a $D$th
+  order polynomial and then adding $K$ truncated power basis functions for each knot.\pause
+  
+\begin{itemize}
+\item Model for degree $D$:
+  \begin{eqnarray}
+    \begin{split}
+    f(X) &=& \pause  w _0+ w _1X+ w _2X^2+ \ldots \\ \pause
+        &=& \quad + ~  w _DX^D+ w _{D+1}(X-\xi_1)_{+}^D+ \ldots + w _{D+K}(X-\xi_K)_{+}^D
+     \end{split}
+  \end{eqnarray}
+  \pause
+  
+\item For $K$ knots and degree $D$ polynomial:\pause
+  \begin{eqnarray}
+    h_m(X) &=& X^m, \quad m=0,\ldots, D \\ \pause
+    h_{D+k}(X) &=& (X-\xi_k)^D_{+},\quad  k=1,\ldots, K
+  \end{eqnarray}
+  \pause
+\item Degree $D=3$ is a \textbf{cubic spline} \pause
+\begin{itemize}
+\item Continuous first and second derivatives (smooth) \pause
+\item The most common spline degree
+\end{itemize}
+\end{itemize}
+}
+
+
+\begin{frame}
+  \frametitle{B-spline basis representation}
+  \pause
+  \begin{itemize}[<+->]
+  \item For larger orders, the truncated power basis can become unstable
+  \item B-splines are a computationally convenient alternative
+  % \item Polynomial basis functions with local support (additional knots at boundaries); recursive construction
+  \end{itemize}
+  \begin{block}{Degree-$D$ B-spline}
+    \pause
+    \begin{enumerate}[<+->]
+    \item Define augmented knot sequence: \pause
+        $\bm\xi^* = (\xi_{-D}, \ldots, \xi_0, \bm \xi, \xi_{K+1}, \ldots, \xi_{K+D+1})$
+    \item For $i = -D,\ldots, K+D$, let:\pause
+      \begin{equation}
+        B_{i,0}(x) =
+        \begin{cases}
+          1, & x \in [\xi_i,\xi_{i+1}) \\\pause
+          0, & \text{otherwise}
+        \end{cases}
+      \end{equation}\pause
+      and by convention $B_{i,0}(x) = 0$ when $\xi_i = \xi_{i+1}$
+  \item The $i$th B-spline basis function of degree $j, j=1,\ldots, D$ is:\pause
+    \begin{equation}
+      B_{i,j}(x) = \fr{x - \xi_i}{\xi_{i+j} - \xi_i}B_{i,j-1}(x) +\fr{\xi_{i+j+1} - x}{\xi_{i+j+1} - \xi_{i+1}}B_{i+1,j-1}(x)
+    \end{equation}
+    \pause for $i = -D, \ldots, K + D - j$
+        \end{enumerate}
+
+  \end{block}
+\end{frame}
+
+
+\section{Appx: GLMs}
+
+\begin{frame}
+  \frametitle{The generalized linear model (GLM)}
+  \label{glm}
+  \pause
+
+  \begin{itemize}
+  \item Conventional linear models have the form:
+    \begin{equation}
+      y_{i} \sim N(\bm x_{i}\tr \bm\beta, \sigma^{2})
+    \end{equation}
+    \pause where \pause
+    \begin{itemize}
+    \item $y_{i}$ is a continuous response
+    \item $\bm x_{i}$ is a vector of quantitative and/or qualitative explanatory variables
+    \end{itemize}
+    \pause
+
+  \item Generalized linear models (GLMs) were introduced to extend this framework to allow $y_{i}$ to be modeled by other \href{https://people.eecs.berkeley.edu/~jordan/courses/260-spring10/other-readings/chapter8.pdf}{exponential family distributions} besides the normal/Gaussian, e.g.
+    \begin{itemize}
+    \item exponential
+    \item binomial/multinomial (with fixed number of trials)
+    \item Poisson
+    \end{itemize}
+  \pause
+
+\item In the GLM framework: \pause
+  \begin{itemize}
+  \item The mean of $y_{i}$ is given by $\mu_{i}$
+  \item $\mu_{i}$ can be specified by a nonlinear function of $\bm x_{i}\tr \bm\beta$
+  \item Note that the simple linear regression is a special case of GLM in which $\mu_{i} = \bm x_{i}\tr \bm\beta$ and $y_{i}$ follows a Gaussian distribution
+  \end{itemize}
+    \end{itemize}
+
+    \pause
+
+    \hyperlink{recap}{\beamerbutton{Back to Recap}}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{GLM components}
+
+    \pause
+
+    A GLM consists of three parts: \pause
+
+    \begin{itemize}
+    \item \textbf{Random component:} this is the probability distribution of the response variable \pause
+    \item \textbf{Systematic component:} specifies the explanatory variables within the linear combination of their coefficients ($\bm X\bm w $)\pause
+    \item \textbf{Link function $\bm{g(\mu)}$:} defines the relationship between the random and systematic components: \pause
+      \begin{itemize}
+      \item Simple linear regression (identity link function): \pause
+        \begin{equation}
+          g(\mu_{i}) = g(E(y_{i})) = \bm x_{i}\tr \bm w 
+        \end{equation}
+        \pause
+      \item Binary logistic regression (logit link function): \pause
+        \begin{equation}
+          g(\mu_{i}) = g(p(\bm x_{i})) = \pause \text{logit} (p(\bm x_{i})) = \pause
+          \ln\lt(\fr{p(\bm x_{i})}{1 - p(\bm x_{i})} \rt) = \pause \bm x_{i}\tr \bm w 
+        \end{equation}
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Assumptions of GLM}
+    \pause
+    \begin{itemize}
+    \item The observations of the response variable $\bm y$  are i.i.d.
+      \pause
+    \item Response variable $y_{i}$ is typically exponentially distributed (not restricted to being normally distributed) \pause
+      \begin{itemize}
+      \item Implies that errors need not be normally distributed (but should be independent)
+      \end{itemize}
+    \item Link function is linear with respect to the coefficients ($ w _{j}$)\pause
+      \begin{itemize}
+      \item Relationship between response and explanatory variables does not have to be linear \pause
+      \item Explanatory variables can be nonlinear transformations of original values (as in simple linear regression)
+      \end{itemize}
+      \pause
+    \item Variance may not homogeneous (i.e.\ homoscedasticity is not a requirement)\pause
+    \item Parameters are estimated via MLE 
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Commonly used GLM models and their components}
+
+    \pause
+
+    \begin{center}\small
+      \begin{tabular}{l p{.7in} l }\toprule
+        \bf Model & \bf Random component& \bf Link function   \\\midrule
+        Linear regression & Gaussian & Identity: $g(\mu_i) = \mu_{i} =  w \tr x_{i}$ \\\midrule
+        Binary logistic regression & Bernoulli & Logit:  $g(\mu_{i}) = \ln\lt(\fr{\mu_{i}}{1 - \mu_{i}}\rt)$ \\\midrule
+        Probit regression & Bernoulli & Probit: $g(\mu_{i}) = \Phi^{-1}(\mu_{i})$ \\\midrule
+        Multinomial logit/logistic  & Categorical & Multinomial logit: $g(\mu_{ic}) = \ln\lt(\fr{\mu_{ic}}{\mu_{iC}}\rt)$ \\\midrule
+        Poisson regression & Poisson & Log: $g(\mu_{i}) = \ln(\mu_{i})$ \\\bottomrule
+      \end{tabular}
+    \end{center}
+
+    \pause
+
+    Note that in all cases, the link function always results in:
+    \begin{equation}
+      g(\mu_i) = w\tr x_{i}
+    \end{equation}
+    \pause Its job is to ``link'' the response to the systematic component via a suitable transformation that results in a linear function of the $ w $'s.
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Further reading on GLMs}
+    \pause
+
+    \begin{itemize}
+    \item German Rodriguez's lecture notes on GLMs: \url{https://data.princeton.edu/wws509/notes/}
+    \item Penn State: \url{https://online.stat.psu.edu/stat504/lesson/6/6.1} (Including more on logistic and multinomial logistic)
+    \end{itemize}
+  \end{frame}
+
+% \begin{frame}
+%   \frametitle{Bias-variance tradeoff}
+%   \pause
+%   Given a simple case with $n=100$ observations of $x_{i},y_{i}$ where:
+%   \begin{eqnarray*}
+%     Y &=& f(X) + \epsilon \\\pause
+%     f(X) &=& \fr{\sin(12(X+0.2))}{X + 0.2}
+%   \end{eqnarray*}
+%   \pause
+%   with $X \sim U(0,1)$ and $\epsilon \sim \mathcal{N}(0,1)$.
+%   \pause
+%   \medskip
+%   The covariance is given by:
+%   \begin{equation}
+%     Cov(\bm{\hat f}) = \bm S_{\la}Cov(\bm y)\bm S_{\la}\tr  = \pause \bm S_{\la}\bm S_{\la}\tr 
+%   \end{equation}
+%   \pause
+%   The bias is given by:\pause
+%   \begin{equation}
+%     \text{Bias}(\hat{\bm f}) = \bm f - E(\bm{\hat f}) = \pause \bm f - E(\bm S_{\la}\bm y) = \pause \bm f - \bm S_{\la}\bm f
+%   \end{equation}
+% \end{frame}
+
+% \begin{frame}
+%   \frametitle{Bias-variance tradeoff (cont.)}
+%   \pause
+%   We can then write the expected prediction error (EPE) as:\pause
+%   \begin{eqnarray}
+%     \begin{split}
+%       EPE(\hat f_{\la}) &= E(Y - \hat f_{\la}(X))^{2} \\\pause
+%       &= Var(Y) + {\pl E\lt[\text{Bias}^{2}(\hat f_{\la}(X)) + Var(\hat f_{\la}(X)) \rt]}\\\pause
+%       &= \sigma^{2} + {\pl MSE(\hat f_{\la})}
+%     \end{split}
+%   \end{eqnarray}
+%   \pause
+%   This explicitly shows the bias-variance tradeoff. \pause
+%   \medskip
+  
+%   However, we do not know the true $f(X)$, as we have here. Thus, we can use \textbf{\bl cross-validation} to estimate this:\pause
+%   \begin{eqnarray}\bl
+%     CV(\hat f_{\la}) &\bl = \fr1n \sum_{i=1}^{n} (y_{i} - \hat f_{\la}^{-i}(x_{i}))^{2} \\\pause
+%                      &\bl =  \fr1n\sum_{i=1}^{n} \lt( \fr{y_{i} -\hat f_{\la}(x_{i})}{1 - S_{\la}(i,i)}\rt)
+%   \end{eqnarray}
+% \end{frame}
+% \begin{frame}
+%   \frametitle{Cross-validation estimate of test error}\pause
+%    \visible<2->{
+%     \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=.5\textwidth,trim={1cm 5cm 1cm 2cm},clip]{ESL5-9}
+%     \caption{$EPE(\la)$ and estimate $CV(\la)$ and  smoothing spline fits for various $df_{\la}$. In this case the CV estimate is biased (above the EPE curve). Generally, however, CV produces unbiased estimates of the extra-sample (test) error.}}
+%   \end{figure}
+% \end{frame}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

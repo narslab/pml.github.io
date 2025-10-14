@@ -1,0 +1,105 @@
+---
+layout: default
+---
+
+<div class="latex-preview-container">
+  <div class="latex-controls">
+    <h1>{{ page.title }}</h1>
+    {% if page.latex_file %}
+    <div class="download-controls">
+      <a href="{{ site.baseurl }}/{{ page.latex_file }}" class="btn btn-primary" download>
+        📄 Download LaTeX Source
+      </a>
+      {% if page.pdf_file %}
+      <a href="{{ site.baseurl }}/{{ page.pdf_file }}" class="btn btn-outline-primary" target="_blank">
+        📋 View PDF
+      </a>
+      {% endif %}
+      {% if page.overleaf_link %}
+      <a href="{{ page.overleaf_link }}" class="btn btn-outline-success" target="_blank">
+        📝 Open in Overleaf
+      </a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if page.description %}
+  <div class="latex-description">
+    {{ page.description | markdownify }}
+  </div>
+  {% endif %}
+
+  <div class="latex-content">
+    {{ content }}
+  </div>
+
+  {% if page.latex_preview %}
+  <div class="latex-preview">
+    <h2>📄 LaTeX Preview</h2>
+    <div class="latex-rendered-content">
+      {{ page.latex_preview }}
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<script>
+// Enhanced MathJax configuration for LaTeX rendering
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    packages: {'[+]': ['ams', 'newcommand', 'configmacros']},
+    macros: {
+      // Common LaTeX macros
+      RR: "{\\mathbb{R}}",
+      NN: "{\\mathbb{N}}",
+      ZZ: "{\\mathbb{Z}}",
+      QQ: "{\\mathbb{Q}}",
+      CC: "{\\mathbb{C}}",
+      FF: "{\\mathbb{F}}",
+      PP: "{\\mathbb{P}}",
+      EE: "{\\mathbb{E}}",
+      Var: "{\\text{Var}}",
+      Cov: "{\\text{Cov}}",
+      Corr: "{\\text{Corr}}",
+      argmin: "{\\text{argmin}}",
+      argmax: "{\\text{argmax}}",
+      minimize: "{\\text{minimize}}",
+      maximize: "{\\text{maximize}}",
+      subject: "{\\text{subject to}}",
+      given: "{\\,|\\,}",
+      norm: ["{\\left\\|#1\\right\\|}", 1],
+      abs: ["{\\left|#1\\right|}", 1],
+      set: ["{\\left\\{#1\\right\\}}", 1],
+      paren: ["{\\left(#1\\right)}", 1],
+      bracket: ["{\\left[#1\\right]}", 1],
+      T: "{^\\top}",
+      inv: "{^{-1}}",
+      tr: "{\\text{tr}}",
+      diag: "{\\text{diag}}",
+      rank: "{\\text{rank}}",
+      span: "{\\text{span}}",
+      null: "{\\text{null}}",
+      range: "{\\text{range}}",
+      dim: "{\\text{dim}}"
+    }
+  },
+  svg: {
+    fontCache: 'global'
+  },
+  startup: {
+    ready: function () {
+      MathJax.startup.defaultReady();
+      // Add loading indicator
+      const loadingElements = document.querySelectorAll('.math-loading');
+      loadingElements.forEach(el => el.style.display = 'none');
+    }
+  }
+};
+</script>
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>

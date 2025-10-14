@@ -1,0 +1,217 @@
+/* LaTeX Preview Styling */
+.latex-preview-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.latex-controls {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.latex-controls h1 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #24292e;
+}
+
+.download-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.download-controls .btn {
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.download-controls .btn-primary {
+  background-color: #0366d6;
+  color: white;
+  border-color: #0366d6;
+}
+
+.download-controls .btn-primary:hover {
+  background-color: #0256cc;
+  border-color: #0256cc;
+  text-decoration: none;
+}
+
+.download-controls .btn-outline-primary {
+  background-color: transparent;
+  color: #0366d6;
+  border-color: #0366d6;
+}
+
+.download-controls .btn-outline-primary:hover {
+  background-color: #0366d6;
+  color: white;
+  text-decoration: none;
+}
+
+.download-controls .btn-outline-success {
+  background-color: transparent;
+  color: #28a745;
+  border-color: #28a745;
+}
+
+.download-controls .btn-outline-success:hover {
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+}
+
+.latex-description {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  border-radius: 0 4px 4px 0;
+}
+
+.latex-content {
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.latex-preview {
+  margin-top: 30px;
+  border-top: 2px solid #e1e4e8;
+  padding-top: 20px;
+}
+
+.latex-preview h2 {
+  color: #24292e;
+  margin-bottom: 15px;
+  font-size: 1.5em;
+}
+
+.latex-rendered-content {
+  background-color: white;
+  border: 1px solid #d1d5da;
+  border-radius: 6px;
+  padding: 20px;
+  font-family: "Computer Modern", "Latin Modern Math", "Times New Roman", serif;
+  font-size: 16px;
+  line-height: 1.7;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* LaTeX-style typography */
+.latex-rendered-content h1,
+.latex-rendered-content h2,
+.latex-rendered-content h3,
+.latex-rendered-content h4,
+.latex-rendered-content h5,
+.latex-rendered-content h6 {
+  font-family: "Computer Modern", "Latin Modern", serif;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.latex-rendered-content p {
+  margin-bottom: 1em;
+  text-align: justify;
+}
+
+.latex-rendered-content .theorem,
+.latex-rendered-content .definition,
+.latex-rendered-content .lemma,
+.latex-rendered-content .proposition {
+  background-color: #f8f9fa;
+  border-left: 4px solid #0366d6;
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.latex-rendered-content .proof {
+  border-left: 4px solid #6c757d;
+  padding: 15px;
+  margin: 20px 0;
+  background-color: #f8f9fa;
+  border-radius: 0 4px 4px 0;
+}
+
+.latex-rendered-content .example {
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Code blocks */
+.latex-rendered-content pre,
+.latex-rendered-content code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 3px;
+}
+
+.latex-rendered-content pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.latex-rendered-content code {
+  padding: 2px 4px;
+  font-size: 14px;
+}
+
+/* Math display improvements */
+.latex-rendered-content .MathJax {
+  font-size: 1.1em !important;
+}
+
+.latex-rendered-content .MathJax_Display {
+  margin: 1em 0 !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .latex-preview-container {
+    padding: 10px;
+  }
+  
+  .download-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .download-controls .btn {
+    justify-content: center;
+  }
+  
+  .latex-rendered-content {
+    font-size: 14px;
+    padding: 15px;
+    max-height: 400px;
+  }
+}
+
+/* Loading indicator */
+.math-loading {
+  color: #6c757d;
+  font-style: italic;
+  padding: 10px;
+  text-align: center;
+}

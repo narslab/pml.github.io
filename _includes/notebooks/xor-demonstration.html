@@ -213,7 +213,7 @@ I0000 00:00:1760623780.272852 1328064 service.cc:154]   StreamExecutor device (0
 2025-10-16 10:09:40.726725: I external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:531] Loaded cuDNN version 8902
 2025-10-16 10:09:41.021438: W tensorflow/core/framework/op_kernel.cc:1840] OP_REQUIRES failed at xla_ops.cc:577 : NOT_FOUND: Couldn't find a suitable version of ptxas. The following locations were considered: ./cuda_sdk_lib/bin/ptxas, /usr/local/bin/ptxas, /usr/bin/ptxas, /var/lib/snapd/snap/bin/ptxas, /usr/local/sbin/ptxas, /var/lib/flatpak/exports/bin/ptxas, /usr/lib/jvm/default/bin/ptxas, /usr/bin/site_perl/ptxas, /usr/bin/vendor_perl/ptxas, /usr/bin/core_perl/ptxas, /usr/local/cuda-12.3/bin/ptxas, /usr/local/cuda/bin/ptxas, /home/jbo/nars/lib/python3.12/site-packages/tensorflow/python/platform/../../../nvidia/cuda_nvcc/bin/ptxas, /home/jbo/nars/lib/python3.12/site-packages/tensorflow/python/platform/../../../../nvidia/cuda_nvcc/bin/ptxas
 2025-10-16 10:09:41.021492: I tensorflow/core/framework/local_rendezvous.cc:404] Local rendezvous is aborting with status: NOT_FOUND: Couldn't find a suitable version of ptxas. The following locations were considered: ./cuda_sdk_lib/bin/ptxas, /usr/local/bin/ptxas, /usr/bin/ptxas, /var/lib/snapd/snap/bin/ptxas, /usr/local/sbin/ptxas, /var/lib/flatpak/exports/bin/ptxas, /usr/lib/jvm/default/bin/ptxas, /usr/bin/site_perl/ptxas, /usr/bin/vendor_perl/ptxas, /usr/bin/core_perl/ptxas, /usr/local/cuda-12.3/bin/ptxas, /usr/local/cuda/bin/ptxas, /home/jbo/nars/lib/python3.12/site-packages/tensorflow/python/platform/../../../nvidia/cuda_nvcc/bin/ptxas, /home/jbo/nars/lib/python3.12/site-packages/tensorflow/python/platform/../../../../nvidia/cuda_nvcc/bin/ptxas
-	 [[{{node StatefulPartitionedCall}}]]
+	 [[{% raw %}{{node StatefulPartitionedCall}}{% endraw %}]]
 </pre>
 </div>
 </div>
@@ -276,7 +276,7 @@ Detected at node StatefulPartitionedCall defined at (most recent call last):
   File "/home/jbo/nars/lib/python3.12/site-packages/keras/src/backend/tensorflow/trainer.py", line 318, in fit
   File "/home/jbo/nars/lib/python3.12/site-packages/keras/src/backend/tensorflow/trainer.py", line 121, in one_step_on_iterator
 Couldn't find a suitable version of ptxas. The following locations were considered: ./cuda_sdk_lib/bin/ptxas, /usr/local/bin/ptxas, /usr/bin/ptxas, /var/lib/snapd/snap/bin/ptxas, /usr/local/sbin/ptxas, /var/lib/flatpak/exports/bin/ptxas, /usr/lib/jvm/default/bin/ptxas, /usr/bin/site_perl/ptxas, /usr/bin/vendor_perl/ptxas, /usr/bin/core_perl/ptxas, /usr/local/cuda-12.3/bin/ptxas, /usr/local/cuda/bin/ptxas, /home/jbo/nars/lib/python3.12/site-packages/tensorflow/python/platform/../../../nvidia/cuda_nvcc/bin/ptxas, /home/jbo/nars/lib/python3.12/site-packages/tensorflow/python/platform/../../../../nvidia/cuda_nvcc/bin/ptxas
-	 [[{{node StatefulPartitionedCall}}]] [Op:__inference_one_step_on_iterator_991]</pre>
+	 [[{% raw %}{{node StatefulPartitionedCall}}{% endraw %}]] [Op:__inference_one_step_on_iterator_991]</pre>
 </div>
 </div>
 </div>

@@ -1,5 +1,5 @@
-%\documentclass[smaller]{beamer}
-\def\bmode{2} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+%\documentclass[smaller,handout]{beamer}
+\def\bmode{0} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
 \if 0\bmode
 \documentclass[smaller]{beamer}
 \else \if 1\bmode
@@ -387,12 +387,12 @@ $w_i > 0 \rightarrow$ excitory influence
   
   The sigmoid {\bf \bl activation (output)} of a neuron is denoted:\pause
   \begin{equation}\bl
-    \bm\sigma(w_0a_m + w_{1}a_2 + \cdots + w_{m-1} a_{m-1} + b) = \bm\sigma\lt(\sum w_ia_i + b\rt) = \text{new neuron}
+    \bm\varphi(w_0z_1 + w_{1}z_2 + \cdots + w_{m-1} z_{m-1} + b) = \bm\varphi\lt(\sum w_iz_i + b\rt) = \text{new neuron}
   \end{equation}
   \pause
-  Further, we denote each activation as $a_{neuron}^{(layer)}$, e.g.\pause
+  Further, we denote each hidden unit as $z_{neuron}^{(layer)}$, e.g.\pause
   \begin{itemize}[<+->]
-  \item $a_4^{(1)}$: fourth neuron in first layer (layers are counted from first hidden layer)
+  \item $z_4^{(1)}$: fourth neuron in first layer (layers are counted from first hidden layer)
   \end{itemize}
   \pause
 
@@ -408,7 +408,39 @@ $w_i > 0 \rightarrow$ excitory influence
 \begin{minipage}[t]{.47\linewidth}
   \begin{figure}[h!]
     \centering
-    \includegraphics<9->[width=.8\textwidth]{nn-1-3}
+    \begin{tikzpicture}[>=stealth,scale=0.8]
+      % Input layer
+      \node[circle,fill=green!30,draw] at (0,2) (x1) {$x_1$};
+      \node[circle,fill=green!30,draw] at (0,0) (x2) {$x_2$};
+      \node[circle,fill=green!30,draw] at (0,-2) (x3) {$x_3$};
+      
+      % Hidden layer with three units
+      \node[circle,fill=blue!30,draw] at (3,1.5) (z1) {$h_1$};
+      \node[circle,fill=blue!30,draw] at (3,0) (z2) {$h_2$};
+      \node[circle,fill=blue!30,draw] at (3,-1.5) (z3) {$h_3$};
+      
+      % Output layer
+      \node[circle,fill=red!30,draw] at (6,0) (y) {$\hat{y}$};
+      
+      % Connections from input to hidden
+      \draw[->] (x1) -- (z1);
+      \draw[->] (x1) -- (z2);
+      \draw[->] (x1) -- (z3);
+      \draw[->] (x2) -- (z1);
+      \draw[->] (x2) -- (z2);
+      \draw[->] (x2) -- (z3);
+      \draw[->] (x3) -- (z1);
+      \draw[->] (x3) -- (z2);
+      \draw[->] (x3) -- (z3);
+      
+      % Connection from middle hidden unit to output
+      \draw[->,thick,red] (z3) -- (y) node[midway,above] {$w_{1,3}^{(2)}$};
+      
+      % Layer labels
+      \node[above] at (0,3) {Input Layer};
+      \node[above] at (3,3) {Hidden Layer};
+      \node[above] at (6,1.5) {Output Layer};
+    \end{tikzpicture}
   \end{figure}
 \end{minipage}
 \end{frame}
@@ -421,22 +453,22 @@ $w_i > 0 \rightarrow$ excitory influence
 
   Given the activation vector ($D$ neurons) in the zeroth (input) layer:
   \begin{equation}
-   \bm x \in \mb{R}^D = \bm a^{(0)} =   \begin{bmatrix}
-    a_1^{0}\\[2mm]
-    a_2^{0}\\[2mm]
+   \bm x \in \mb{R}^D = \bm z^{(0)} =   \begin{bmatrix}
+    z_1^{0}\\[2mm]
+    z_2^{0}\\[2mm]
     \vdots \\[2mm]
-    a_D^{0}\\
+    z_D^{0}\\
     \end{bmatrix}
   \end{equation}
   \pause
   Then the activations in the next layer ($M$ neurons) are given by:\pause
   \begin{equation}
-    \bm{a}^{(1)}=
-    \bm\sigma\left(
-    \boldsymbol{W}\bm a^{0}+ \bm b
+    \bm{z}^{(1)}=
+    \bm\varphi\left(
+    \boldsymbol{W}\bm z^{(0)}+ \bm b
   \right)
   = \pause
-  \sigma \left(
+  \bm\varphi \left(
     \begin{bmatrix}
       w_{1,1} & w_{1,2} & \cdots & w_{1,D}\\
       w_{2,1} & w_{2,2} & \cdots & w_{2,D}\\
@@ -445,10 +477,10 @@ $w_i > 0 \rightarrow$ excitory influence
     \end{bmatrix}
     \, 
     \begin{bmatrix}
-    a_1^{0}\\
-    a_2^{0}\\
+    z_1^{0}\\
+    z_2^{0}\\
     \vdots \\
-    a_{D}^{0}\\
+    z_{D}^{0}\\
     \end{bmatrix}
     +
     \begin{bmatrix}
@@ -479,7 +511,7 @@ $w_i > 0 \rightarrow$ excitory influence
 +(-3.5,1.5)  node[circle,fill=green!50]  (x1) {$x_1$}
 +(-3.5,0)    node[circle,fill=green!50]  (x2) {$x_2$}
 +(-3.5,-1.5) node[circle,fill=green!50]  (x3) {$x_3$}
-(2,0)    node[draw] (g) {$\sigma$} node[above=3mm]{\small\normalfont Activation}
+(2,0)    node[draw] (g) {$\bm\varphi$} node[above=3mm]{\small\normalfont Activation}
 +(15:3)  node[circle,fill=red!50]  (y1) {$\hat{y}_1$}
 +(-15:3) node[circle,fill=red!50]  (y2) {$\hat{y}_2$};
 \draw[->] (S)--(g);
@@ -493,38 +525,39 @@ $w_i > 0 \rightarrow$ excitory influence
 \end{tikzpicture}
 \end{center}
 
+
 \end{frame}
 
 
 
 \begin{frame}[fragile]
-  \frametitle{Example: 2-layer regression MLP }\pause  
-  Two-layer MLP for regression \pause
-  
-  \begin{figure}
-    \centering
-    \begin{neuralnetwork}[height=4, nodespacing=1.7cm,layerspacing=5cm ]
-    \newcommand{\x}[2]{$x_#2$}
-    \newcommand{\y}[2]{$\hat{y}$}
-    \newcommand{\hfirst}[2]{\small $a^{(1)}_{#2}$}
-    \newcommand{\wfirst}[4]{\small $w^{(1)}_#2$}
-    \newcommand{\mylinktext}[4]{$w^{(#3)}_{#4,#2}$}
-    \newcommand{\hsecond}[2]{\small $h^{(2)}_{#2}$}
-    \setdefaultlinklabel{\mylinktext}
-    \visible<+->{\inputlayer[count=2, bias=false, text=\x]}
-    \visible<+->{\hiddenlayer[count=4, bias=false,text=\hfirst]}
-    %\visible<+->{\linklayers}
-    \visible<+->{\link[from layer=0,to layer=1,from node=1,to node=1, labelpos=near end]}
-    \visible<+->{\link[from layer=0,to layer=1,from node=1,to node=2, labelpos=near end]}
-    \visible<+->{\link[from layer=0,to layer=1,from node=1,to node=3, labelpos=near end]}
-    \visible<+->{\link[from layer=0,to layer=1,from node=1,to node=4, labelpos=near end]}
-    \visible<+->{\link[from layer=0,to layer=1,from node=2,to node=1, labelpos= midway]}
-    \visible<+->{\link[from layer=0,to layer=1,from node=2,to node=2, labelpos=midway]}
-    \visible<+->{\link[from layer=0,to layer=1,from node=2,to node=3, labelpos=midway]}
-    \visible<+->{\link[from layer=0,to layer=1,from node=2,to node=4, labelpos=midway]}
-    \visible<+->{\outputlayer[count=1,text=\y]}
-    \visible<+->{\linklayers}
-  \end{neuralnetwork}
+   \frametitle{Example: 2-layer regression MLP }\pause  
+    Two-layer MLP for regression \pause
+    
+    \begin{figure}
+      \centering
+      \begin{neuralnetwork}[height=4, nodespacing=1.7cm,layerspacing=5cm ]
+      \newcommand{\x}[2]{$x_#2$}
+      \newcommand{\y}[2]{$\hat{y}$}
+      \newcommand{\hfirst}[2]{\small $z^{(1)}_{#2}$}
+      \newcommand{\wfirst}[4]{\small $w^{(1)}_#2$}
+      \newcommand{\mylinktext}[4]{$w^{(#3)}_{#4,#2}$}
+      \newcommand{\hsecond}[2]{\small $h^{(2)}_{#2}$}
+      \setdefaultlinklabel{\mylinktext}
+      \visible<+->{\inputlayer[count=2, bias=false, text=\x]}
+      \visible<+->{\hiddenlayer[count=4, bias=false,text=\hfirst]}
+      %\visible<+->{\linklayers}
+      \visible<+->{\link[from layer=0,to layer=1,from node=1,to node=1, labelpos=near end]}
+      \visible<+->{\link[from layer=0,to layer=1,from node=1,to node=2, labelpos=near end]}
+      \visible<+->{\link[from layer=0,to layer=1,from node=1,to node=3, labelpos=near end]}
+      \visible<+->{\link[from layer=0,to layer=1,from node=1,to node=4, labelpos=near end]}
+      \visible<+->{\link[from layer=0,to layer=1,from node=2,to node=1, labelpos= midway]}
+      \visible<+->{\link[from layer=0,to layer=1,from node=2,to node=2, labelpos=midway]}
+      \visible<+->{\link[from layer=0,to layer=1,from node=2,to node=3, labelpos=midway]}
+      \visible<+->{\link[from layer=0,to layer=1,from node=2,to node=4, labelpos=midway]}
+      \visible<+->{\outputlayer[count=1,text=\y]}
+      \visible<+->{\linklayers}
+    \end{neuralnetwork}
 \end{figure}
 
   \end{frame}
@@ -537,8 +570,8 @@ $w_i > 0 \rightarrow$ excitory influence
   \pause
   
    \begin{eqnarray*}
-    a_m^{(1)} &=& \sigma\lt(\sum_{d=1}^{D} w_{1,d}^{(1)}x_{nd}  + b_d^{(1)} \rt)\\[2mm]\pause
-    y_{i}(x_{i}) &=& \pause  \sum_{m=1}^{M} w_{1,m}^{(2)}a_m^{(1)}   + b^{(2)}   
+    z_m^{(1)} &=& \bm\varphi\lt(\sum_{d=1}^{D} w_{1,d}^{(1)}x_{nd}  + b_d^{(1)} \rt)\\[2mm]\pause
+    y_{i}(x_{i}) &=& \pause  \sum_{m=1}^{M} w_{1,m}^{(2)}z_m^{(1)}   + b^{(2)}   
   \end{eqnarray*}
   \pause
   %Note:
@@ -629,7 +662,7 @@ $w_i > 0 \rightarrow$ excitory influence
   \begin{itemize}[<+->]
   \item Fix initial weights and perform a forward sweep/pass through the network computing the activations $a$ (outputs) of each layer $l$ as:\pause
     \begin{equation}
-      \bm z^{(\ell)} = \bm \sigma(\bm W^{\ell} \bm z^{\ell-1} + \bm  b^{\ell})
+      \bm z^{(\ell)} = \bm \varphi(\bm W^{\ell} \bm z^{\ell-1} + \bm  b^{\ell})
     \end{equation}
   \item At the output layer, we compute the cost (loss) function $\mc L$ (what we want to minimize)
   \item Then, we {\it backpropagate} the errors through each layer in order to compute the gradients for the weight updates:\pause
@@ -653,7 +686,7 @@ $w_i > 0 \rightarrow$ excitory influence
   At the outer layer $L$ (without indexing by neuron):\pause
   \begin{eqnarray}
     a^{(L)} &=& \bm w^{(L)\top} \bm z^{(L-1)} + b^{(L)} \\\pause
-    o^{(L)} &=& \bm a^{(L)}  \quad \text{(linear activation or {\it no} activation)} \\\pause
+    o^{(L)} &=& a^{(L)}  \quad \text{(linear activation or {\it no} activation)} \\\pause
     \mc{L} &=& (o  - y)^2
   \end{eqnarray}
   \pause
@@ -751,15 +784,15 @@ $w_i > 0 \rightarrow$ excitory influence
   \item $(r=0)$: Initialize weights and biases: $w^{(l),0}$, $b^{(l),0}$
   \item Perform forward pass to compute activations:
     \begin{eqnarray}
-      z^{(l),0} &=& w^{(l),0} \times a^{(l-1),0} + b^{(l),0} \\\pause
-    a^{(l)} &=& \sigma(z^{(l),0}) 
+      a^{(l),0} &=& w^{(l),0} \times z^{(l-1),0} + b^{(l),0} \\\pause
+    z^{(l)} &=& \varphi(a^{(l),0}) 
     \end{eqnarray}
     \pause
     At output layer:
     \begin{eqnarray}      
-      z^{(L),0} &=& w^{(L),0} \times a^{(L-1),0} + b^{(L),0} \\\pause
-      a^{(L),0} &=& \sigma(z^{(L),0}) \\
-      C &=& (a^{(L),0}  - y)^2
+      a^{(L),0} &=& w^{(L),0} \times z^{(L-1),0} + b^{(L),0} \\\pause
+      o &=& \varphi(a^{(L),0}) \\
+      C &=& (o  - y)^2
     \end{eqnarray}
   \end{enumerate}
 \end{frame}
@@ -771,8 +804,8 @@ $w_i > 0 \rightarrow$ excitory influence
     \begin{enumerate}[<+->]
     \item Compute gradients: \pause
       \begin{eqnarray}
-      \pd{\mc{L}}{w^{(L)}} &=& \pause \pd{\mc{L}}{a^{(L)}}\pd{a^{(L)}}{z^{(L)}}\pd{z^{(L)}}{w^{(L)}}\\\pause
-      \pd{\mc{L}}{b^{(L)}} &=& \pause \pd{\mc{L}}{a^{(L)}}\pd{a^{(L)}}{z^{(L)}}\pd{z^{(L)}}{b^{(L)}}\pause
+      \pd{\mc{L}}{w^{(L)}} &=& \pause \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{w^{(L)}}\\\pause
+      \pd{\mc{L}}{b^{(L)}} &=& \pause \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{b^{(L)}}\pause
       \end{eqnarray}
     \item Update weights: \pause
       \begin{eqnarray}
@@ -790,8 +823,8 @@ $w_i > 0 \rightarrow$ excitory influence
     \begin{enumerate}[<+->]\setcounter{enumii}{2}
     \item Compute gradients: \pause
     \begin{eqnarray}
-      \pd{\mc{L}}{w^{(L-1)}} &=&  \pd{\mc{L}}{a^{(L)}}\pd{a^{(L)}}{z^{(L)}}\pd{z^{(L)}}{a^{(L-1)}}  \pd{a^{(L-1)}}{z^{(L-1)}}\pd{z^{(L-1)}}{w^{(L-1)}}\\\pause
-      \pd{\mc{L}}{b^{(L-1)}} &=&   \pd{\mc{L}}{a^{(L)}}\pd{a^{(L)}}{z^{(L)}}\pd{z^{(L)}}{a^{(L-1)}} \pd{a^{(L-1)}}{z^{(L-1)}}\pd{z^{(L-1)}}{b^{(L-1)}}
+      \pd{\mc{L}}{w^{(L-1)}} &=&  \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{z^{(L-1)}}  \pd{z^{(L-1)}}{a^{(L-1)}}\pd{a^{(L-1)}}{w^{(L-1)}}\\\pause
+      \pd{\mc{L}}{b^{(L-1)}} &=&   \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{z^{(L-1)}}  \pd{z^{(L-1)}}{a^{(L-1)}}\pd{a^{(L-1)}}{b^{(L-1)}}
     \end{eqnarray}
     \pause
   \item Update weights: \pause
@@ -810,12 +843,12 @@ $w_i > 0 \rightarrow$ excitory influence
     \begin{enumerate}[<+->] \setcounter{enumii}{4}
     \item Compute gradients: \pause
     \begin{eqnarray}
-      \pd{\mc{L}}{w^{(L-2)}} &=&  \pd{\mc{L}}{a^{(L)}}\pd{a^{(L)}}{z^{(L)}}\pd{z^{(L)}}{a^{(L-1)}} \pause
-                        \pd{a^{(L-1)}}{z^{(L-1)}}\pd{z^{(L-1)}}{a^{(L-2)}} \pause
-                        \pd{a^{(L-2)}}{z^{(L-2)}}\pd{z^{(L-2)}}{w^{(L-2)}}\\\pause
-      \pd{\mc{L}}{b^{(L-2)}} &=&   \pd{\mc{L}}{a^{(L)}}\pd{a^{(L)}}{z^{(L)}}\pd{z^{(L)}}{a^{(L-1)}} \pause
-                        \pd{a^{(L-1)}}{z^{(L-1)}}\pd{z^{(L-1)}}{a^{(L-2)}} \pause
-                        \pd{a^{(L-2)}}{z^{(L-2)}}\pd{z^{(L-2)}}{b^{(L-2)}}\\\pause
+      \pd{\mc{L}}{w^{(L-2)}} &=&  \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{z^{(L-1)}} \pause
+                        \pd{z^{(L-1)}}{a^{(L-1)}}\pd{a^{(L-1)}}{z^{(L-2)}} \pause
+                        \pd{z^{(L-2)}}{a^{(L-2)}}\pd{a^{(L-2)}}{w^{(L-2)}}\\\pause
+      \pd{\mc{L}}{b^{(L-2)}} &=&   \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{z^{(L-1)}} \pause
+                        \pd{z^{(L-1)}}{a^{(L-1)}}\pd{a^{(L-1)}}{z^{(L-2)}} \pause
+                        \pd{z^{(L-2)}}{b^{(L-2)}}\pd{a^{(L-2)}}{b^{(L-2)}}
     \end{eqnarray}
     \pause
   \item Update weights: \pause
@@ -835,14 +868,12 @@ $w_i > 0 \rightarrow$ excitory influence
         \begin{enumerate}[<+->] \setcounter{enumii}{4}
     \item Compute gradients: \pause
     \begin{eqnarray}
-      \pd{\mc{L}}{w^{(1)}} &=&  \pd{\mc{L}}{a^{(L)}}\pd{a^{(L)}}{z^{(L)}}\pd{z^{(L)}}{a^{(L-1)}}\pd{a^{(L-1)}}{z^{(L-1)}} \pause
+      \pd{\mc{L}}{w^{(1)}} &=&  \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{z^{(L-1)}}\pd{z^{(L-1)}}{a^{(L-1)}} \pause
                           \pause\cdots  
-                          \pd{z^{(2)}}{a^{(1)}}                          
-                        \pd{a^{(1)}}{z^{(1)}}\pd{z^{(1)}}{w^{(1)}}\\\pause
-      \pd{\mc{L}}{b^{(1)}} &=&  \pd{\mc{L}}{a^{(L)}}\pd{a^{(L)}}{z^{(L)}}\pd{z^{(L)}}{a^{(L-1)}}\pd{a^{(L-1)}}{z^{(L-1)}} \pause
+                          \pd{a^{(2)}}{z^{(1)}}\pd{z^{(1)}}{a^{(1)}}\pd{a^{(1)}}{w^{(1)}}\\\pause
+      \pd{\mc{L}}{b^{(1)}} &=&  \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{z^{(L-1)}}\pd{z^{(L-1)}}{a^{(L-1)}} \pause
                           \pause\cdots  
-                          \pd{z^{(2)}}{a^{(1)}}                          
-                        \pd{a^{(1)}}{z^{(1)}}\pd{z^{(1)}}{b^{(1)}}
+                          \pd{a^{(2)}}{z^{(1)}}\pd{z^{(1)}}{a^{(1)}}\pd{a^{(1)}}{b^{(1)}}
     \end{eqnarray}
     \pause
   \item Update weights: \pause
@@ -861,7 +892,7 @@ $w_i > 0 \rightarrow$ excitory influence
   \begin{enumerate}[<+->]
   \item Fix initial weights $w^{(l),0}$, $b^{(l),0}$ and perform a forward sweep/pass through the network computing the activations $a$ (outputs) of each layer $l$ as:\pause
     \begin{equation}
-      a^{(l)} = \sigma(\bm W^{(l)} a^{(l-1)} + b^{(l)})
+      a^{(l)} = \varphi(\bm W^{(l)} z^{(l-1)} + b^{(l)})
     \end{equation}
   \item At the output layer, we compute the cost function $C$ (what we want to minimize)
   \item Then, we {\it backpropagate} the errors through each layer in order to compute the gradients $\pd{\mc{L}}{w^{(l)}}$, $\pd{\mc{L}}{b^{(l)}}$ \pause
@@ -884,15 +915,46 @@ $w_i > 0 \rightarrow$ excitory influence
 \pause
 \vspace{-2ex}
 \begin{eqnarray}
- \pd{\mc{L}}{w^{(3)}} &=&  {\rd \pd{\mc{L}}{a^{(3)}}\pd{a^{(3)}}{z^{(3)}}}\pause \pd{z^{(3)}}{w^{(3)}}\\\pause
-\pd{\mc{L}}{w^{(2)}} &=&  {\rd \pd{\mc{L}}{a^{(3)}}\pd{a^{(3)}}{z^{(3)}}} \pause {\bl \pd{z^{(3)}}{a^{(2)}}\pd{a^{(2)}}{z^{(2)}}} \pause                   
-                    \pd{z^{(2)}}{w^{(2)}}\\\pause  
-\pd{\mc{L}}{w^{(1)}} &=&  {\rd \pd{\mc{L}}{a^{(3)}}\pd{a^{(3)}}{z^{(3)}}} \pause {\bl \pd{z^{(3)}}{a^{(2)}}\pd{a^{(2)}}{z^{(2)}}} \pause                   
-                    \pd{z^{(2)}}{a^{(1)}}                          
-                    \pd{a^{(1)}}{z^{(1)}}\pd{z^{(1)}}{w^{(1)}}
+ \pd{\mc{L}}{w^{(3)}} &=&  {\rd \pd{\mc{L}}{o^{(3)}}\pd{o^{(3)}}{a^{(3)}}} \pd{a^{(3)}}{w^{(3)}}\\\pause
+ \pd{\mc{L}}{w^{(2)}} &=&  {\rd \pd{\mc{L}}{o^{(3)}}\pd{o^{(3)}}{a^{(3)}}}  {\bl \pd{a^{(3)}}{z^{(2)}}  \pd{z^{(2)}}{a^{(2)}}} \pd{a^{(2)}}{w^{(2)}} \\\pause
+ \pd{\mc{L}}{w^{(1)}} &=&  {\rd \pd{\mc{L}}{o^{(3)}}\pd{o^{(3)}}{a^{(3)}}}  {\bl \pd{a^{(3)}}{z^{(2)}}  \pd{z^{(2)}}{a^{(2)}}}   \pd{a^{(2)}}{z^{(1)}} \pd{z^{(1)}}{a^{(1)}} \pd{a^{(1)}}{w^{(1)}}
 \end{eqnarray}
 \end{frame}
 
+
+
+% \begin{frame}
+%   \frametitle{Automatic differentiation}
+
+%   Automatic differentiation (AD) is a set of techniques to numerically evaluate the derivative of a function specified by a computer program.
+
+%   \medskip
+
+%   \begin{itemize}[<+->]
+%   \item AD exploits the fact that most functions are composed of elementary operations (addition, multiplication, etc.) for which derivatives are known.
+
+%   \item There are two main modes of AD:
+%     \begin{itemize}
+%     \item Forward mode: propagates derivatives from inputs to outputs.
+%     \item Reverse mode: propagates derivatives from outputs to inputs (used in backpropagation).
+%     \end{itemize}
+%   \end{itemize}
+
+% \end{frame}
+
+% \begin{frame}
+%   \frametitle{Forward mode differentiation}\pause
+
+%   Think of the output as a mapping $\bm o = \bm f(\bm x)$ where $\bm x \in\mathbb{R}^n$ and $\bm o \in\mathbb{R}^m$. \pause
+%   Then
+   
+%   $\bm f$ is given by: \pause
+
+
+%   \begin{equation}
+%     \bm f = \bm f_4 \circ \bm f_3 \circ \bm f_2 \circ \bm f_1
+%   \end{equation}
+% \end{frame}
 
 
 

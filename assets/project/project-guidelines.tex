@@ -1,0 +1,297 @@
+\documentclass[11pt,twoside]{article}
+\usepackage{etex}
+
+\raggedbottom
+
+%geometry (sets margin) and other useful packages
+\usepackage{geometry}
+\geometry{top=1in, left=1in,right=1in,bottom=1in}
+ \usepackage{graphicx,booktabs,calc}
+ 
+\usepackage{listings}
+
+
+% Marginpar width
+%Marginpar width
+\newcommand{\pts}[1]{\marginpar{ \small\hspace{0pt} \textit{[#1]} } } 
+\setlength{\marginparwidth}{.5in}
+%\reversemarginpar
+%\setlength{\marginparsep}{.02in}
+
+ 
+%\usepackage{cmbright}lstinputlisting
+%\usepackage[T1]{pbsi}
+
+
+\usepackage{chngcntr,mathtools}
+%\counterwithin{figure}{section}
+%\numberwithin{equation}{section}
+
+%\usepackage{listings}
+
+%AMS-TeX packages
+\usepackage{amssymb,amsmath,amsthm} 
+\usepackage{bm}
+\usepackage[mathscr]{eucal}
+\usepackage{colortbl}
+\usepackage{color}
+
+
+\usepackage{subfig,hyperref,enumerate,polynom,polynomial}
+\usepackage{multirow,minitoc,fancybox,array,multicol}
+
+\definecolor{slblue}{rgb}{0,.3,.62}
+\hypersetup{
+    colorlinks,%
+    citecolor=blue,%
+    filecolor=blue,%
+    linkcolor=blue,
+    urlcolor=slblue
+}
+
+%%%TIKZ
+\usepackage{tikz}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{arrows,shapes,positioning}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shadows}
+\usetikzlibrary{patterns}
+%\usetikzlibrary{circuits.ee.IEC}
+\usetikzlibrary{decorations.text}
+% For Sagnac Picture
+\usetikzlibrary{%
+    decorations.pathreplacing,%
+    decorations.pathmorphing%
+}
+
+\tikzstyle arrowstyle=[black,scale=2]
+\tikzstyle directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrow[arrowstyle]{stealth}}}}]
+\tikzstyle reverse directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrowreversed[arrowstyle]{stealth};}}}]
+\tikzstyle dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrow[arrowstyle]{latex}}}}]
+\tikzstyle rev dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrowreversed[arrowstyle]{latex};}}}]
+
+\usepackage{ctable}
+
+%
+%Redefining sections as problems
+%
+\makeatletter
+\newenvironment{exercise}{\@startsection 
+	{section}
+	{1}
+	{-.2em}
+	{-3.5ex plus -1ex minus -.2ex}
+    	{1.3ex plus .2ex}
+    	{\pagebreak[3]%forces pagebreak when space is small; use \eject for better results
+	\large\bf\noindent{Part 1.\hspace{-1.5ex} }
+	}
+	}
+	%{\vspace{1ex}\begin{center} \rule{0.3\linewidth}{.3pt}\end{center}}
+	%\begin{center}\large\bf \ldots\ldots\ldots\end{center}}
+\makeatother
+
+%
+%Fancy-header package to modify header/page numbering 
+%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\addtolength{\headwidth}{\marginparsep} %these change header-rule width
+%\addtolength{\headwidth}{\marginparwidth}
+%\fancyheadoffset{30pt}
+%\fancyfootoffset{30pt}
+\fancyhead[LO,RE]{\small Oke}
+\fancyhead[RO,LE]{\small Page \thepage} 
+\fancyfoot[RO,LE]{\small Project Presentation Guide} 
+\fancyfoot[LO,RE]{\small \scshape CEE 697M} 
+\cfoot{} 
+\renewcommand{\headrulewidth}{0.1pt} 
+\renewcommand{\footrulewidth}{0.1pt}
+%\setlength\voffset{-0.25in}
+%\setlength\textheight{648pt}
+
+
+\usepackage{paralist}
+
+\newcommand{\osn}{\oldstylenums}
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+\newcommand{\pt}{\phantom}
+\newcommand{\tf}{\therefore}
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\fr}{\frac}
+\newcommand{\dfr}{\dfrac}
+\newcommand{\ul}{\underline}
+\newcommand{\tn}{\tabularnewline}
+\newcommand{\nl}{\newline}
+\newcommand\relph[1]{\mathrel{\phantom{#1}}}
+\newcommand{\cm}{\checkmark}
+\newcommand{\ol}{\overline}
+\newcommand{\rd}{\color{red}}
+\newcommand{\bl}{\color{blue}}
+\newcommand{\pl}{\color{purple}}
+\newcommand{\og}{\color{orange!90!black}}
+\newcommand{\gr}{\color{green!40!black}}
+\newcommand{\nin}{\noindent}
+\newcommand{\la}{\lambda}
+\renewcommand{\th}{\theta}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,thick,inner sep=1pt] (char) {\small #1};}}
+
+\newcommand{\bc}{\begin{compactenum}[\quad--]}
+\newcommand{\ec}{\end{compactenum}}
+
+\newcommand{\n}{\\[2mm]}
+%% GREEK LETTERS
+\newcommand{\al}{\alpha}
+\newcommand{\gam}{\gamma}
+\newcommand{\eps}{\epsilon}
+\newcommand{\sig}{\sigma}
+
+\newcommand{\p}{\partial}
+\newcommand{\pd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpd}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\pdd}[2]{\frac{\partial^2{#1}}{\partial{#2}^2}}
+\newcommand{\mr}{\mathbb{R}}
+\newcommand{\xs}{x^{*}}
+\newenvironment{solution}
+{\medskip\par\quad\quad\begin{minipage}[c]{.8\textwidth}}{\medskip\end{minipage}}
+
+\newcommand{\nmfr}[3]{\Phi\left(\frac{{#1} - {#2}}{#3}\right)}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\lstset{language=C++,
+                basicstyle=\tiny\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{gray}\ttfamily,
+                morecomment=[l][\color{gray}]{\#}
+}
+
+
+\thispagestyle{empty}
+
+
+\nin{\LARGE Project Guidelines}\hfill{\bf Prof. Oke}
+
+\medskip\hrule\medskip
+
+\nin {\small CEE 697M:  Data Mining and Machine Learning for Engineers
+\hfill\textit{ 05.17.2023}}
+
+%\nin{\it \small Due April 10, 2020 at 11:59PM. Submit on \href{https://moodle.umass.edu/course/view.php?id=64661}{Moodle}}.\\
+
+% \nin The standard problems are worth a total of \textbf{100 points}. While 25 \textbf{extra credit points} are available from the problems marked [EC], as well as those in the ``FURTHER PROBLEMS'' section, only a maximum of \textbf{15} extra credit points will be awarded.
+
+\bigskip
+
+\noindent Please use the following guidelines as you work on your project and prepare your presentations (date TBD).
+
+
+\subsubsection*{Format}
+I will email the order of presentations in an Announcement a few days before.
+You will have \textbf{10 minutes} for your presentation [if you are presenting solo]; and \textbf{14 minutes} if you are in a group.
+Following each presentation, a few minutes will be allotted for questions. (Please keep responses brief and to the point.)
+
+\bigskip
+
+\subsubsection*{Structure}
+Your presentation should have the following sections. You may find it helpful to also have an Outline slide. For each item, the number of \textit{recommended}
+slides  has been placed in square brackets (note that these are recommendations, and not strict slide number requirements).
+You are free to reorganize the order of each section within reason, as well as increase/reduce the number of slides as you see fit.
+However, keep in mind your time constraints.
+
+\begin{itemize}
+\item \textbf{Introduction and/or Motivation} Background of your project (Why is the problem important?  What has been done before, and what is yet unknown?
+  Why do you care about it? Why should your audience care?) [1 Slide]
+\item \textbf{Objectives:} State the research questions/aims of your work. (What does your project accomplish?) [1 Slide]
+\item \textbf{Data:} Describe your data and sources. [1 Slide]
+\item \textbf{Methods:} Specify your model structure[s] (use equations where feasible, e.g.\ splines, and/or diagrams, e.g.\ trees/neural networks). [2 Slides]
+\item \textbf{Results:} Show estimates and results, including performance/errors. (What did you find? How good is/are your model[s]?) [2 Slides]
+\item \textbf{Conclusion:} Summarize what you did and what you discovered. Briefly state any limitations of your approach and potential future work. [1 Slide]
+\item \textbf{Author Contributions:} For those who worked in a group, include 1 slide stating how each member contributed to the project.
+\end{itemize}
+Use your slide real-estate wisely. \textit{You may also wish to include slides in an appendix}, which you may refer to in response to post-presentation questions.
+
+
+
+% \newpage
+% \begin{exercise}{\it Variable estimation}
+% Choose one of the variable as your dependent variable.
+% Using techniques learned in multivariate linear regression, study the dependence of the dependent variable with other relevant variables.
+% Justify your explanatory variable selection as well as the fitness of your model (or models).
+% Use also ridge regression or kernel density estimation.
+% Use plots and tables to support your responses.
+% \end{exercise}
+
+
+% \begin{exercise}{\it Dimensionality reduction}
+%   Apply Principal Components Analysis you learned in class.Clearly state your reasoning.
+%   Indicate how well the projected data are representative of the original.
+%   Describe your results, using tables and plots to show how the indicators contribute to each factor or component.
+%   Justify why the factors/components make sense
+  
+%   % \begin{enumerate}[(a)]
+%   % \item 
+%   % \end{enumerate}
+% \end{exercise}
+
+% \begin{exercise}{\it Clustering}
+%   Use any of the clustering approaches discussed in the lectures to assign the cities into characteristic groups.
+%   This should be done based on computations in the reduced space obtained in the previous exercise.
+%   Clearly show your results using tables and maps.
+%   Justify why the clusters/groups you have obtained make sense.
+%   Indicate the criteria for measuring the quality of your method of choice.
+%   % \begin{enumerate}[(a)]
+%   % \item 
+%   % \end{enumerate}
+% \end{exercise}
+% \vfill
+
+\subsubsection*{Submission Instructions}
+Following the class presentation, I will email you with comments.
+You should address any suggested corrections prior to the submission of your final presentation (submit as PDF), which will be due a few days afterward (TBD).
+Along with your PDF, you are also required to include the code you used in generating your results either as an R script/package, Python script/package or Jupyter Lab/Notebook.
+Your code should be portable. Thus, you should include your data folder in your submission. Your paths should all be relative. \textit{(I will not necessarily be running your code; so if your dataset is too large to upload, a small sample will suffice.)}
+This means your code submission must be an archive (e.g.\ ZIP file). \textbf{Alternatively}, you can submit a link to your code on GitHub or other sharing platform.
+Submit this along with your final [revised] presentation.
+
+
+\subsubsection*{Grading rubric}
+
+\begin{tabular}{m{1in} m{1in} m{3.5in} m{.5in}}\toprule
+  \bf Component & \bf Item & \bf Description & \bf Points \\ \midrule
+  \textbf{Proposal} & Completeness  & All required elements present & 10 \\\midrule
+  \multirow{4}{*}{\textbf{Presentation}} & Organization  & Clear structure and required elements  & 5 \\\cmidrule{2-4}
+                &  \multirow{3}{*}{Content} & Adequate model description  & 5\\\cmidrule{3-4}
+                & & Adequate data description  & 5\\\cmidrule{3-4}
+                & & Thoroughness of results & 5 \\\cmidrule{2-4}
+                &  \multirow{2}{*}{Methods}  & At least 2 modeling approaches used & 5 \\ \cmidrule{3-4}
+                % \ref{} (or 1 with prior approval) %OR (b) 2 datasets used; 
+                         &    & Correctness and appropriateness  & 5 \\\midrule
+%  & Question & Adequate responses to post-presentation questions & 5 \\
+ % & Final version submitted with corrections addressed (if any)& 5 \\\midrule
+  \textbf{Code} &  Organization & Organized and runnable, with reproducible results & 10 \\ \midrule
+  \bf Total & & & \bf 50 \\\bottomrule
+\end{tabular}
+
+%Slides for your presentation should also be included with your submission as a PDF. Clearly indicate the responsibilities assigned to each person in your group.
+ 
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -1,0 +1,285 @@
+<div class="jupyter-notebook-content">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [1]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="c1"># XOR dataset</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"XOR Truth Table:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Input</span><span class="se">\t\t</span><span class="s2">Output"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="se">\t</span><span class="si">{</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="c1"># Build the neural network model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'relu'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,),</span> <span class="n">name</span><span class="o">=</span><span class="s1">'hidden_layer'</span><span class="p">),</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">'sigmoid'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'output_layer'</span><span class="p">)</span>
+<span class="p">])</span>
+<span class="c1"># Compile the model</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">),</span>
+    <span class="n">loss</span><span class="o">=</span><span class="s1">'binary_crossentropy'</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="c1"># Display model architecture</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Model Architecture:"</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="c1"># Train the model</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Training the network..."</span><span class="p">)</span>
+<span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span>
+<span class="p">)</span>
+<span class="c1"># Print training progress</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Final Loss: </span><span class="si">{</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">'loss'</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Final Accuracy: </span><span class="si">{</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="c1"># Make predictions</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Results after training:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Input</span><span class="se">\t\t</span><span class="s2">Expected</span><span class="se">\t</span><span class="s2">Predicted</span><span class="se">\t</span><span class="s2">Rounded"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="se">\t</span><span class="si">{</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="se">\t\t</span><span class="si">{</span><span class="n">predictions</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="se">\t\t</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">predictions</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="c1"># Visualize decision boundary</span>
+<span class="k">def</span> <span class="nf">plot_decision_boundary</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="c1"># Create a mesh grid</span>
+    <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span>
+    <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">h</span><span class="p">),</span>
+                         <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+    <span class="c1"># Predict for each point in the mesh</span>
+    <span class="n">grid_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()]</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">grid_points</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1"># Plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'RdBu'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">'Prediction'</span><span class="p">)</span>
+    <span class="c1"># Plot the XOR points</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'red'</span> <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">'blue'</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">'black'</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1"># Add labels to points</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> 
+                    <span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> 
+                    <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> 
+                    <span class="n">ha</span><span class="o">=</span><span class="s1">'center'</span><span class="p">,</span> 
+                    <span class="n">va</span><span class="o">=</span><span class="s1">'center'</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="s1">'white'</span><span class="p">,</span>
+                    <span class="n">weight</span><span class="o">=</span><span class="s1">'bold'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Input A'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Input B'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'XOR Problem - Decision Boundary'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">'bold'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">'xor_decision_boundary.png'</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Decision boundary plot saved as 'xor_decision_boundary.png'"</span><span class="p">)</span>
+<span class="c1"># Plot training history</span>
+<span class="k">def</span> <span class="nf">plot_training_history</span><span class="p">(</span><span class="n">history</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">'loss'</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Model Loss Over Time'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Epoch'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Loss'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Model Accuracy Over Time'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Epoch'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Accuracy'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">'xor_training_history.png'</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Training history plot saved as 'xor_training_history.png'"</span><span class="p">)</span>
+<span class="c1"># Generate visualizations</span>
+<span class="n">plot_decision_boundary</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plot_training_history</span><span class="p">(</span><span class="n">history</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Visualization complete!"</span><span class="p">)</span>
+<span class="c1"># Optional: Show weights learned by the network</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Learned Weights:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="si">{</span><span class="n">layer</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Weights shape: </span><span class="si">{</span><span class="n">weights</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Biases shape: </span><span class="si">{</span><span class="n">weights</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2025-10-16 10:09:18.457603: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:485] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2025-10-16 10:09:18.741013: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:8454] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2025-10-16 10:09:18.870332: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1452] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-10-16 10:09:19.822037: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-10-16 10:09:30.134273: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>XOR Truth Table:
+Input		Output
+[0. 0.]	0.0
+[0. 1.]	1.0
+[1. 0.]	1.0
+[1. 1.]	0.0
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/jbo/nars/lib/python3.12/site-packages/keras/src/layers/core/dense.py:87: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(activity_regularizer=activity_regularizer, **kwargs)
+2025-10-16 10:09:39.225815: I tensorflow/core/common_runtime/gpu/gpu_device.cc:2021] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 1585 MB memory:  -&gt; device: 0, name: Quadro P4000, pci bus id: 0000:65:00.0, compute capability: 6.1
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Model Architecture:
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_html rendered_html output_subarea"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Model: "sequential"</span>
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_html rendered_html output_subarea"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
+┃<span style="font-weight: bold"> Layer (type)                    </span>┃<span style="font-weight: bold"> Output Shape           </span>┃<span style="font-weight: bold">       Param # </span>┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
+│ hidden_layer (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)            │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">4</span>)              │            <span style="color: #00af00; text-decoration-color: #00af00">12</span> │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ output_layer (<span style="color: #0087ff; text-decoration-color: #0087ff">Dense</span>)            │ (<span style="color: #00d7ff; text-decoration-color: #00d7ff">None</span>, <span style="color: #00af00; text-decoration-color: #00af00">1</span>)              │             <span style="color: #00af00; text-decoration-color: #00af00">5</span> │
+└─────────────────────────────────┴────────────────────────┴───────────────┘
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_html rendered_html output_subarea"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold"> Total params: </span><span style="color: #00af00; text-decoration-color: #00af00">17</span> (68.00 B)
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_html rendered_html output_subarea"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold"> Trainable params: </span><span style="color: #00af00; text-decoration-color: #00af00">17</span> (68.00 B)
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_html rendered_html output_subarea"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold"> Non-trainable params: </span><span style="color: #00af00; text-decoration-color: #00af00">0</span> (0.00 B)
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Training the network...
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1760623780.272806 1328064 service.cc:146] XLA service 0x7367380069e0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+I0000 00:00:1760623780.272852 1328064 service.cc:154]   StreamExecutor device (0): Quadro P4000, Compute Capability 6.1
+2025-10-16 10:09:40.443510: I tensorflow/compiler/mlir/tensorflow/utils/dump_mlir_util.cc:268] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+2025-10-16 10:09:40.726725: I external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:531] Loaded cuDNN version 8902
+2025-10-16 10:09:41.021438: W tensorflow/core/framework/op_kernel.cc:1840] OP_REQUIRES failed at xla_ops.cc:577 : NOT_FOUND: Couldn't find a suitable version of ptxas. The following locations were considered: ./cuda_sdk_lib/bin/ptxas, /usr/local/bin/ptxas, /usr/bin/ptxas, /var/lib/snapd/snap/bin/ptxas, /usr/local/sbin/ptxas, /var/lib/flatpak/exports/bin/ptxas, /usr/lib/jvm/default/bin/ptxas, /usr/bin/site_perl/ptxas, /usr/bin/vendor_perl/ptxas, /usr/bin/core_perl/ptxas, /usr/local/cuda-12.3/bin/ptxas, /usr/local/cuda/bin/ptxas, /home/jbo/nars/lib/python3.12/site-packages/tensorflow/python/platform/../../../nvidia/cuda_nvcc/bin/ptxas, /home/jbo/nars/lib/python3.12/site-packages/tensorflow/python/platform/../../../../nvidia/cuda_nvcc/bin/ptxas
+2025-10-16 10:09:41.021492: I tensorflow/core/framework/local_rendezvous.cc:404] Local rendezvous is aborting with status: NOT_FOUND: Couldn't find a suitable version of ptxas. The following locations were considered: ./cuda_sdk_lib/bin/ptxas, /usr/local/bin/ptxas, /usr/bin/ptxas, /var/lib/snapd/snap/bin/ptxas, /usr/local/sbin/ptxas, /var/lib/flatpak/exports/bin/ptxas, /usr/lib/jvm/default/bin/ptxas, /usr/bin/site_perl/ptxas, /usr/bin/vendor_perl/ptxas, /usr/bin/core_perl/ptxas, /usr/local/cuda-12.3/bin/ptxas, /usr/local/cuda/bin/ptxas, /home/jbo/nars/lib/python3.12/site-packages/tensorflow/python/platform/../../../nvidia/cuda_nvcc/bin/ptxas, /home/jbo/nars/lib/python3.12/site-packages/tensorflow/python/platform/../../../../nvidia/cuda_nvcc/bin/ptxas
+	 [[{{node StatefulPartitionedCall}}]]
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NotFoundError</span>                             Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[1], line 35</span>
+<span class="ansi-green-intense-fg ansi-bold">     33</span> <span style="color: rgb(95,135,135)"># Train the model</span>
+<span class="ansi-green-intense-fg ansi-bold">     34</span> <span style="color: rgb(0,135,0)">print</span>(<span style="color: rgb(175,0,0)">"</span><span style="color: rgb(175,0,0)">Training the network...</span><span style="color: rgb(175,0,0)">"</span>)
+<span class="ansi-green-fg">---&gt; 35</span> history <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">model</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">fit</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-intense-fg ansi-bold">     36</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">X</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">y</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     37</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">epochs</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">500</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     38</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">verbose</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">0</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     39</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">batch_size</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">4</span>
+<span class="ansi-green-intense-fg ansi-bold">     40</span> <span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     42</span> <span style="color: rgb(95,135,135)"># Print training progress</span>
+<span class="ansi-green-intense-fg ansi-bold">     43</span> <span style="color: rgb(0,135,0)">print</span>(<span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">"</span><span style="color: rgb(175,0,0)">Final Loss: </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>history<span style="color: rgb(98,98,98)">.</span>history[<span style="color: rgb(175,0,0)">'</span><span style="color: rgb(175,0,0)">loss</span><span style="color: rgb(175,0,0)">'</span>][<span style="color: rgb(98,98,98)">-</span><span style="color: rgb(98,98,98)">1</span>]<span class="ansi-bold" style="color: rgb(175,95,135)">:</span><span style="color: rgb(175,0,0)">.4f</span><span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">"</span>)
+File <span class="ansi-green-fg">~/nars/lib/python3.12/site-packages/keras/src/utils/traceback_utils.py:122</span>, in <span class="ansi-cyan-fg">filter_traceback.&lt;locals&gt;.error_handler</span><span class="ansi-blue-fg">(*args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    119</span>     filtered_tb <span style="color: rgb(98,98,98)">=</span> _process_traceback_frames(e<span style="color: rgb(98,98,98)">.</span>__traceback__)
+<span class="ansi-green-intense-fg ansi-bold">    120</span>     <span style="color: rgb(95,135,135)"># To get the full stack trace, call:</span>
+<span class="ansi-green-intense-fg ansi-bold">    121</span>     <span style="color: rgb(95,135,135)"># `keras.config.disable_traceback_filtering()`</span>
+<span class="ansi-green-fg">--&gt; 122</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> e<span style="color: rgb(98,98,98)">.</span>with_traceback(filtered_tb) <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
+<span class="ansi-green-intense-fg ansi-bold">    123</span> <span class="ansi-bold" style="color: rgb(0,135,0)">finally</span>:
+<span class="ansi-green-intense-fg ansi-bold">    124</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">del</span> filtered_tb
+File <span class="ansi-green-fg">~/nars/lib/python3.12/site-packages/tensorflow/python/eager/execute.py:53</span>, in <span class="ansi-cyan-fg">quick_execute</span><span class="ansi-blue-fg">(op_name, num_outputs, inputs, attrs, ctx, name)</span>
+<span class="ansi-green-intense-fg ansi-bold">     51</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
+<span class="ansi-green-intense-fg ansi-bold">     52</span>   ctx<span style="color: rgb(98,98,98)">.</span>ensure_initialized()
+<span class="ansi-green-fg">---&gt; 53</span>   tensors <span style="color: rgb(98,98,98)">=</span> pywrap_tfe<span style="color: rgb(98,98,98)">.</span>TFE_Py_Execute(ctx<span style="color: rgb(98,98,98)">.</span>_handle, device_name, op_name,
+<span class="ansi-green-intense-fg ansi-bold">     54</span>                                       inputs, attrs, num_outputs)
+<span class="ansi-green-intense-fg ansi-bold">     55</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> core<span style="color: rgb(98,98,98)">.</span>_NotOkStatusException <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> e:
+<span class="ansi-green-intense-fg ansi-bold">     56</span>   <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> name <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:
+<span class="ansi-red-fg">NotFoundError</span>: Graph execution error:
+Detected at node StatefulPartitionedCall defined at (most recent call last):
+  File "/usr/lib/python3.12/runpy.py", line 198, in _run_module_as_main
+  File "/usr/lib/python3.12/runpy.py", line 88, in _run_code
+  File "/home/jbo/nars/lib/python3.12/site-packages/ipykernel_launcher.py", line 18, in &lt;module&gt;
+  File "/home/jbo/nars/lib/python3.12/site-packages/traitlets/config/application.py", line 1075, in launch_instance
+  File "/home/jbo/nars/lib/python3.12/site-packages/ipykernel/kernelapp.py", line 758, in start
+  File "/home/jbo/nars/lib/python3.12/site-packages/tornado/platform/asyncio.py", line 205, in start
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 641, in run_forever
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 1986, in _run_once
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+  File "/home/jbo/nars/lib/python3.12/site-packages/ipykernel/kernelbase.py", line 701, in shell_main
+  File "/home/jbo/nars/lib/python3.12/site-packages/ipykernel/kernelbase.py", line 469, in dispatch_shell
+  File "/home/jbo/nars/lib/python3.12/site-packages/ipykernel/ipkernel.py", line 379, in execute_request
+  File "/home/jbo/nars/lib/python3.12/site-packages/ipykernel/kernelbase.py", line 899, in execute_request
+  File "/home/jbo/nars/lib/python3.12/site-packages/ipykernel/ipkernel.py", line 471, in do_execute
+  File "/home/jbo/nars/lib/python3.12/site-packages/ipykernel/zmqshell.py", line 632, in run_cell
+  File "/home/jbo/nars/lib/python3.12/site-packages/IPython/core/interactiveshell.py", line 3075, in run_cell
+  File "/home/jbo/nars/lib/python3.12/site-packages/IPython/core/interactiveshell.py", line 3130, in _run_cell
+  File "/home/jbo/nars/lib/python3.12/site-packages/IPython/core/async_helpers.py", line 129, in _pseudo_sync_runner
+  File "/home/jbo/nars/lib/python3.12/site-packages/IPython/core/interactiveshell.py", line 3334, in run_cell_async
+  File "/home/jbo/nars/lib/python3.12/site-packages/IPython/core/interactiveshell.py", line 3517, in run_ast_nodes
+  File "/home/jbo/nars/lib/python3.12/site-packages/IPython/core/interactiveshell.py", line 3577, in run_code
+  File "/tmp/ipykernel_1327976/656023006.py", line 35, in &lt;module&gt;
+  File "/home/jbo/nars/lib/python3.12/site-packages/keras/src/utils/traceback_utils.py", line 117, in error_handler
+  File "/home/jbo/nars/lib/python3.12/site-packages/keras/src/backend/tensorflow/trainer.py", line 318, in fit
+  File "/home/jbo/nars/lib/python3.12/site-packages/keras/src/backend/tensorflow/trainer.py", line 121, in one_step_on_iterator
+Couldn't find a suitable version of ptxas. The following locations were considered: ./cuda_sdk_lib/bin/ptxas, /usr/local/bin/ptxas, /usr/bin/ptxas, /var/lib/snapd/snap/bin/ptxas, /usr/local/sbin/ptxas, /var/lib/flatpak/exports/bin/ptxas, /usr/lib/jvm/default/bin/ptxas, /usr/bin/site_perl/ptxas, /usr/bin/vendor_perl/ptxas, /usr/bin/core_perl/ptxas, /usr/local/cuda-12.3/bin/ptxas, /usr/local/cuda/bin/ptxas, /home/jbo/nars/lib/python3.12/site-packages/tensorflow/python/platform/../../../nvidia/cuda_nvcc/bin/ptxas, /home/jbo/nars/lib/python3.12/site-packages/tensorflow/python/platform/../../../../nvidia/cuda_nvcc/bin/ptxas
+	 [[{{node StatefulPartitionedCall}}]] [Op:__inference_one_step_on_iterator_991]</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>

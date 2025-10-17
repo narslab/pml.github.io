@@ -1,5 +1,5 @@
 %\documentclass[smaller,handout]{beamer}
-\def\bmode{0} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+\def\bmode{2} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
 \if 0\bmode
 \documentclass[smaller]{beamer}
 \else \if 1\bmode
@@ -643,6 +643,7 @@ $w_i > 0 \rightarrow$ excitory influence
 
 
 
+
  
 \section{Backpropagation}
 \begin{frame}
@@ -660,64 +661,68 @@ $w_i > 0 \rightarrow$ excitory influence
   \frametitle{Training procedure}\pause
 
   \begin{itemize}[<+->]
-  \item Fix initial weights and perform a forward sweep/pass through the network computing the activations $a$ (outputs) of each layer $l$ as:\pause
-    \begin{equation}
-      \bm z^{(\ell)} = \bm \varphi(\bm W^{\ell} \bm z^{\ell-1} + \bm  b^{\ell})
-    \end{equation}
+  \item Fix initial weights and perform a \textbf{forward sweep/pass} through the network computing the activations $a$ (outputs) of each layer $l$ as:\pause
+    \begin{eqnarray} 
+      \gr      \bm{z}_{\ell} &=& \gr \varphi(\bm W_{\ell} \bm z_{\ell-1} + \bm  b_{\ell})\\\pe
+      \og    \bm{a}_{\ell} &=& \og \bm W_{\ell} \bm z_{\ell-1} + \bm b_{\ell}\\\pe
+            \rd  \bm z_{\ell}   &=& \rd \varphi(\bm a_{\ell})
+    \end{eqnarray}
+    \pe
   \item At the output layer, we compute the cost (loss) function $\mc L$ (what we want to minimize)
-  \item Then, we {\it backpropagate} the errors through each layer in order to compute the gradients for the weight updates:\pause
+  \item Then, we {\bf backpropagate} the errors through each layer in order to compute the gradients for the weight updates:\pause
     \begin{equation}
-      \frac{\partial \mc{L}}{\partial \bm  W^{(L)}}
+      \frac{\partial \mc{L}}{\partial \bm  W_{L}}
       =
-      \frac{\partial \mc{L}}{\partial \bm z^{(L)}}
-      \frac{\partial  \bm z^{(L)}}{\partial  \bm a^{(L)}}
-      \frac{\partial  \bm a^{(L)}}{\partial  \bm W^{(L)}}
+      \frac{\partial \mc{L}}{\partial \bm z_{L}}
+      \frac{\partial  \bm z_{L}}{\partial  \bm a_{L}}
+      \frac{\partial  \bm a_{L}}{\partial  \bm W_{L}}
   \end{equation}
   \pause
-  where $L$ is the last layer and $\bm a = \bm W \bm z^{\ell-1} + \bm b$
+  where $L$ is the last layer.\pe
+
 \item Repeat the forward and backward passes until cost is sufficiently minimized
-  \end{itemize}
+\end{itemize}
   
 \end{frame}
 
 \begin{frame}
-  \frametitle{Equation summary: outer layer (regression case)}
+  \frametitle{Equation summary: outer layer (regression case}
   \pause
   At the outer layer $L$ (without indexing by neuron):\pause
   \begin{eqnarray}
-    a^{(L)} &=& \bm w^{(L)\top} \bm z^{(L-1)} + b^{(L)} \\\pause
-    o^{(L)} &=& a^{(L)}  \quad \text{(linear activation or {\it no} activation)} \\\pause
-    \mc{L} &=& (o  - y)^2
+    a_{L} &=& \bm w_{L}\tr \bm z_{L-1} + b_{L} \\\pause
+    o &=&  a_{L}  \quad \text{(linear activation or {\it no} activation)} \\\pause
+    \mc{L} &=& (o  - y)^{2}
   \end{eqnarray}
   \pause
   
-  The gradient of the cost function with respect to $\bm w^{(L)}$ is:\pause
+  The gradient of the cost function with respect to $\bm w_{L}$ is:\pause
   \begin{equation}
-    \frac{\partial \mc{L}}{\partial \bm w^{(L)}}
+    \frac{\partial \mc{L}}{\partial \bm w_{L}}
     =\pause
     \frac{\partial \mc{L}}{\partial  o}
-    \frac{\partial o^{(L)}}{\partial a^{(L)}}
-    \frac{\partial a^{(L)}}{\partial \bm w^{(L)}}
+    \frac{\partial o}{\partial a_{L}}
+    \frac{\partial a_{L}}{\partial \bm w_{L}}
     =\pause
-    2 \left(a^{(L)} - y \right) \bm z^{(L-1)}
+    2 \left(a_{L} - y \right) \bm z_{L-1}
   \end{equation}
   \pause
-  Thus, we see that this gradient depends on the activation from the previous layer $a^{(L-1)}$. \pause Also wrt to the bias:
+  Thus, we see that this gradient depends on the activation from the previous layer $a_{L-1}$. \pause Also wrt to the bias:
   \begin{equation}
-    \pd{\mc{L}}{b^{(L)}} = \pause \pd{\mc{L}}{o}\pd{o}{a^{(L)}}\pd{a^{(L)}}{b^{(L)}} =\pause 2\lt(a^{(L)} - y\rt)(1)
+    \pd{\mc{L}}{b_{L}} = \pause \pd{\mc{L}}{o}\pd{o}{a_{L}}\pd{a_{L}}{b_{L}} =\pause 2\lt(a_{L} - y\rt)(1)
   \end{equation}
 \end{frame}
 
 \begin{frame}
   \frametitle{Updating weights}
   \pause
-  We can then update the weights for the last layer for the next iteration $r+1$:\pause
+  We can then update the weights for the last layer for the next iteration $t+1$:\pause
   \begin{eqnarray}
-    w^{(L), r+1}  &=&  w^{(L),r} - \eta \pd{\mc{L}}{w^{(L)}}  \\\pause
-    b^{(L), r+1}  &=&  b^{(L),r} - \eta \pd{\mc{L}}{b^{(L)}}  
+    w_{L, t+1}  &=&  w_{L,t} - \rho \pd{\mc{L}}{w_{L}}  \\\pause
+    b_{L, t+1}  &=&  b_{L,t} - \rho \pd{\mc{L}}{b_{L}}  
   \end{eqnarray}
   \pause
-  To update the weights for layer $L-1$, we need to find the gradients $\pd{\mc{L}}{w^{(L-1)}}$ and $\pd{\mc{L}}{b^{(L-1)}}$.
+  where $\rho$ is the learning rate. \pe To update the weights for layer $L-1$, we need to find the gradients $\pd{\mc{L}}{\bm\th_{L-1}}$, where $\bm\th = (\bm W, \bm b)$. % and $\pd{\mc{L}}{b_{L-1}}$.
 
   \pause
 
@@ -725,74 +730,71 @@ $w_i > 0 \rightarrow$ excitory influence
   
   Using the chain rule again, we write:\pause
   \begin{eqnarray}
-    \pd{\mc{L}}{w^{(L-1)}} &=& {\rd \pd{\mc{L}}{a^{(L-1)}}}\pd{a^{(L-1)}}{z^{(L-1)}}\pd{z^{(L-1)}}{w^{(L-1)}} \\\pause
-    \pd{\mc{L}}{b^{(L-1)}} &=& {\rd \pd{\mc{L}}{a^{(L-1)}}}\pd{a^{(L-1)}}{z^{(L-1)}}\pd{z^{(L-1)}}{b^{(L-1)}} 
+    \pd{\mc{L}}{\bm\th_{L-1}} &=& {\rd \pd{\mc{L}}{\bm z_{L-1}}}\pd{\bm z_{L-1}}{\bm a_{L-1}}\pd{\bm a_{L-1}}{\bm\th_{L-1}}
+%    \pd{\mc{L}}{b_{L-1}} &=& {\rd \pd{\mc{L}}{a_{L-1}}}\pd{a_{L-1}}{z_{L-1}}\pd{z_{L-1}}{b_{L-1}} 
   \end{eqnarray}
 \end{frame}
 
 \begin{frame}
   \frametitle{Backward pass}
   \pause
-  But we recall that $\mc{L}$ is not \textit{explicitly} dependent on $a^{(L-1)}$ as $C = (a^{(L)} - y)^2$.
+  But we recall that $\mc{L}$ is not \textit{explicitly} dependent on $\bm z_{L-1}$ as $\mc L = (o - y)^{2}$.
   \pause
 
   However, it is \textit{implicitly} dependent, since\pause
   \begin{equation}
-    C \propto a^{(L)},
+    \mc L \propto  o,
   \end{equation}
   \pause
   \begin{equation}
-    a^{(L)} \propto z^{(L)} 
+    o \propto a_{L}
   \end{equation}
-  \pause
   and\pause
   \begin{equation}
-    z^{(L)} \propto a^{(L-1)}
+    a_{L} \propto z_{L-1}
   \end{equation}
   \pause
   
-  So, we use the chain rule to expand $\pd{\mc{L}}{a^{(L-1)}}$ as follows:\pause
+  So, we use the chain rule to expand $\pd{\mc{L}}{\bm z_{L-1}}$ as follows:\pause
   \begin{equation}\rd
-    \pd{\mc{L}}{a^{(L-1)}} = \pause \pd{\mc{L}}{a^{(L)}}\pd{a^{(L)}}{z^{(L)}}\pd{z^{(L)}}{a^{(L-1)}}
+    \pd{\mc{L}}{\bm z_{L-1}} = \pause \pd{\mc{L}}{\bm z_{L}}\pd{\bm z_{L}}{\bm a_{L}}\pd{\bm a_{L}}{\bm z_{L-1}}
   \end{equation}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Backward pass (cont.)}
+  \frametitle{Backward pass (cont.}
   \pause
   We can then expand the cost function gradient wrt to weights for layer $L-1$ as:\pause
   \begin{eqnarray}
-    \pd{\mc{L}}{w^{(L-1)}} &=& {\rd \pd{\mc{L}}{a^{(L-1)}}}\pd{a^{(L-1)}}{z^{(L-1)}}\pd{z^{(L-1)}}{w^{(L-1)}}
+    \pd{\mc{L}}{\bm \th_{L-1}} &=& {\rd \pd{\mc{L}}{\bm z_{L-1}}}\pd{\bm z_{L-1}}{\bm a_{L-1}}\pd{\bm a_{L-1}}{\bm\th_{L-1}}
                           \\\pause
-                        &=& {\rd \pd{\mc{L}}{a^{(L)}}\pd{a^{(L)}}{z^{(L)}}\pd{z^{(L)}}{a^{(L-1)}}} \pd{a^{(L-1)}}{z^{(L-1)}}\pd{z^{(L-1)}}{w^{(L-1)}} \\[2mm]\pause
-    \pd{\mc{L}}{b^{(L-1)}} &=& {\rd \pd{\mc{L}}{a^{(L-1)}}}\pd{a^{(L-1)}}{z^{(L-1)}}\pd{z^{(L-1)}}{b^{(L-1)}}\\\pause                          
-                           &=& {\rd \pd{\mc{L}}{a^{(L)}}\pd{a^{(L)}}{z^{(L)}}\pd{z^{(L)}}{a^{(L-1)}}} \pd{a^{(L-1)}}{z^{(L-1)}}\pd{z^{(L-1)}}{b^{(L-1)}} 
+                           &=& {\rd \pd{\mc{L}}{\bm z_{L}}\pd{\bm z_{L}}{\bm a_{L}}\pd{\bm a_{L}}{\bm z_{L-1}}}
+    \pd{\bm z_{L-1}}{\bm a_{L-1}}\pd{\bm a_{L-1}}{\bm\th_{L-1}}
   \end{eqnarray}
 
   \pause
 
-  Once these gradients are computed, we update the weights for the $(r+1)$th iteration using: \pause
+  Once these gradients are computed, we update the weights for the $(t+1)$th iteration using: \pause
    \begin{eqnarray}
-    w^{(L-1), r+1}  &=& \pause  w^{(L-1),r} - \pause \eta \pd{\mc{L}}{w^{(L-1)}}  \\\pause
-    b^{(L-1), r+1}  &=&  \pause b^{(L-1),r} - \pause \eta \pd{\mc{L}}{b^{(L-1)}}  
+    \bm\th_{L-1, t+1}  &=& \pause  \bm\th_{L-1,t} - \pause \rho \pd{\mc{L}}{\bm\th_{L-1}}  \\\pause
   \end{eqnarray}
 \end{frame}
 
 \begin{frame}
   \frametitle{Summary: forward pass}
   \begin{enumerate}[<+->]
-  \item $(r=0)$: Initialize weights and biases: $w^{(l),0}$, $b^{(l),0}$
+  \item $(t=0)$: Initialize weights and biases: $\bm\th$
   \item Perform forward pass to compute activations:
     \begin{eqnarray}
-      a^{(l),0} &=& w^{(l),0} \times z^{(l-1),0} + b^{(l),0} \\\pause
-    z^{(l)} &=& \varphi(a^{(l),0}) 
+      \bm a_{\ell,0} &=& \bm W_{\ell,0} \times \bm z_{\ell-1,0} +\bm b_{\ell,0} \\\pause
+    \bm z_{\ell} &=& \varphi(\bm a_{\ell,0}) 
     \end{eqnarray}
     \pause
     At output layer:
     \begin{eqnarray}      
-      a^{(L),0} &=& w^{(L),0} \times z^{(L-1),0} + b^{(L),0} \\\pause
-      o &=& \varphi(a^{(L),0}) \\
-      C &=& (o  - y)^2
+     a_{L,0} &=& \bm w_{L,0}\tr \bm Z_{L-1,0} + b_{L,0} \\\pause
+      o &=& a_{L,0}\\\pe
+      \mc L &=& (o  - y)^2
     \end{eqnarray}
   \end{enumerate}
 \end{frame}
@@ -800,17 +802,15 @@ $w_i > 0 \rightarrow$ excitory influence
 \begin{frame}
   \frametitle{Summary: backward pass---outer layer }
   \begin{enumerate}[<+->]\setcounter{enumi}{2}
-  \item Backward pass, outer layer $(L)$:\pause
-    \begin{enumerate}[<+->]
+  \item Backward pass, outer layer $L$:\pause
+    \begin{enumerate}[a]
     \item Compute gradients: \pause
       \begin{eqnarray}
-      \pd{\mc{L}}{w^{(L)}} &=& \pause \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{w^{(L)}}\\\pause
-      \pd{\mc{L}}{b^{(L)}} &=& \pause \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{b^{(L)}}\pause
+       \pd{\mc{L}}{b_{L}} = \pause \pd{\mc{L}}{o}\pd{o}{a_{L}}\pd{a_{L}}{b_{L}}
       \end{eqnarray}
     \item Update weights: \pause
       \begin{eqnarray}
-        w^{(L), 1}  &=&  w^{(L),0} - \eta \pd{C^0}{w^{(L)}}  \\\pause
-      b^{(L), 1}  &=&  b^{(L),0} - \eta \pd{C^0}{b^{(L)}}  
+        \bm \th_{L, 1}  &=&  \bm\th_{L,0} - \rho \pd{\mc {L}_0}{\bm\th_{L}}   
       \end{eqnarray}
   \end{enumerate}
   \end{enumerate}
@@ -818,19 +818,25 @@ $w_i > 0 \rightarrow$ excitory influence
 
 \begin{frame}
   \frametitle{Summary: backward pass---last hidden layer}
-  \begin{enumerate}[<+->]\setcounter{enumi}{2}
-  \item Backward pass, layer $(L-1)$:\pause
-    \begin{enumerate}[<+->]\setcounter{enumii}{2}
+  \pe
+  Recall: \pe
+              \begin{align}
+                \bm z_{L-1} &= \varphi(\bm a_{L-1}) \\\pe
+                \bm a_{L-1} &= \bm W_{L-1} \bm z_{L-2} + \bm b_{L-1}
+      \end{align}\pe
+  \begin{enumerate}[<+->]\setcounter{enumi}{3}
+  \item Backward pass, layer $L-1$:\pause
+    \begin{enumerate}[a]
     \item Compute gradients: \pause
     \begin{eqnarray}
-      \pd{\mc{L}}{w^{(L-1)}} &=&  \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{z^{(L-1)}}  \pd{z^{(L-1)}}{a^{(L-1)}}\pd{a^{(L-1)}}{w^{(L-1)}}\\\pause
-      \pd{\mc{L}}{b^{(L-1)}} &=&   \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{z^{(L-1)}}  \pd{z^{(L-1)}}{a^{(L-1)}}\pd{a^{(L-1)}}{b^{(L-1)}}
-    \end{eqnarray}
+      \pd{\mc{L}}{\bm\th_{L-1}} &=& \pd{\mc{L}}{\bm z_{L}}\pd{\bm z_{L}}{\bm a_{L}}\pd{\bm a_{L}}{\bm z_{L-1}}
+    \pd{\bm z_{L-1}}{\bm a_{L-1}}\pd{\bm a_{L-1}}{\bm\th_{L-1}}
+      \\\pause
+     \end{eqnarray}
     \pause
   \item Update weights: \pause
     \begin{eqnarray}
-      w^{(L-1), 1}  &=& \pause  w^{(L-1),0} - \pause \eta \pd{\mc{L}}{w^{(L-1)}}  \\\pause
-      b^{(L-1), 1}  &=&  \pause b^{(L-1),0} - \pause \eta \pd{\mc{L}}{b^{(L-1)}}  
+      \bm\th_{L-1, 1}  &=& \pause  \bm\th_{L-1,0} - \pause \rho \pd{\mc{L}}{\bm\th_{L-1}}  
     \end{eqnarray}
   \end{enumerate}
   \end{enumerate}
@@ -838,23 +844,27 @@ $w_i > 0 \rightarrow$ excitory influence
 
 \begin{frame}
   \frametitle{Summary: backward pass---second-to-last hidden layer}
-  \begin{enumerate}[<+->]\setcounter{enumi}{2}
-  \item Backward pass, layer $(L-2)$:\pause
-    \begin{enumerate}[<+->] \setcounter{enumii}{4}
+  \pe
+  Recall
+  \pe
+  \begin{align}
+    \bm a_{L-1} &= \bm W_{L-1} \bm z_{L-2} + \bm b_{L-1} \\\pe
+    \bm z_{L-2} &= \varphi(\bm a_{L-2}) \\\pe
+    \bm a_{L-2} &=  \bm W_{L-2} \bm z_{L-3} + \bm b_{L-2} 
+  \end{align}\pe
+  \begin{enumerate}[<+->]\setcounter{enumi}{4}
+  \item Backward pass, layer $L-2$:\pause
+    \begin{enumerate}[a]
     \item Compute gradients: \pause
     \begin{eqnarray}
-      \pd{\mc{L}}{w^{(L-2)}} &=&  \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{z^{(L-1)}} \pause
-                        \pd{z^{(L-1)}}{a^{(L-1)}}\pd{a^{(L-1)}}{z^{(L-2)}} \pause
-                        \pd{z^{(L-2)}}{a^{(L-2)}}\pd{a^{(L-2)}}{w^{(L-2)}}\\\pause
-      \pd{\mc{L}}{b^{(L-2)}} &=&   \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{z^{(L-1)}} \pause
-                        \pd{z^{(L-1)}}{a^{(L-1)}}\pd{a^{(L-1)}}{z^{(L-2)}} \pause
-                        \pd{z^{(L-2)}}{b^{(L-2)}}\pd{a^{(L-2)}}{b^{(L-2)}}
+      \pd{\mc{L}}{\bm\th_{L-2}} &=&  \pd{\mc{L}}{\bm z_{L}}\pd{\bm z_{L}}{\bm a_{L}}\pd{\bm a_{L}}{\bm z_{L-1}}
+    \pd{\bm z_{L-1}}{\bm a_{L-1}}\pd{\bm a_{L-1}}{\bm z_{L-2}}\pause
+                        \pd{\bm z_{L-2}}{\bm a_{L-2}}\pd{\bm a_{L-2}}{\bm\th_{L-2}}
     \end{eqnarray}
     \pause
   \item Update weights: \pause
     \begin{eqnarray}
-      w^{(L-2), 1}  &=& \pause  w^{(L-2),0} - \pause \eta \pd{\mc{L}}{w^{(L-2)}}  \\\pause
-      b^{(L-2), 1}  &=&  \pause b^{(L-2),0} - \pause \eta \pd{\mc{L}}{b^{(L-2)}}  
+      \bm\th_{L-2, 1}  &=& \pause  \bm\th_{L-2,0} - \pause \rho \pd{\mc{L}}{\bm\th_{L-2}}  \\\pause
     \end{eqnarray}
   \end{enumerate}
   \end{enumerate}
@@ -863,24 +873,30 @@ $w_i > 0 \rightarrow$ excitory influence
 
 \begin{frame}
   \frametitle{Summary: backward pass---first hidden layer}
+ \pe
+  Recall
+  \pe
+  \begin{align}
+      \bm a_{\ell} &=  \bm W_{\ell} \bm z_{\ell-1} + \bm b_{\ell} \\\pe
+    \bm z_{\ell} &= \varphi(\bm a_{\ell}) \\\pe
+  \end{align}
+
   \begin{enumerate}[<+->]\setcounter{enumi}{2}
   \item Backward pass, layer $(1)$:\pause
         \begin{enumerate}[<+->] \setcounter{enumii}{4}
     \item Compute gradients: \pause
     \begin{eqnarray}
-      \pd{\mc{L}}{w^{(1)}} &=&  \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{z^{(L-1)}}\pd{z^{(L-1)}}{a^{(L-1)}} \pause
+      \pd{\mc{L}}{\bm\th_{1}} &=&  \pd{\mc{L}}{\bm z_{L}}\pd{\bm z_{L}}{\bm a_{L}}\pd{\bm a_{L}}{\bm z_{L-1}}
+    \pd{\bm z_{L-1}}{\bm a_{L-1}}  \pause
                           \pause\cdots  
-                          \pd{a^{(2)}}{z^{(1)}}\pd{z^{(1)}}{a^{(1)}}\pd{a^{(1)}}{w^{(1)}}\\\pause
-      \pd{\mc{L}}{b^{(1)}} &=&  \pd{\mc{L}}{o^{(L)}}\pd{o^{(L)}}{a^{(L)}}\pd{a^{(L)}}{z^{(L-1)}}\pd{z^{(L-1)}}{a^{(L-1)}} \pause
-                          \pause\cdots  
-                          \pd{a^{(2)}}{z^{(1)}}\pd{z^{(1)}}{a^{(1)}}\pd{a^{(1)}}{b^{(1)}}
+                          \pd{\bm a_{2}}{\bm z_{1}}                          
+                        \pd{\bm z_{1}}{\bm a_{1}}\pd{\bm a_{1}}{\bm\th_{1}}
     \end{eqnarray}
     \pause
   \item Update weights: \pause
     \begin{eqnarray}
-      w^{(1), 1}  &=& \pause  w^{(1),0} - \pause \eta \pd{\mc{L}}{w^{(1)}}  \\\pause
-      b^{(1), 1}  &=&  \pause b^{(1),0} - \pause \eta \pd{\mc{L}}{b^{(1)}}  
-    \end{eqnarray}
+      \bm\th_{1, 1}  &=& \pause  \bm\th_{1,0} - \pause \rho \pd{\mc{L}}{\bm\th_{1}}  \\\pause
+     \end{eqnarray}
   \end{enumerate}
   \end{enumerate}
 \end{frame}
@@ -890,13 +906,13 @@ $w_i > 0 \rightarrow$ excitory influence
   \frametitle{Summary of backpropagation}\pause
 
   \begin{enumerate}[<+->]
-  \item Fix initial weights $w^{(l),0}$, $b^{(l),0}$ and perform a forward sweep/pass through the network computing the activations $a$ (outputs) of each layer $l$ as:\pause
+  \item Fix initial weights $\bm\th_{\ell,0} = (\bm W_{\ell,0}$, $\bm b_{\ell,0})$ and perform a forward sweep/pass through the network computing the activations $a$ (outputs) of each layer $\ell$ as:\pause
     \begin{equation}
-      a^{(l)} = \varphi(\bm W^{(l)} z^{(l-1)} + b^{(l)})
+      \bm a_{\ell} = \sigma(\bm W_{\ell} a_{l-1} + b_{\ell})
     \end{equation}
-  \item At the output layer, we compute the cost function $C$ (what we want to minimize)
-  \item Then, we {\it backpropagate} the errors through each layer in order to compute the gradients $\pd{\mc{L}}{w^{(l)}}$, $\pd{\mc{L}}{b^{(l)}}$ \pause
-    and  weight updates  $w^{(l),r+1}$ and $b^{(l),r+1}$
+  \item At the output layer, we compute the loss/cost function $\mc L$ (what we want to minimize)
+  \item Then, we {\it backpropagate} the errors through each layer in order to compute the gradients $\pd{\mc{L}}{\bm\th_{\ell}}$ \pause
+    and  weight updates  $\bm\th_{\ell,t+1}$ 
 \item Repeat the forward and backward passes until cost is sufficiently minimized
   \end{enumerate}
   
@@ -915,47 +931,16 @@ $w_i > 0 \rightarrow$ excitory influence
 \pause
 \vspace{-2ex}
 \begin{eqnarray}
- \pd{\mc{L}}{w^{(3)}} &=&  {\rd \pd{\mc{L}}{o^{(3)}}\pd{o^{(3)}}{a^{(3)}}} \pd{a^{(3)}}{w^{(3)}}\\\pause
- \pd{\mc{L}}{w^{(2)}} &=&  {\rd \pd{\mc{L}}{o^{(3)}}\pd{o^{(3)}}{a^{(3)}}}  {\bl \pd{a^{(3)}}{z^{(2)}}  \pd{z^{(2)}}{a^{(2)}}} \pd{a^{(2)}}{w^{(2)}} \\\pause
- \pd{\mc{L}}{w^{(1)}} &=&  {\rd \pd{\mc{L}}{o^{(3)}}\pd{o^{(3)}}{a^{(3)}}}  {\bl \pd{a^{(3)}}{z^{(2)}}  \pd{z^{(2)}}{a^{(2)}}}   \pd{a^{(2)}}{z^{(1)}} \pd{z^{(1)}}{a^{(1)}} \pd{a^{(1)}}{w^{(1)}}
+  \pd{\mc{L}}{\bm\th_{3}} &=&  {\rd \pd{\mc{L}}{\bm z_{3}}\pd{\bm z_{3}}{\bm a_{3}}}\pause \pd{\bm a_{3}}{\bm\th_{3}}
+\pe \quad (\bm z_{3} \equiv o)
+  \\\pause
+\pd{\mc{L}}{\bm\th_{2}} &=&  {\rd \pd{\mc{L}}{\bm z_{3}}\pd{\bm z_{3}}{\bm a_{3}}} \pause {\bl \pd{\bm a_{3}}{\bm z_{2}}\pd{\bm z_{2}}{\bm a_{2}}} \pause                   
+                    \pd{\bm a_{2}}{\bm\th_{2}}\\\pause  
+\pd{\mc{L}}{\bm\th_{1}} &=&  {\rd \pd{\mc{L}}{\bm z_{3}}\pd{\bm z_{3}}{\bm a_{3}}} \pause {\bl \pd{\bm a_{3}}{\bm z_{2}}\pd{\bm z_{2}}{\bm a_{2}}} \pause                   
+                    \pd{\bm a_{2}}{\bm z_{1}}                          
+                    \pd{\bm z_{1}}{\bm a_{1}}\pd{\bm a_{1}}{\bm\th_{1}}
 \end{eqnarray}
 \end{frame}
-
-
-
-% \begin{frame}
-%   \frametitle{Automatic differentiation}
-
-%   Automatic differentiation (AD) is a set of techniques to numerically evaluate the derivative of a function specified by a computer program.
-
-%   \medskip
-
-%   \begin{itemize}[<+->]
-%   \item AD exploits the fact that most functions are composed of elementary operations (addition, multiplication, etc.) for which derivatives are known.
-
-%   \item There are two main modes of AD:
-%     \begin{itemize}
-%     \item Forward mode: propagates derivatives from inputs to outputs.
-%     \item Reverse mode: propagates derivatives from outputs to inputs (used in backpropagation).
-%     \end{itemize}
-%   \end{itemize}
-
-% \end{frame}
-
-% \begin{frame}
-%   \frametitle{Forward mode differentiation}\pause
-
-%   Think of the output as a mapping $\bm o = \bm f(\bm x)$ where $\bm x \in\mathbb{R}^n$ and $\bm o \in\mathbb{R}^m$. \pause
-%   Then
-   
-%   $\bm f$ is given by: \pause
-
-
-%   \begin{equation}
-%     \bm f = \bm f_4 \circ \bm f_3 \circ \bm f_2 \circ \bm f_1
-%   \end{equation}
-% \end{frame}
-
 
 
 \section{Summary}

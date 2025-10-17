@@ -4,7 +4,7 @@ title: "XOR demonstration"
 description: "Description for XOR demonstration notebook."
 notebook_path: "assets/notebooks/xor-demonstration.ipynb"
 notebook_html: "notebooks/xor-demonstration.html"
-nav_order: 9
+nav_order: 10
 parent: Notebooks
 ---
 

@@ -1,0 +1,402 @@
+%\documentclass[smaller, handout]{beamer}
+\def\bmode{2} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+\if 0\bmode
+\documentclass[smaller]{beamer}
+\else \if 1\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout-Notes\space\jobname}
+\documentclass[smaller,handout]{beamer}
+\usepackage{handoutWithNotes}
+\pgfpagesuselayout{2 on 1 with notes}[letterpaper, landscape, border shrink=4mm]
+\else \if 2\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout\space\jobname}
+\documentclass[smaller,handout]{beamer}
+\fi
+\fi
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\coursetitle}{CEE 616: Probabilistic Machine Learning}
+\newcommand{\longlecturetitle}{M2 Deep Neural Networks:\\ Neural Networks for Structured Data II}
+\newcommand{\shortlecturetitle}{L3b: NNs for Structured Data II}
+\newcommand{\instructor}{Jimi Oke}
+\newcommand{\lecturedate}{Tue, Oct 21, 2025}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ \input{course-macros.tex}
+              
+\begin{document}
+\maketitle
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+ 
+
+ 
+
+\section{Backpropagation}
+\begin{frame}
+  \frametitle{Forward mode differentiation}
+  \pause
+  Let us think of a simple feedforward with inputs $\bm x =\bm x_1 \in \mathbb{R}^{D=4}$, 3 hidden layers with
+   $m_1=8$, $m_2=6$, and $m_3=4$ neurons, and outputs $\bm o\in \mathbb{R}^2$:\pause
+
+  \begin{center}
+    \begin{tikzpicture}[
+      node distance=1.5cm and 2cm,
+      neuron/.style={circle,draw,minimum size=8mm,fill=blue!20},
+      input/.style={circle,draw,minimum size=8mm,fill=green!20},
+      output/.style={circle,draw,minimum size=8mm,fill=red!20},
+      layer/.style={rectangle,draw=none,minimum height=6cm,minimum width=1cm},
+      scale=.8, transform shape
+    ]
+
+    % Input layer
+    \foreach \i in {1,...,4}
+      \node[input] (I\i) at (0, {3-0.8*\i}) {$x_{1,\i}$};
+
+    % Hidden layer 1 (8 units)
+    \foreach \i in {1,...,8}
+      \node[neuron] (H1\i) at (2, {4.5-0.8*\i}) {};
+
+    % Hidden layer 2 (6 units)
+    \foreach \i in {1,...,6}
+      \node[neuron] (H2\i) at (4, {3.5-0.8*\i}) {};
+
+    % Hidden layer 3 (4 units)
+    \foreach \i in {1,...,4}
+      \node[neuron] (H3\i) at (6, {2.5-0.8*\i}) {};
+
+    % Output layer (2 units)
+    \foreach \i in {1,2}
+      \node[output] (O\i) at (8, {1.5-0.8*\i}) {$o_\i$};
+
+    % Connections input to hidden layer 1
+    \foreach \i in {1,...,4}
+      \foreach \j in {1,...,8}
+        \draw[->] (I\i) -- (H1\j);
+
+    % Connections hidden layer 1 to hidden layer 2
+    \foreach \i in {1,...,8}
+      \foreach \j in {1,...,6}
+        \draw[->] (H1\i) -- (H2\j);
+
+    % Connections hidden layer 2 to hidden layer 3
+    \foreach \i in {1,...,6}
+      \foreach \j in {1,...,4}
+        \draw[->] (H2\i) -- (H3\j);
+
+    % Connections hidden layer 3 to output
+    \foreach \i in {1,...,4}
+      \foreach \j in {1,2}
+        \draw[->] (H3\i) -- (O\j);
+
+    % Layer labels
+    \node[below] at (0,-2.5) {Input Layer};
+    \node[below] at (2,-2.5) {Hidden 1 (8)};
+    \node[below] at (4,-2.5) {Hidden 2 (6)};
+    \node[below] at (6,-2.5) {Hidden 3 (4)};
+    \node[below] at (8,-2.5) {Output Layer};
+
+    \end{tikzpicture}
+  \end{center}
+
+  \pause
+  We consider each hidden unit as a function $\bm f_{\ell}(\cdot)$, where $\ell$ is the layer index, that maps the input $\bm x_{\ell}$ to the output of the hidden unit $\bm x_{\ell+1}$. \pause
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Function composition}
+
+  We can then express the output of the network as a composition of functions:
+
+  \begin{eqnarray}
+    \bm o &=& \bm f(\bm x)
+  \end{eqnarray}
+
+  \pause
+  where 
+  \begin{equation}
+    \bm f = \bm f_{4} \circ \bm f_{3} \circ \bm f_{2} \circ \bm f_{1}
+  \end{equation}
+
+  and thus
+
+  \begin{equation}
+    \bm o = \bm f_{4}(\bm f_{3}(\bm f_{2}(\bm f_{1}(\bm x))))
+  \end{equation}
+
+  and
+  \begin{eqnarray*}
+    \bm x_{2} &=& \bm f_{1}(\bm x_1), \quad \bm f_1 : \mathbb{R}^4 \to \mathbb{R}^8 \\
+    \bm x_{3} &=& \bm f_{2}(\bm x_{2}), \quad \bm f_2 : \mathbb{R}^8 \to \mathbb{R}^6 \\
+    \bm x_4 &=& \bm f_{3}(\bm x_{3}), \quad \bm f_3 : \mathbb{R}^6 \to \mathbb{R}^4 \\
+    \bm o &=& \bm f_{4}(\bm x_{4}), \quad \bm f_4 : \mathbb{R}^4 \to \mathbb{R}^2
+  \end{eqnarray*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Computational graph}\pause
+
+  We can further visualize the FFNN as a computational graph:\pause
+
+  \begin{center}
+    \begin{tikzpicture}[
+      node distance=2cm,
+      funcnode/.style={circle,draw,minimum size=12mm,fill=blue!20},
+      datanode/.style={rectangle,draw,minimum size=8mm,fill=green!20},
+      scale=1, transform shape
+    ]
+
+    % Input node
+    \node[datanode] (x1) at (0, 0) {$\bm{x}_1$};
+
+    % Function nodes
+    \node[funcnode] (f1) at (2, 0) {$\bm{f}_1$};
+    \node[funcnode] (f2) at (4, 0) {$\bm{f}_2$};
+    \node[funcnode] (f3) at (6, 0) {$\bm{f}_3$};
+    \node[funcnode] (f4) at (8, 0) {$\bm{f}_4$};
+
+    % Output node
+    \node[datanode] (o) at (10, 0) {$\bm{o}$};
+
+    % Parameter nodes (coming from northwest)
+    \node[datanode] (theta1) at (1, 1.5) {$\bm{\theta}_1$};
+    \node[datanode] (theta2) at (3, 1.5) {$\bm{\theta}_2$};
+    \node[datanode] (theta3) at (5, 1.5) {$\bm{\theta}_3$};
+    \node[datanode] (theta4) at (7, 1.5) {$\bm{\theta}_4$};
+
+    % Main flow arrows with labels
+    \draw[->] (x1) -- (f1);
+    \draw[->] (f1) -- (f2) node[midway,above] {$\bm{x}_2$};
+    \draw[->] (f2) -- (f3) node[midway,above] {$\bm{x}_3$};
+    \draw[->] (f3) -- (f4) node[midway,above] {$\bm{x}_4$};
+    \draw[->] (f4) -- (o);
+
+    % Parameter arrows from northwest
+    \draw[->] (theta1) -- (f1);
+    \draw[->] (theta2) -- (f2);
+    \draw[->] (theta3) -- (f3);
+    \draw[->] (theta4) -- (f4);
+
+    \end{tikzpicture}
+  \end{center}
+
+  \pause
+  where $\bm{\theta}_\ell$ are the parameters (weights and biases) of layer $\ell$.
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Backpropagation}\pause
+
+  To compute the gradient, we need to find:
+
+  \begin{equation}
+    \pd{\bm o}{\bm x} = \pd{\bm f_{4}(\bm x_{4})}{\bm x_{4}} \cdot \pd{\bm f_{3}(\bm x_{3})}{\bm x_{3}} \cdot \pd{\bm f_{2}(\bm x_{2})}{\bm x_{2}} \cdot \pd{\bm f_{1}(\bm x_{1})}{\bm x_{1}}
+  \end{equation}
+
+  \pause
+
+  We define the Jacobian matrix of each layer as:
+  \begin{equation}
+    \bm J_{\bm f}(\bm x_{\ell}) = \pd{\bm f_{\ell}(\bm x_{\ell})}{\bm x_{\ell}} \pause
+    = 
+    \begin{pmatrix}
+      \pd{f_{\ell,1}(\bm x_{\ell})}{x_{\ell,1}} & \pd{f_{\ell,1}(\bm x_{\ell})}{x_{\ell,2}} & \cdots & \pd{f_{\ell,1}(\bm x_{\ell})}{x_{\ell,D}} \\
+      \pd{f_{\ell,2}(\bm x_{\ell})}{x_{\ell,1}} & \pd{f_{\ell,2}(\bm x_{\ell})}{x_{\ell,2}} & \cdots & \pd{f_{\ell,2}(\bm x_{\ell})}{x_{\ell,D}} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      \pd{f_{\ell,M}(\bm x_{\ell})}{x_{\ell,1}} & \pd{f_{\ell,M}(\bm x_{\ell})}{x_{\ell,2}} & \cdots & \pd{f_{\ell,M}(\bm x_{\ell})}{x_{\ell,D}}
+    \end{pmatrix}
+  \end{equation}
+
+  \pause
+  Thus, the gradient of the output with respect to the input is given by:\pause
+  \begin{equation}
+    \pd{\bm o}{\bm x} = \bm J_{\bm f}(\bm x_{4}) \cdot \bm J_{\bm f}(\bm x_{3}) \cdot \bm J_{\bm f}(\bm x_{2}) \cdot \bm J_{\bm f}(\bm x_{1})
+  \end{equation}
+\end{frame}
+
+\section{Training}
+\begin{frame}
+  \frametitle{Batch learning}
+  The gradient descent method was described without referencing the observations. \pause
+
+  \medskip
+
+  In reality, the forward and backward passes are performed for each observation in the training set, with parameter updates obtained by
+  \textbf{\bl averaging} the gradients: \pause
+
+  \begin{eqnarray}
+    \bm\th_{\ell, t+1}  &=& \pause  \bm\th_{\ell,t} - \pause \rho{\bl  \fr1N \sum_{n=1}^N}\pd{\mc{L}_n(\bm \th_{\ell,t})}{\bm\th_{\ell}} 
+   \end{eqnarray}
+
+  \pause
+
+  This approach is called \textbf{\bl batch learning}. \pause
+
+  \begin{itemize}[<+->]
+  \item One sweep through all the training observations is called an \textit{epoch}
+  \item In batch learning, only one update results from a training epoch
+  \item Thus, several epochs are required for convergence
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Stochastic gradient descent}
+  \pause
+
+  In standard gradient descent (batch learning, the updates are performed only after the gradient is computed for \textit{all} training observations.
+
+  \pause
+
+  \medskip
+  
+  The stochastic gradient descent approach approximates the gradient in each iteration using a {\rd randomly selected}  observation $n$: \pause
+
+    \begin{eqnarray}
+    \bm\th_{\ell, t+1}  &=& \pause  \bm\th_{\ell,t} - \pause \rho \pd{\mc{L}_{\rd n}(\bm \th_{\ell,t})}{\bm\th_{\ell}}  \\\pause
+  \end{eqnarray}
+
+  \pause
+
+  \begin{itemize}[<+->]
+  \item Each iteration over observation $n$ results in a weight/bias update
+  \item Thus, one sweep through the entire training set (an epoch) produces $N$ updates
+  \end{itemize}
+  \pause
+  This procedure is also known as \textbf{\rd online learning}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mini-batch learning}
+  \pause
+  To introduce stability, we can compute weight updates over a \textit{\pl subset} of training observations
+
+  \begin{enumerate}[<+->]
+  \item Randomly sample a mini-batch $\mc{B}_{t}$ of $B$ samples (this means that $|\mc{B}_{t}|=B$), where $B \ll N$.
+  \item Perform a forward and backward pass through each mini-batch to update the weights:\pause
+      \begin{eqnarray}
+    \bm\th_{\ell, t+1}  &=& \pause  \bm\th_{\ell,t} - \pause \rho{\pl  \fr1{|\mc{B}_{t}|} \sum_{n\in\mc{B}_{t}}} \pd{\mc{L}_{\pl m}(\bm \th_{\ell,t})}{\bm\th_{\ell}} 
+  \end{eqnarray}
+  \pause
+  Thus, for each iteration, average the gradient over a \textit{\pl mini-batch} of $B$ randomly selected observations
+\item Repeat step 2 until convergence
+  \end{enumerate}  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Considerations}
+  \pause
+  \begin{itemize}[<+->]
+  \item Online learning is more efficient for very large datasets
+  \item In practice, mini-batch learning is employed, as batch sizes (usually, $M=16$ or $M=32$) can be chosen to take advantage of parallel computing architectures
+  \item An \textit{\bf \rd adpative} learning rate $\rho$ can guarantee convergence, e.g. $\rd \rho_r = \fr1r$
+  
+
+  \item Input \textbf{standardization} (mean zero, SD 1) is recommended for consistent weight initialization and regularization
+  \item Weights/biases are \textbf{initialized} to \textit{small} values near 0 for better performance
+  \item Cost function $C$ is nonlinear and nonconvex; other optimization approaches (e.g.\ conjugate gradient) can
+    provide faster convergence compared to stochastic gradient descent
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Regularization}
+  \pe
+  DNNs are prone to overfitting. \pe To migitate this, we can regularize them by: \pe
+  \begin{itemize}
+  \item Early stopping: terminating training if objective does not improve after a specified number of epochs (patience) \pe
+  \item Weight decay: \pe
+     \begin{equation}\bl 
+      C \leftarrow \pause C + \la J = \pause C + \la\lt(\sum w^2 + \sum b^2\rt)
+    \end{equation}
+    \pause where $\la$ is tuning parameter estimated via cross-validation
+  \pe
+\item Model compression via $\ell_{1}$ regularization of weights (sparse DNNs) \pe
+\item Dropout: \pe randomly switching off connections from each neuraon with probability $p$
+    \end{itemize}
+
+\end{frame}
+
+\section{Summary}
+
+\begin{frame}
+  \frametitle{Regression MLP architecture}
+  \pause
+  Typical hyperparameter values are: \pause
+
+  \begin{table}\centering
+  \begin{tabular}[t]{l l}
+    \bf Hyperparameter & \bf Value \\\midrule
+    \# input neurons & 1 per input feature \\[2mm]\pause
+    \# hidden layers & Usually 1 -- 5 \\[2mm]\pause
+    \# neurons per hidden layer & Usually 10 -- 100 \\[2mm]\pause
+    \# output neurons & 1 per prediction dimension \\[2mm]\pause
+    hidden layer activation & ReLU \\[2mm]\pause
+    output activation & None (if unbounded) \\[2mm]\pause
+    loss function & MSE or MAE/Huber
+  \end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Classification MLP architecture}
+  \pause
+  \begin{itemize}
+  \item For classifcation, input and hidden layers are chosen in similar fashion to the regression case
+
+    \pause
+
+  \item However, the number of output neurons is given by the name of classes/labels
+
+  \item The output layer activation is typically the softmax function:
+    \begin{equation}
+     o_{c} =  \mathcal{S}(\bm a_{c}) = \fr{e^{\bm a_{c}}}{\sum_{c'=1}^{C}e^{\bm a_{c'}}}
+    \end{equation}
+    where $\bm a_{c}$ is the unnormalized log probability of each class $c$
+    
+    \pause
+    
+  \item The loss function is taken as the \textbf{categorical cross-entropy}:\pe
+    \begin{equation}
+      \mc{L} = -\sum_{c=1}^{C}y_{c}\log p_{c} = - \sum_{c=1}^{C}y_{c}\log(\mc{S}(\bm a_{c}) )   \end{equation}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Other types of neural networks}
+  \pause
+
+  The standard ANN architecture (MLP) we have studied is also called the feed-forward network.
+
+  \medskip
+  
+  Other architectures have been shown to give better performance for various applications: \pause
+
+  \medskip
+  \begin{itemize}[<+->]
+  \item Recurrent neural networks (RNNs): time-series forecasting
+
+  \item Convolutional neural networks (CNNs): image classification
+
+  \item Long short-term memory networks (LSTMs): time-series, pattern identification, etc.
+  \end{itemize}
+  \pause
+%  We will discuss the CNN on Wednesday, along with examples in Python.
+  % \begin{itemize}[<+->]
+  % \item Reading: DL 6-8, 11, 12; PML 8.3, 9.4; ESL 11      
+  % \item Experiment in this \href{http://playground.tensorflow.org}{\bl \bf playground}
+  % \end{itemize}
+\end{frame}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

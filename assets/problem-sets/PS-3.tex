@@ -1,0 +1,378 @@
+
+\documentclass[11pt,twoside]{article}
+\usepackage{etex}
+
+\raggedbottom
+
+%geometry (sets margin) and other useful packages
+\usepackage{geometry}
+\geometry{top=1in, left=1in,right=1in,bottom=1in}
+ \usepackage{graphicx,booktabs,calc}
+ 
+\usepackage{listings}
+
+
+% Marginpar width
+%Marginpar width
+\newcommand{\pts}[1]{\marginpar{ \small\hspace{0pt} \textit{[#1]} } } 
+\setlength{\marginparwidth}{.5in}
+%\reversemarginpar
+%\setlength{\marginparsep}{.02in}
+
+ 
+%\usepackage{cmbright}lstinputlisting
+%\usepackage[T1]{pbsi}
+
+\usepackage{neuralnetwork}
+
+\usepackage{chngcntr,mathtools}
+%\counterwithin{figure}{section}
+%\numberwithin{equation}{section}
+
+%\usepackage{listings}
+
+%AMS-TeX packages
+\usepackage{amssymb,amsmath,amsthm} 
+\usepackage{bm}
+\usepackage[mathscr]{eucal}
+\usepackage{colortbl}
+\usepackage{color}
+
+
+\usepackage{subfig,hyperref,enumerate,polynom,polynomial}
+\usepackage{multirow,minitoc,fancybox,array,multicol}
+
+\definecolor{slblue}{rgb}{0,.3,.62}
+\hypersetup{
+    colorlinks,%
+    citecolor=blue,%
+    filecolor=blue,%
+    linkcolor=blue,
+    urlcolor=slblue
+}
+
+%%%TIKZ
+\usepackage{tikz}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{arrows,shapes,positioning}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shadows}
+\usetikzlibrary{patterns}
+%\usetikzlibrary{circuits.ee.IEC}
+\usetikzlibrary{decorations.text}
+% For Sagnac Picture
+\usetikzlibrary{%
+    decorations.pathreplacing,%
+    decorations.pathmorphing%
+}
+
+\tikzstyle arrowstyle=[black,scale=2]
+\tikzstyle directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrow[arrowstyle]{stealth}}}}]
+\tikzstyle reverse directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrowreversed[arrowstyle]{stealth};}}}]
+\tikzstyle dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrow[arrowstyle]{latex}}}}]
+\tikzstyle rev dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrowreversed[arrowstyle]{latex};}}}]
+
+\usepackage{ctable}
+
+%
+%Redefining sections as problems
+%
+\makeatletter
+\newenvironment{exercise}{\@startsection 
+	{section}
+	{1}
+	{-.2em}
+	{-3.5ex plus -1ex minus -.2ex}
+    	{1.3ex plus .2ex}
+    	{\pagebreak[3]%forces pagebreak when space is small; use \eject for better results
+	\large\bf\noindent{Part 1.\hspace{-1.5ex} }
+	}
+	}
+	%{\vspace{1ex}\begin{center} \rule{0.3\linewidth}{.3pt}\end{center}}
+	%\begin{center}\large\bf \ldots\ldots\ldots\end{center}}
+\makeatother
+
+%
+%Fancy-header package to modify header/page numbering 
+%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\addtolength{\headwidth}{\marginparsep} %these change header-rule width
+%\addtolength{\headwidth}{\marginparwidth}
+%\fancyheadoffset{30pt}
+%\fancyfootoffset{30pt}
+\fancyhead[LO,RE]{\small Oke}
+\fancyhead[RO,LE]{\small Page \thepage} 
+\fancyfoot[RO,LE]{\small PS 3} 
+\fancyfoot[LO,RE]{\small \scshape CEE 616} 
+\cfoot{} 
+\renewcommand{\headrulewidth}{0.1pt} 
+\renewcommand{\footrulewidth}{0.1pt}
+%\setlength\voffset{-0.25in}
+%\setlength\textheight{648pt}
+
+
+\usepackage{paralist}
+
+\newcommand{\eps}{\epsilon}
+\newcommand{\bX}{\mb X}
+\newcommand{\by}{\mb y}
+\newcommand{\bbe}{\bm\beta}
+\newcommand{\beps}{\bm\epsilon}
+\newcommand{\bY}{\mb Y}
+
+\newcommand{\osn}{\oldstylenums}
+\newcommand{\dg}{^{\circ}}
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+\newcommand{\pt}{\phantom}
+\newcommand{\tf}{\therefore}
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\fr}{\frac}
+\newcommand{\dfr}{\dfrac}
+\newcommand{\ul}{\underline}
+\newcommand{\tn}{\tabularnewline}
+\newcommand{\nl}{\newline}
+\newcommand\relph[1]{\mathrel{\phantom{#1}}}
+\newcommand{\cm}{\checkmark}
+\newcommand{\ol}{\overline}
+\newcommand{\rd}{\color{red}}
+\newcommand{\bl}{\color{blue}}
+\newcommand{\pl}{\color{purple}}
+\newcommand{\og}{\color{orange!90!black}}
+\newcommand{\gr}{\color{green!40!black}}
+\newcommand{\dca}{\color{darkcandyapplered}}
+\newcommand{\nin}{\noindent}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,thick,inner sep=1pt] (char) {\small #1};}}
+
+\newcommand{\bc}{\begin{compactenum}[\quad--]}
+\newcommand{\ec}{\end{compactenum}}
+
+\newcommand{\p}{\partial}
+\newcommand{\pd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpd}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\pdd}[2]{\frac{\partial^2{#1}}{\partial{#2}^2}}
+\newcommand{\pde}[3]{\frac{\partial^2{#1}}{\partial{#2}\partial{#3}}}
+\newcommand{\nmfr}[3]{\Phi\left(\frac{{#1} - {#2}}{#3}\right)}
+\newcommand{\Err}{\text{Err}}
+\newcommand{\err}{\text{err}}
+
+%\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+%\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+%%%% GREEK LETTER SHORTCUTS %%%%%
+\newcommand{\la}{\lambda}
+\renewcommand{\th}{\theta}
+\newcommand{\al}{\alpha}
+\newcommand{\G}{\Gamma}
+\newcommand{\si}{\sigma}
+\newcommand{\Si}{\Sigma}
+
+
+\pgfmathdeclarefunction{poiss}{1}{%
+  \pgfmathparse{(#1^x)*exp(-#1)/(x!)}%
+  }
+
+\pgfmathdeclarefunction{gauss}{2}{%
+  \pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+\pgfmathdeclarefunction{expo}{2}{%
+  \pgfmathparse{#1*exp(-#1*#2)}%
+}
+
+\pgfmathdeclarefunction{expocdf}{2}{%
+  \pgfmathparse{1 -exp(-#1*#2)}%
+}
+
+\newcommand{\mb}{\mathbb}
+\newcommand{\mc}{\mathcal}
+\newcommand{\tr}{^{\bm\top}} 
+\newcommand{\n}{\\[2mm]}
+ 
+\newcommand{\xs}{x^{*}}
+\newenvironment{solution}
+{\medskip\par\quad\quad\begin{minipage}[c]{.8\textwidth}}{\medskip\end{minipage}}
+
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\lstset{language=C++,
+                basicstyle=\tiny\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{gray}\ttfamily,
+                morecomment=[l][\color{gray}]{\#}
+}
+
+
+\thispagestyle{empty}
+
+
+\nin{\LARGE Problem Set 3}\hfill{\bf Oke}
+
+\medskip\hrule\medskip
+
+\nin {\small CEE 616: Probabilistic Machine Learning
+\hfill\textit{ 10.18.2025}}
+
+\nin{\it \small Due October 25, 2025 at 11:59PM. Submit on Moodle.}\\
+
+\nin The standard problems are worth a total of \textbf{53 points}.
+
+ 
+
+
+\section*{Problem 1 \quad {\it Batch learning (5 pts)}}
+In training a neural network via batch learning, the weight updates are given by:
+  \begin{eqnarray}
+    \bm\th_{\ell, t+1}  &=&   \bm\th_{\ell,t} - \rho{  \fr1N \sum_{n=1}^N}\pd{\mc{L}_n(\bm \th_{\ell,t})}{\bm\th_{\ell,t}} 
+   \end{eqnarray}
+Now, imagine you are training an MLP with $N=4000$ observations.
+\begin{enumerate}[\bf (a)]
+\item If you use a batch learning approach \pts{1} (i.e.\ all observations are used to compute a single weight update), how many iterations/weight updates are obtained in one training epoch?
+\item If you use a stochastic minibatch approach with a batch size $B=32$, \pts{2} how many training iterations are obtained in one epoch? (Show your calculation.)
+\item What is \pts{2} the maximum number of iterations possible in 50 epochs if your batch size must be no less than 10 samples (note that sampling for SGD approaches is typically done without replacement)?
+\end{enumerate}
+
+
+\section*{Problem 2 \quad {\it Subdifferential of ReLU (7 pts)}}
+
+The \textbf{subdifferential} $\partial f(\bm x)$ of a function $f$ at a point $\bm x$ is the \textit{set} of all the \textbf{subgradients} $\bm g$ at that point. Thus, for instance, if $f(x) = |x|$, then the subdifferential at $x = 0$ is given by
+\begin{equation}
+\partial f(0) = [-1,1]
+\end{equation}
+At $x=1$, however, there is only one unique subgradient: $\partial f(1) = \{1\}$, which is the subdifferential (set of 1 element).
+Note that $f(x)$ is not differentiable at $x=0$, \textit{but} it is subdifferentiable.
+
+
+\begin{enumerate}[\bf (a)]
+\item The rectified linear unit activation function (ReLU) is defined as: \pts{2}
+  \begin{equation}
+    \text{ReLU}(a) = \max(a,0) = a\mathbb{I}(a>0)
+  \end{equation}
+  Sketch/plot ReLU$(a)$ for $a\in [-5,5]$.
+
+\item \textit{Write} the piecewise subdifferential function $\partial \varphi(a)$, where $\varphi\equiv\text{ReLU}$.\pts{3}
+  (Refer to \textbf{PMLI} 8.1.4.1
+  for an example of how to do this).
+
+\item Sketch/plot the subdifferential function $\partial \varphi(a)$, where $\varphi\equiv\text{ReLU}$ (label both axes).\pts{2}
+\end{enumerate}
+
+
+\section*{Problem 3 \quad {\it Optimizers (6 pts)}}
+\textbf{PMLI} Section 8.4.5 describes approaches to reduce the variance in SGD.
+\begin{enumerate}[\bf (a)]
+\item Read the section
+\item List three of the SGD variants described in the section and write their weight update equations.\pts{6}
+\end{enumerate}
+
+\section*{Problem 4 \quad {\it Feed forward neural network (12 pts; 3 pts EC)}}
+The neural network shown in \autoref{fig:nn} is to be trained for a binary classification problem, $y_{n} \in \{0,1\}$.
+Logistic sigmoid activations are used in the hidden layer neurons.
+  \begin{figure}[h!]
+    \centering
+    \begin{neuralnetwork}[height=4 ]
+    \newcommand{\x}[2]{$x_#2$}
+    \newcommand{\y}[2]{$o$}
+    \newcommand{\hfirst}[2]{\small $z_{1,#2}$}
+    \inputlayer[count=2, bias=false, title=, text=\x]
+    \hiddenlayer[count=3, bias=false, title=, text=\hfirst] \linklayers
+    \outputlayer[count=1, title=, text=\y] \linklayers
+  \end{neuralnetwork}
+  \caption{}
+  \label{fig:nn}
+\end{figure}
+
+\begin{enumerate}[\bf (a)]
+\item What is the dimensionality of the input vector $\bm x$ (i.e.\ what is $D$)? \pts{1}
+\item How many parameters (weights/biases) are required to train this network?\pts{2} (Show your calculations explicitly.)
+\item We can write the hidden units (activations) at layer $1$ as:
+  \begin{equation}
+    \bm z_{1} =
+    \begin{bmatrix}
+      z_{1,1} \\ z_{1,2} \\  z_{1,3}
+    \end{bmatrix}
+  \end{equation}
+  Thus,
+  \begin{equation}
+    \bm z_{1} = \bm\sigma(\bm b_{1} + \bm W_{1}\bm x)
+  \end{equation}
+  where $\bm x = [x_{1}, x_{2}]\tr$.
+  \begin{enumerate}[\bf i.]
+  \item What is the length of $b_{1}$?\pts{1}
+  \item What are the dimensions of $\bm W_{1}$?\pts{1}
+  \item Write an equation for $z_{1,3}$ in terms of $x_{1}$, $x_{2}$,\pts{2} the relevant elements of $\bm W_{1}$ (e.g.\ $w_{3,1}$, etc.) and the relevant element(s) of $\bm b_{1}$. The equation should be written in scalar form and should include the exponential function explicitly.
+    
+  \end{enumerate}
+\item The weights in the final (output) layer are given by $\bm\th_{2} = (\bm w_{2}, b_{2})$.
+  \begin{enumerate}[\bf i.]
+  \item What is the length of $\bm w_{2}$?\pts{1}
+  \item Given that this is a binary \pts{1} classification problem and only a single neuron is specified in
+    the final (output) layer, what activation function should be used in the output layer?
+  \item Write an explicit equation for $o$ \pts{2} in terms of $\bm w_{2}$, $\bm z_{1}$ and $b_{2}$.
+  \item What does $o$ represent? \pts{1}
+  \end{enumerate}
+  \item Write/derive the binary cross-entropy loss function $\mc{L}_n$ for an observation $n$ in this problem \pts{3} in terms of $o_n$ and $y_n$.
+\end{enumerate}
+
+
+\section*{Problem 5 \quad {\it Backpropagation for MLP (20 pts)}}
+(From PMLI Exercise 13.1) Consider the following classification MLP with one hidden layer:
+\begin{eqnarray}
+  \bm x &=& \text{input vector} \in \mathbb{R}^D \\
+  \bm z &=& \sigma(\bm W\bm x + \bm b_{1}) \in \mathbb{R}^K \\
+  \bm h &=& \text{ReLU}(\bm z)\in \mathbb{R}^K\\
+  \bm a &=& \bm V\bm h + \bm b_2 \in \mathbb{R}^C\\
+  \mc L &=& \text{CrossEntropy}(\bm y, \text{softmax}(\bm a)) \in \mathbb{R}
+\end{eqnarray}
+where $\bm x \in \mathbb{R}^D$, $\bm b_1 \in \mathbb{R}^K$, $\bm W_1 \in \mathbb{R}^{K\times D}$, $\bm V \in \mathbb{R}^{C\times K}$, where $D$ is the input dimension, $K$ is the number of hidden units, and $C$ is the number of classes. Show that the gradients for the parameters and input are given by:
+
+\begin{enumerate}[\bf (a)]
+  \item \pts{4} \begin{equation}
+    \nabla_{\bm V} \mc L = \lt[ \pd{\mc L}{\bm V} \rt]_{1,:} = \bm u_2 \bm h\tr \in \mathbb{R}^{C\times K}
+  \end{equation}
+  \item \pts{4} \begin{equation}
+    \nabla_{\bm b_2} \mc L = \lt( \pd{\mc L}{\bm b_2} \rt)\tr = \bm u_2 \in \mathbb{R}^{C}
+  \end{equation}
+  \item \pts{4} \begin{equation}
+    \nabla_{\bm W} \mc L = \lt[ \pd{\mc L}{\bm W} \rt]_{1,:} = \bm u_1 \bm x\tr \in \mathbb{R}^{K\times D}
+  \end{equation}
+  \item \pts{4} \begin{equation}
+    \nabla_{\bm b_1} \mc L = \lt( \pd{\mc L}{\bm b_1} \rt)\tr = \bm u_1 \in \mathbb{R}^{K}
+  \end{equation}
+  \item \pts{4} \begin{equation}
+    \nabla_{\bm x} \mc L = \lt( \pd{\mc L}{\bm x} \rt)\tr = \bm W\tr \bm u_1 \in \mathbb{R}^{D}
+  \end{equation}
+\end{enumerate}
+where the gradients of the loss with respect to the logit layer and hidden layer are given by:
+\begin{eqnarray}
+  \bm u_2 &=& \lt(\pd{\mc L}{\bm a}\rt)\tr = \text{softmax}(\bm a) - \bm y \in \mathbb{R}^C \\
+  \bm u_1 &=& \lt(\pd{\mc L}{\bm z}\rt)\tr = \bm V\tr \bm u_2 \odot H(\bm z) \in \mathbb{R}^K
+\end{eqnarray}
+and where $\odot$ denotes the element-wise (Hadamard) product and $H(\bm z)$ is the Heaviside step function defined as:
+\begin{equation}
+  H(z_i) =
+  \begin{cases}
+    1 & z_i > 0 \\
+    0 & \text{otherwise}
+  \end{cases}
+\end{equation}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

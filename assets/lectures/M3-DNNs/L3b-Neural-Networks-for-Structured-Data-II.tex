@@ -221,6 +221,172 @@
   \end{equation}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Jacobian matrix (2/2)}\pause
+
+  We can write the Jacobian as:\pause
+
+  \begin{equation}
+    \bm J_{\bm f}(\bm x) = \pd{\bm f(\bm x)}{\bm x} =
+    \begin{pmatrix}
+    \nabla f_1(\bm x)\tr \\
+    \nabla f_2(\bm x)\tr \\
+    \vdots \\
+    \nabla f_M(\bm x)\tr 
+    \end{pmatrix} \pause = \lt( \pd{\bm f}{\bm x_1}, \pd{\bm f}{\bm x_2}, \ldots, \pd{\bm f}{\bm x_D} \rt)
+  \end{equation}
+\pause
+
+\begin{itemize}
+  \item $i$'th row: $\nabla f_i(\bm x)\tr \in \mb{R}^{1\times D}$ gradient of the $i$'th output w.r.t. all inputs
+  \item $j$'th column: $\pd{\bm f}{x_j} \in\mb{R}^{M}$ gradient of all outputs w.r.t. the $j$'th input
+\end{itemize}
+  
+\pause
+
+Thus:
+\begin{equation}
+  \nabla \bm f(\bm x) = \bm J_{\bm f}(\bm x)\tr = \lt( \nabla f_1(\bm x), \nabla f_2(\bm x), \ldots, \nabla f_M(\bm x) \rt)
+\end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Vector Jacobian product}\pause
+
+  The vector-Jacobian product (VJP) is the left-multiplication of the Jacobian matrix $\bm J_{\bm f}(\bm x)$ by a vector $\bm u$, which results in a row vector:\pause
+  \begin{equation}
+    \bm u \tr \bm J_{\bm f}(\bm x) \in \mathbb{R}^{1\times D}
+  \end{equation}
+
+  \pause
+
+  \begin{itemize}
+    \item If $\bm u\in \mb{R}^{M}$ is a one-hot vector with 1 at index $i$ and 0 elsewhere, e.g.
+      \begin{equation}
+        \bm u = 
+        \begin{pmatrix}
+          0 \\ \vdots \\ 1 \\ \vdots \\ 0
+        \end{pmatrix} = \bm e_i
+      \end{equation}
+
+        then the VJP $\bm e_i\tr \bm J_{\bm f}(\bm x)$ extracts the $i$'th row from $\bm J_{\bm f}(\bm x)$, which is the gradient of the $i$'th output with respect to all inputs, $\nabla f_i(\bm x)\tr$.
+
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Jacobian-vector product}\pause
+
+  The Jacobian-vector product (JVP) is the right-multiplication of the Jacobian matrix $\bm J_{\bm f}(\bm x)$ by a vector $\bm v$, which results in a column vector:\pause
+
+  \begin{equation}
+    \bm J_{\bm f}(\bm x) \bm v \in \mathbb{R}^{M}
+  \end{equation}
+
+  \pause
+\begin{itemize}
+  \item If $\bm v\in \mb{R}^{D}$ is a one-hot vector with 1 at index $j$ and 0 elsewhere, e.g.
+      \begin{equation}
+        \bm v = 
+        \begin{pmatrix}
+          0 \\ \vdots \\ 1 \\ \vdots \\ 0
+        \end{pmatrix} = \bm e_j
+      \end{equation}
+
+        then the JVP $\bm J_{\bm f}(\bm x) \bm e_j$ extracts the $j$'th column from $\bm J_{\bm f}(\bm x)$, which is the gradient of all outputs with respect to the $j$'th input, $\pd{\bm f}{x_j}$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Computing the Jacobian}\pause
+
+  \begin{itemize}
+    \item The Jacobian can be computed by performing either $M$ JVPs (one per input dimension) or $D$ VJPs (one per output dimension)
+    \item If $D < M$, it is more efficient to compute the Jacobian via JVPs for each column $j$:
+      \begin{equation}
+        \bm J_{\bm f}(\bm x)(\bm v) = \underbrace{\bm J_{\bm f}(\bm x)_4}_{M \times M_3} \underbrace{\bm J_{\bm f}(\bm x)_3}_{M_3 \times M_2} \underbrace{\bm J_{\bm f}(\bm x)_2}_{M_2 \times M_1} \underbrace{\bm J_{\bm f}(\bm x)_1}_{M_1 \times D} \underbrace{\bm v}_{D \times 1}
+      \end{equation}
+      in a right-to-left fashion (\textbf{forward mode differentiation})
+    \item If $M < D$, it is more efficient to compute the Jacobian via VJPs for each row $i$:
+      \begin{equation}
+        \bm u\tr \bm J_{\bm f}(\bm x) = \underbrace{\bm u\tr}_{1 \times M} \underbrace{\bm J_{\bm f}(\bm x)_4}_{M \times M_3} \underbrace{\bm J_{\bm f}(\bm x)_3}_{M_3 \times M_2} \underbrace{\bm J_{\bm f}(\bm x)_2}_{M_2 \times M_1} \underbrace{\bm J_{\bm f}(\bm x)_1}_{M_1 \times D}
+      \end{equation}
+      in a left-to-right fashion (\textbf{reverse mode differentiation})
+    \item In neural networks, the number of outputs $M$ is often much smaller than the number of inputs $D$
+    \item Thus, backpropagation typically employs VJPs to compute the gradients efficiently
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: single hidden layer MLP}\pause
+
+  Consider a single hidden layer MLP with an $\ell_2$ loss for regression (scalar output):\pause
+  \begin{equation}
+    \mc{L}((\bm x, \bm y),\bm\th) = \fr12 ||\bm y - \bm W_2\varphi(\bm W_1\bm x)||_2^2
+  \end{equation}
+  \pause
+  We can represent the network as follows:\pause
+  \begin{eqnarray}
+    \mc L &=& \bm f_4 \circ \bm f_3 \circ \bm f_2 \circ \bm f_1  \\\pause
+    \bm x_2 &=& \bm f_1(\bm x, \bm\th_1) = \bm W_1 \bm x \\\pause
+    \bm x_3 &=& \bm f_2(\bm x_2, \bm\th_2) = \varphi(\bm x_2) \\\pause
+    \bm x_4 &=& \bm f_3(\bm x_3, \bm\th_3) = \bm W_2 \bm x_3 \\\pause
+    \mc L &=& \bm f_4(\bm x_4, \bm y) = \fr12||\bm y - \bm x_4||_2^2
+  \end{eqnarray}
+  and $\mc L : \mathbb{R}^D \to \mathbb{R}$.
+\end{frame}
+\begin{frame}
+  \frametitle{Example: single hidden layer MLP (contd.)}\pause
+
+  Using the chain rule, We can express the gradient of the loss wrt the parameters in each layer as:\pause
+  \begin{eqnarray}
+    \pd{\mc L}{\bm\th_3} &=& \pd{\mc L}{\bm x_4} \pd{\bm x_4}{\bm\th_3} \\\pause
+    \pd{\mc L}{\bm\th_2} &=& \pd{\mc L}{\bm x_4} \pd{\bm x_4}{\bm x_3} \pd{\bm x_3}{\bm\th_2} \\ \pause
+    \pd{\mc L}{\bm\th_1} &=& \pd{\mc L}{\bm x_4} \pd{\bm x_4}{\bm x_3} \pd{\bm x_3}{\bm x_2} \pd{\bm x_2}{\bm\th_1}
+  \end{eqnarray}
+  \pause
+  Note:
+  \begin{equation}
+    \pd{\mc L}{\bm\th_k} = \lt(\nabla_{\bm\th_k} \mc L\rt)\tr
+  \end{equation}
+  is a $d_k$-dimensional gradient row vector, where $d_k$ is the number of parameters in layer $k$ \pause and can be computed recursively as VJPs:
+  \begin{equation}
+    \pd{\mc L}{\bm\th_k} = \bm u_{k+1}\tr \pd{\bm f_k(\bm x_k, \bm\th_k)}{\bm\th_k}
+  \end{equation}
+  where $\bm x_{k+1} = \bm f_k(\bm x_k, \bm\th_k)$, $\bm u_{k}\tr = \bm u_{k+1}\tr\pd{\bm f_k(\bm x_k, \bm\th_k)}{\bm x_{k}}$ and $\bm u_{K+1} = 1$.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: single hidden layer MLP (contd.)}\pause
+We then need to specify the Jacobians for each layer:\pause
+\begin{itemize}
+\item Output layer:
+  \begin{eqnarray}
+    \pd{\mc L}{\bm x_4} &=& \bm u_4\tr = \pd{\fr12||\bm y - \bm x_4||_2^2}{\bm x_4} = (\bm x_4 - \bm y)\tr
+  \end{eqnarray}
+  \pause
+  \item Linear layer:
+    \begin{eqnarray}
+    \pd{\bm x_4}{\bm x_3} &=& \bm J_{\bm f_3}(\bm x_3) = \pd{\bm W_2 \bm x_3}{\bm x_3} = \bm W_2 \\
+    \pd{\bm x_4}{\bm W_2} &=& \pd{\bm W_2 \bm x_3}{\bm W_2} = \bm x_3\tr
+  \end{eqnarray}
+  \pause
+
+  % \item Activation layer:
+  %   \begin{eqnarray}
+  %   \pd{\bm x_3}{\bm x_2} &=& \bm J_{\bm f_2}(\bm x_2) = \pd{\varphi(\bm x_2)}{\bm x_2} = \diag\lt(\varphi'(\bm x_2)\rt) \\
+  %   \pd{\bm x_3}{\bm\th_2} &=& 0
+  % \end{eqnarray}
+  % \pause
+  % \item Linear layer:
+  %   \begin{eqnarray}
+  %   \pd{\bm x_2}{\bm x_1} &=& \bm J_{\bm f_1}(\bm x_1) = \pd{\bm W_1 \bm x_1}{\bm x_1} = \bm W_1 \\
+  %   \pd{\bm x_2}{\bm W_1} &=& \pd{\bm W_1 \bm x_1}{\bm W_1} = \bm x_1\tr
+  % \end{eqnarray}  
+\end{itemize} 
+\end{frame}
+
+
 \section{Training}
 \begin{frame}
   \frametitle{Batch learning}

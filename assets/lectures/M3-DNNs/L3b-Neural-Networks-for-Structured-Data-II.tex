@@ -318,7 +318,7 @@ Thus:
 \end{frame}
 
 \begin{frame}
-  \frametitle{Example: single hidden layer MLP}\pause
+  \frametitle{Example 1: single hidden layer MLP}\pause
 
   Consider a single hidden layer MLP with an $\ell_2$ loss for regression (scalar output):\pause
   \begin{equation}
@@ -336,7 +336,7 @@ Thus:
   and $\mc L : \mathbb{R}^D \to \mathbb{R}$.
 \end{frame}
 \begin{frame}
-  \frametitle{Example: single hidden layer MLP (contd.)}\pause
+  \frametitle{Example 1: MLP network representation}\pause
 
   Using the chain rule, We can express the gradient of the loss wrt the parameters in each layer as:\pause
   \begin{eqnarray}
@@ -347,36 +347,75 @@ Thus:
   \pause
   Note:
   \begin{equation}
-    \pd{\mc L}{\bm\th_k} = \lt(\nabla_{\bm\th_k} \mc L\rt)\tr
+    \pd{\mc L}{\bm\th_\ell} = \lt(\nabla_{\bm\th_\ell} \mc L\rt)\tr
   \end{equation}
-  is a $d_k$-dimensional gradient row vector, where $d_k$ is the number of parameters in layer $k$ \pause and can be computed recursively as VJPs:
+  is a $d_\ell$-dimensional gradient row vector, where $d_\ell$ is the number of parameters in layer $\ell$ \pause and can be computed recursively as VJPs:
   \begin{equation}
-    \pd{\mc L}{\bm\th_k} = \bm u_{k+1}\tr \pd{\bm f_k(\bm x_k, \bm\th_k)}{\bm\th_k}
+    \pd{\mc L}{\bm\th_\ell} = \bm u_{\ell+1}\tr \pd{\bm f_\ell(\bm x_\ell, \bm\th_\ell)}{\bm\th_\ell}
   \end{equation}
-  where $\bm x_{k+1} = \bm f_k(\bm x_k, \bm\th_k)$, $\bm u_{k}\tr = \bm u_{k+1}\tr\pd{\bm f_k(\bm x_k, \bm\th_k)}{\bm x_{k}}$ and $\bm u_{K+1} = 1$.
+  where $\bm x_{\ell+1} = \bm f_\ell(\bm x_\ell, \bm\th_\ell)$, $\bm u_{\ell}\tr = \bm u_{\ell+1}\tr\pd{\bm f_\ell(\bm x_\ell, \bm\th_\ell)}{\bm x_{\ell}}$ and $\bm u_{L+1} = 1$.
 \end{frame}
 
 \begin{frame}
-  \frametitle{Example: single hidden layer MLP (contd.)}\pause
+  \frametitle{Example 1:  Backprop for MLP with $L$ layers}
+\pause To compute the gradients for an MLP with $L$ layers, we perform the following steps:\pause
+
+\begin{enumerate}[<+->]
+\item // Perform a forward pass through the network to compute the outputs $\bm x_{\ell}$
+\item $\bm x_1 := \bm x$ // input layer
+\item \textbf{for} $\ell = 1$ to $L$ \textbf{do}
+  \begin{itemize}
+  \item $\bm x_{\ell+1} = \bm f_\ell(\bm x_\ell, \bm\th_\ell)$
+  \end{itemize}
+\item // Initialize the backpropagation
+\item $\bm u_{L+1} := 1$ // since $\mc L$ is scalar
+\item // Perform a backward pass through the network to compute the gradients
+\item \textbf{for} $\ell = L$ down to $1$ \textbf{do}
+  \begin{itemize}
+  \item $ \bm g_\ell = \pd{\mc L}{\bm\th_\ell} := \bm u_{\ell+1}\tr \pd{\bm f_\ell(\bm x_\ell, \bm\th_\ell)}{\bm\th_\ell}$
+  \item $\bm u_{\ell}\tr := \bm u_{\ell+1}\tr\pd{\bm f_\ell(\bm x_\ell, \bm\th_\ell)}{\bm x_{\ell}}$
+  \end{itemize}
+  \item // Output the gradients
+  \item  Return $\pd{\mc L}{\bm\th_\ell} = \bm x_{L+1}$, $\nabla_{\bm x}\mc L = \bm u_1, \{\nabla_{\bm\th}\mc L = \bm g_\ell : \ell = 1:L\}$
+\end{enumerate}
+  
+
+\end{frame}
+\begin{frame}
+  \frametitle{Example 1: Jacobians for each layer}\pause
 We then need to specify the Jacobians for each layer:\pause
 \begin{itemize}
-\item Output layer:
+\item Output layer ($\ell = L = 4$):
   \begin{eqnarray}
-    \pd{\mc L}{\bm x_4} &=& \bm u_4\tr = \pd{\fr12||\bm y - \bm x_4||_2^2}{\bm x_4} = (\bm x_4 - \bm y)\tr
+    \pd{\mc L}{\bm x_4} &=& \bm J_{\bm f_4}(\bm x_4) = \pd{\fr12||\bm y - \bm x_4||_2^2}{\bm x_4} = (\bm x_4 - \bm y)\tr
   \end{eqnarray}
   \pause
-  \item Linear layer:
+  \item Linear layer ($\ell = 3$):
     \begin{eqnarray}
     \pd{\bm x_4}{\bm x_3} &=& \bm J_{\bm f_3}(\bm x_3) = \pd{\bm W_2 \bm x_3}{\bm x_3} = \bm W_2 \\
-    \pd{\bm x_4}{\bm W_2} &=& \pd{\bm W_2 \bm x_3}{\bm W_2} = \bm x_3\tr
+    \pd{\bm x_4}{\bm \th_3} &=& \pd{\bm x_4}{\bm W_2} = \pd{\bm W_2 \bm x_3}{\bm W_2} = \bm x_3\tr
   \end{eqnarray}
-  \pause
+  
+\end{itemize} 
+\end{frame}
 
-  % \item Activation layer:
-  %   \begin{eqnarray}
-  %   \pd{\bm x_3}{\bm x_2} &=& \bm J_{\bm f_2}(\bm x_2) = \pd{\varphi(\bm x_2)}{\bm x_2} = \diag\lt(\varphi'(\bm x_2)\rt) \\
-  %   \pd{\bm x_3}{\bm\th_2} &=& 0
-  % \end{eqnarray}
+\begin{frame}
+  \frametitle{Example 1: Jacobians for each layer (cont.)}\pause
+\begin{itemize}
+\setcounter{enumi}{2}
+  \item Activation layer ($\ell = 2$):\\
+  Here, an element-wise nonlinearity is applied: $\bm x_3 = \varphi(\bm x_2)$. Thus, the $(i,j)$'th element of the Jacobian is given by:
+  \begin{equation}
+    \pd{x_{3,i}}{x_{2,j}} = \begin{cases}
+      \varphi'(x_{2,i}), & \text{if } i = j \\
+      0, & \text{otherwise}
+    \end{cases}
+  \end{equation}\pause
+    Furthermore, $\bm\th_2 = 0$ since there are no parameters in the activation layer. Thus, the Jacobians are: \pause
+    \begin{eqnarray}
+    \pd{\bm x_3}{\bm x_2} &=& \bm J_{\bm f_2}(\bm x_2) = \pd{\varphi(\bm x_2)}{\bm x_2} = \text{diag}\lt(\varphi'(\bm x_2)\rt) \\
+    \pd{\bm x_3}{\bm\th_2} &=& 0
+  \end{eqnarray}
   % \pause
   % \item Linear layer:
   %   \begin{eqnarray}
@@ -384,6 +423,52 @@ We then need to specify the Jacobians for each layer:\pause
   %   \pd{\bm x_2}{\bm W_1} &=& \pd{\bm W_1 \bm x_1}{\bm W_1} = \bm x_1\tr
   % \end{eqnarray}  
 \end{itemize} 
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Example 1: Jacobians for each layer (cont.)}\pause
+\begin{itemize}
+\setcounter{enumi}{3}
+  \item Linear layer ($\ell = 1$):
+    \begin{eqnarray}
+    \pd{\bm x_2}{\bm x_1} &=& \bm J_{\bm f_1}(\bm x_1) = \pd{\bm W_1 \bm x_1}{\bm x_1} = \bm W_1 \\
+    \pd{\bm x_2}{\bm \th_1} &=& \bm J_{\bm f_1}(\bm \th_1) = \pd{\bm x_2}{\bm W_1} = \pd{\bm W_1 \bm x_1}{\bm W_1} % = \bm x_1\tr
+  \end{eqnarray}  
+  We can show that $\bm u\tr \bm J_{\bm f_1}(\bm \th_1) = \bm u \bm x_1\tr \in \mathbb{R}^{M_1 \times D}$
+\end{itemize} 
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Example 1: Summary}\pause
+ We recall the chain rule of derivatives and express as products of Jacobians:  
+ \begin{eqnarray}
+    \pd{\mc L}{\bm\th_3} = \nabla_{\bm\th_3}\mc L &=& \pd{\mc L}{\bm x_4} \pd{\bm x_4}{\bm\th_3} \pause = 
+    \bm J_{\bm f_4}(\bm x_4) \bm J_{\bm f_3}(\bm \th_3) \\\pause
+    \pd{\mc L}{\bm\th_2}  = \nabla_{\bm\th_2}\mc L &=& \pd{\mc L}{\bm x_4} \pd{\bm x_4}{\bm x_3} \pd{\bm x_3}{\bm\th_2} \pause =
+    \bm J_{\bm f_4}(\bm x_4) \bm J_{\bm f_3}(\bm x_3) \bm J_{\bm f_2}(\bm\th_2) \\ \pause
+    \pd{\mc L}{\bm\th_1}  = \nabla_{\bm\th_1}\mc L &=& \pd{\mc L}{\bm x_4} \pd{\bm x_4}{\bm x_3} \pd{\bm x_3}{\bm x_2} \pd{\bm x_2}{\bm\th_1} \pause  = 
+    \bm J_{\bm f_4}(\bm x_4) \bm J_{\bm f_3}(\bm x_3) \bm J_{\bm f_2}(\bm x_2) \bm J_{\bm f_1}(\bm\th_1)
+  \end{eqnarray}
+
+Substituting with the expressions derived earlier, we find: 
+
+\begin{eqnarray}
+    \pd{\mc L}{\bm\th_3} &=& \underbrace{(\bm x_4 - \bm y)}_{\bm u_2} \bm x_3\tr \\\pause
+    \pd{\mc L}{\bm\th_2} &=& (\bm x_4 - \bm y)\tr \bm W_2 \cdot 0 = 0 \\ \pause
+    \pd{\mc L}{\bm\th_1} &=& \underbrace{(\bm x_4 - \bm y)\tr \bm W_2 \odot \varphi'(\bm x_2)}_{\bm u_1}  \bm x_1\tr
+\end{eqnarray}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example 1: Summary (cont.)}\pause
+Where $\odot$ denotes the element-wise (Hadamard) product and $\bm u_1, \bm u_2$ are the backpropagated gradients at each layer (often referred to as ``error signals''):
+\begin{eqnarray}
+  \bm u_1 &=& \bm u_2 \tr \bm W_2 \odot \varphi'(\bm x_2) \\\pause
+  \bm u_2 &=& (\bm x_4 - \bm y)\tr
+\end{eqnarray}
 \end{frame}
 
 

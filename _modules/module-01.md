@@ -10,7 +10,8 @@ Thu, Sep 4
 
 Tue, Sep 9
 : **LECTURE 1C**{: .label .label-blue }[Statistics](/assets/lectures/M1-Introduction/L1c-Statistics-Handout.pdf)
-  : **PROBLEM SET 1**{: .label .label-red}[PDF](/assets/problem-sets/PS1.pdf), [LaTeX](/assets/problem-sets/PS1.tex)  **(Due 9/25)** 
+  : **PROBLEM SET 1**{: .label .label-red}[PDF](/assets/problem-sets/PS1.pdf), [LaTeX](/assets/problem-sets/PS1.tex),
+    [Solution](/assets/problem-sets/PS1-Solution.pdf)  **(Due 9/25)** 
 
 Thu, Sep 11
 : **LECTURE 1D**{: .label .label-blue }[Decision and Information Theories](/assets/lectures/M1-Introduction/L1d-Info-Decision-Theories-Handout.pdf)

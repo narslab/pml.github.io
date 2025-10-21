@@ -1,0 +1,1045 @@
+
+\documentclass[11pt,twoside]{article}
+\usepackage{etex}
+
+\raggedbottom
+
+%geometry (sets margin) and other useful packages
+\usepackage{geometry}
+\geometry{top=1in, left=1in,right=1in,bottom=1in}
+ \usepackage{graphicx,booktabs,calc}
+ 
+\usepackage{listings}
+
+
+% Marginpar width
+%Marginpar width
+\newcommand{\pts}[1]{\marginpar{ \small\hspace{0pt} \textit{[#1]} } } 
+\setlength{\marginparwidth}{.5in}
+%\reversemarginpar
+%\setlength{\marginparsep}{.02in}
+
+ 
+%\usepackage{cmbright}lstinputlisting
+%\usepackage[T1]{pbsi}
+
+
+\usepackage{chngcntr,mathtools}
+%\counterwithin{figure}{section}
+%\numberwithin{equation}{section}
+
+%\usepackage{listings}
+
+%AMS-TeX packages
+\usepackage{amssymb,amsmath,amsthm} 
+\usepackage{bm}
+\usepackage[mathscr]{eucal}
+\usepackage{colortbl}
+\usepackage{color}
+\allowdisplaybreaks
+
+
+\usepackage{subfig,hyperref,enumerate,polynom,polynomial}
+\usepackage{multirow,minitoc,fancybox,array,multicol}
+
+\definecolor{slblue}{rgb}{0,.3,.62}
+\hypersetup{
+    colorlinks,%
+    citecolor=blue,%
+    filecolor=blue,%
+    linkcolor=blue,
+    urlcolor=slblue
+}
+
+%%%TIKZ
+\usepackage{tikz}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{arrows,shapes,positioning}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shadows}
+\usetikzlibrary{patterns}
+%\usetikzlibrary{circuits.ee.IEC}
+\usetikzlibrary{decorations.text}
+% For Sagnac Picture
+\usetikzlibrary{%
+    decorations.pathreplacing,%
+    decorations.pathmorphing%
+}
+
+\tikzstyle arrowstyle=[black,scale=2]
+\tikzstyle directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrow[arrowstyle]{stealth}}}}]
+\tikzstyle reverse directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrowreversed[arrowstyle]{stealth};}}}]
+\tikzstyle dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrow[arrowstyle]{latex}}}}]
+\tikzstyle rev dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrowreversed[arrowstyle]{latex};}}}]
+
+\usepackage{ctable}
+
+%
+%Redefining sections as problems
+%
+\makeatletter
+\newenvironment{exercise}{\@startsection 
+	{section}
+	{1}
+	{-.2em}
+	{-3.5ex plus -1ex minus -.2ex}
+    	{1.3ex plus .2ex}
+    	{\pagebreak[3]%forces pagebreak when space is small; use \eject for better results
+	\large\bf\noindent{Part 1.\hspace{-1.5ex} }
+	}
+	}
+	%{\vspace{1ex}\begin{center} \rule{0.3\linewidth}{.3pt}\end{center}}
+	%\begin{center}\large\bf \ldots\ldots\ldots\end{center}}
+\makeatother
+
+%
+%Fancy-header package to modify header/page numbering 
+%
+\usepackage{changepage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\addtolength{\headwidth}{\marginparsep} %these change header-rule width
+%\addtolength{\headwidth}{\marginparwidth}
+%\fancyheadoffset{30pt}
+%\fancyfootoffset{30pt}
+\fancyhead[LO,RE]{\small Oke}
+\fancyhead[RO,LE]{\small Page \thepage} 
+\fancyfoot[RO,LE]{\small PS 1} 
+\fancyfoot[LO,RE]{\small \scshape CEE 616} 
+\cfoot{} 
+\renewcommand{\headrulewidth}{0.1pt} 
+\renewcommand{\footrulewidth}{0.1pt}
+%\setlength\voffset{-0.25in}
+%\setlength\textheight{648pt}
+
+
+\usepackage{paralist}
+
+\newcommand{\osn}{\oldstylenums}
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+\newcommand{\pt}{\phantom}
+\newcommand{\tf}{\therefore}
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\fr}{\frac}
+\newcommand{\dfr}{\dfrac}
+\newcommand{\ul}{\underline}
+\newcommand{\tn}{\tabularnewline}
+\newcommand{\nl}{\newline}
+\newcommand\relph[1]{\mathrel{\phantom{#1}}}
+\newcommand{\cm}{\checkmark}
+\newcommand{\ol}{\overline}
+\newcommand{\rd}{\color{red}}
+\newcommand{\bl}{\color{blue}}
+\newcommand{\pl}{\color{purple}}
+\newcommand{\og}{\color{orange!90!black}}
+\newcommand{\gr}{\color{green!40!black}}
+\newcommand{\nin}{\noindent}
+\newcommand{\la}{\lambda}
+\renewcommand{\th}{\theta}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,thick,inner sep=1pt] (char) {\small #1};}}
+
+\newcommand{\bc}{\begin{compactenum}[\quad--]}
+\newcommand{\ec}{\end{compactenum}}
+
+\newcommand{\n}{\\[2mm]}
+%% GREEK LETTERS
+\newcommand{\al}{\alpha}
+\newcommand{\gam}{\gamma}
+\newcommand{\eps}{\epsilon}
+\newcommand{\sig}{\sigma}
+
+\newcommand{\p}{\partial}
+\newcommand{\pd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpd}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\pdd}[2]{\frac{\partial^2{#1}}{\partial{#2}^2}}
+\newcommand{\mr}{\mathbb{R}}
+\newcommand{\xs}{x^{*}}
+%\newenvironment{solution}
+%{\medskip\par\quad\quad\begin{minipage}[c]{.8\textwidth}\bl}{\medskip\end{minipage}}
+\newenvironment{solution}{\begin{adjustwidth}{.05\textwidth}{}\bl}{\medskip\end{adjustwidth}}
+
+\newcommand{\nmfr}[3]{\Phi\left(\frac{{#1} - {#2}}{#3}\right)}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\lstset{language=C++,
+                basicstyle=\tiny\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{gray}\ttfamily,
+                morecomment=[l][\color{gray}]{\#}
+}
+
+
+\thispagestyle{empty}
+
+
+\nin{\LARGE Problem Set 1 }\hfill{\bf Oke}
+
+\medskip\hrule\medskip
+
+\nin {\small CEE 616: Probabilistic Machine Learning
+\hfill\textit{ 09.11.2025}}
+
+\nin{\it \small Due Thursday, September 25, 2025 at 11:59PM on Canvas}.\\
+
+\nin The problems are worth a total of \textbf{85 points}.
+
+\subsubsection*{Programming requirements}
+It is recommended that you have a working installation of \href{https://jupyter.org/install.html}{JupyterLab}.
+\href{https://colab.research.google.com/notebooks/intro.ipynb}{Google Colab} is also another viable notebook option.
+However, notebooks are optional, and you can always choose to write your code in an editor (e.g. Sublime Text) and process your outputs accordingly. 
+
+In Jupyter, you may use a Python, R or even MATLAB kernel.\footnote{In order to use the R kernel in Jupyter, you may have to install it, as well. Please follow the brief instructions here: \url{https://irkernel.github.io/installation/}. To install the MATLAB kernel, see \url{https://am111.readthedocs.io/en/latest/jmatlab_install.html}.}
+Text can be formatted using Markdown (brief guide here: \url{https://learn.getgrav.org/content/markdown}).
+
+Any Python packages you require must be installed locally to access them via the Jupyter kernel.
+(Use \texttt{conda} or \texttt{pip}.)
+ 
+
+\subsubsection*{Programming help}
+I will provide some programming templates in Python/R in the coming days on Moodle, in order to ease some of the possible
+issues that may arise as you begin scripting. We will also go over coding examples weekly.
+
+\subsubsection*{Submission instructions}
+There are two options for submission:
+\begin{enumerate}
+\item JupyterLab Notebook. Please name your notebook as follows: \\ \texttt{<lastname>-<firstname>-PS1.ipynb}
+\item R/Python/MATLAB script \textit{and} PDF document with supporting responses.
+  Your PDF should have complete responses to all the questions (including all the required plots).
+  Your script should be clearly commented, producing all the results and plots you show in your PDF document.
+  The filenames should be in a similar format as described above.
+\end{enumerate}
+% Whenever datasets are provided, be sure to leave the relative path and filenames as originally given in order to ensure that your scripts will run properly.
+% For instance, here, all the data sets are found in the \texttt{data} folder. So, when you call \texttt{read.csv()}, use the relative path, e.g. \texttt{data/College.csv}.
+% This way, when you submit your work, you need not include the data. I will have the exact same folder and will be able to run all the scripts as the same path will be referenced.
+
+\eject
+
+ 
+% \section*{Problem 1 \quad {\it Bias-variance decomposition (9 pts)}}
+% \begin{enumerate}[\bf (a)]
+
+% \item Explain the bias-variance trade-off and its relationship with overfitting. \pts{3pts}
+
+  
+% \begin{quote}
+%   \gr As we go through the process of estimating a model to reduce the training error,
+%   the selection of the model with the lowest training error indicates the lowest bias.
+%   This, however, poses the danger of \textit{overfitting}, whereby the select model has a poor predictive performance, i.e.\ high variance (prediction error).
+%   The bias-variance trade-off therefore refers broadly to the consideration given in optimizing for both bias and variance in model selection.
+%   The mathematical decomposition shows that aside from the irreducible error which arises from variance intrinsic to the data,
+%   bias and variance are the only two contributing factors to the fitness of an estimated model.
+% \end{quote}
+
+% \item The expected value of a continuous random variable $X$ \pts{6pts} with a probability density function$f(x)$ is defined as: 
+% \begin{equation}
+%   \label{eq:2}
+%   E(X) = \int_{-\infty}^{\infty}x f(x) dx
+% \end{equation}
+% If $X$ is a discrete random variable, then $E(X)$ is given by:
+% \begin{equation}
+%   \label{eq:4}
+%   E(X) = \sum_{i=1}^k x_ip_i
+% \end{equation}
+% where $p_i$ is the probability $\Pr(X=x_i)$ and $k$ is the number of outcomes in $X$.
+
+% Given the following definitions:
+% \begin{align}
+%   \label{eq:5}
+%   \mathrm{Var}(X) &= E\lt[\lt(X - E(X)\rt)^2\rt] = E(X^2) - \lt[E(X)\rt]^2 \\
+%   \mathrm{Bias}(\hat\theta) &= E(\hat\theta) - \theta
+% \end{align}
+% where $\theta$ represents the estimator of a given random variable.
+% Now, derive the bias-variance decomposition of the expected prediction error for a given value $x_0$ with observed response $y_0$:
+% \begin{equation}
+%   \label{eq:6}
+%   E\lt(y_0 - \hat f (x_0)\rt)^2 = \mathrm{Var}\lt(\hat f(x_0)\rt) + \lt[\mathrm{Bias}\lt(\hat f(x_0)\rt)\rt]^2 + \mathrm{Var}(\epsilon)
+% \end{equation}
+
+
+% \begin{quote}
+%   \gr
+%   First, we expand the prediction error term:
+%   \begin{align*}
+%     E\lt(y_0 - \hat f (x_0)\rt)^2 &= Var(y_0 - \hat f(x_0)) + [E(y_0 - \hat f(x_0))]^2\\
+%                                   &= E\lt(y_0^2 - 2y_0\hat f(x_0) + \hat f^2(x_0)\rt) \\    
+%                                   &= {\bl E(y_0^2)} + -2E (y_0)E(\hat f(x_0)) + {\rd E(\hat f^2(x_0))}
+%   \end{align*}
+%   We note that:
+%   \begin{align*}
+%     y_0 &= f(x_0) + \epsilon \\
+%     \implies E(y_0) &= f(x_0) \\
+%     Var(y_0) &= Var(\epsilon)
+%   \end{align*}
+%   That is, the expected observation at a particular point is given by the true function governing the relationship between $X$ and $Y$).
+%   We also use variance definition to rewrite two terms. Thus:
+%   \begin{align*}
+%     E\lt(y_0 - \hat f (x_0)\rt)^2 &= {\bl Var(y_0) + [E(y_0) ]^2 }   -2f(x_0)E(\hat f(x_0)) + {\rd Var(\hat f(x_0)) + [E(\hat f(x_0))]^2}\\
+%                                   &=  {\bl Var(y_0)} + {\pl f^2(x_0) - 2f(x_0)E(\hat f(x_0)) + [E(\hat f(x_0))]^2} + {\rd Var(\hat f(x_0))}  \\
+%                                   &={\bl  Var(\epsilon)} + {\pl \lt[ E(\hat f(x_0) - f(x_0)) \rt]^2 }+  {\rd Var(\hat f(x_0)) }\\
+%                                   &= {\bl  Var(\epsilon)} + {\pl Bias^2(\hat f(x_0))} + {\rd Var(\hat f(x_0))}
+%   \end{align*}
+% \end{quote}
+
+% \end{enumerate}
+
+% \section*{Problem 2\quad {\it $K$-nearest neighbors (KNN) (11 pts)}}
+% \textit{(Adapted from ISLR Ex.\ 2.7)} The table below provides a training data set containing six observations, three predictors and one qualititative response variable.\\
+
+% \begin{center}
+% \begin{tabular}{l r r r l} \toprule
+%   Obs. & $X_1$ & $X_2$ & $X_3$ & $Y$ \\ \midrule
+%   1 & 0 & 3 & 0 & Red \\
+%   2 & 2 & 0 & 0 & Red \\
+%   3 & 0 & 1 & 3 & Red \\
+%   4 & 0 & 1 & 2 & Green \\
+%   5 & $-1$ & 0 & 1 & Green \\
+%   6 & 1 & 1 & 1 & Red \\ \bottomrule
+% \end{tabular}
+% \end{center}
+% We want to use this data set to make a prediction for $Y$ when $X_1 = X_2 = X_3 = 0$ using KNN.
+% \begin{enumerate}[\bf (a)]
+% \item Compute the Euclidean distance between each observation \pts{3pts} and the test point $X_1 = X_2 = X_3 = 0$.
+%   \begin{quote}
+%     \gr
+%     Let the test point be $x_0$. Let the Euclidean distance between this point and each observation be $D_i$, where $i = 1, 2, \ldots, 6$.
+%     \begin{center}
+% \begin{tabular}{l r r r l r} \toprule
+%   Obs. & $X_1$ & $X_2$ & $X_3$ & $Y$  & $D_i$\\ \midrule
+%   1 & 0 & 3 & 0 & Red      & 3\\
+%   2 & 2 & 0 & 0 & Red      & 2\\
+%   3 & 0 & 1 & 3 & Red      & $\sqrt{10} = 3.16 $\\
+%   4 & 0 & 1 & 2 & Green    & $\sqrt{5} = 2.24 $\\
+%   5 & $-1$ & 0 & 1 & Green & $\sqrt{2} = 1.41 $\\ 
+%   6 & 1 & 1 & 1 & Red &$\sqrt{3} = 1.73$ \\ \bottomrule
+% \end{tabular}
+% \end{center}
+%   \end{quote}
+% \item What is the KNN prediction with $K=2$? Explain and show your work. \pts{3pts}
+%   \begin{quote}
+%     \gr Recall that the KNN classifier assigns an observation $x_0$ to the class $j$ whose conditional probability
+%     $\Pr(Y=j|X=x_0)$ is greatest in the neighborhood $\mathcal{N}_0$ of size $K$. The class probability is given by:
+%     \begin{equation}
+%       \Pr(Y=j|X=x_0) = \fr1K \sum_{i\in \mathcal{N}_0}I(y_i = j)
+%     \end{equation}
+%     Thus, for $K=2$:
+%     \begin{align*}
+%       \Pr(Y=\text{Red}|X=x_0) &= \fr12\sum_{i\in\mathcal{N}_0} I(y_i=\text{Red}) = \fr12\times 1 = 0.5 \\
+%       \Pr(Y=\text{Green}|X=x_0) &= \fr12\sum_{i\in\mathcal{N}_0} I(y_i=\text{Green}) = \fr12\times 1 = 0.5 \\
+%     \end{align*}
+%     In the neighborhood of $x_0$ containing the 2 nearest observations, 1 is Green and the other is Red.
+%     Since the class probability for either ``Red'' or ``Green'' is 0.5, this point lies on the decision boundary for $K=2$.
+%     Alternatively, prediction to either of the classes would be acceptable, while noting that the point lies on a boundary (and thus, the output at this threshold is inconclusive.)
+%   \end{quote}
+
+  
+% \item What is the KNN prediction with $K=3$? Explain and show your work. \pts{3pts}
+%   \begin{quote}
+%     \gr
+%     Thus, for $K=2$:
+%     \begin{align*}
+%       \Pr(Y=\text{Red}|X=x_0) &= \fr13\sum_{i\in\mathcal{N}_0} I(y_i=\text{Red}) = \fr13\times 2 = 0.67 \\
+%       \Pr(Y=\text{Green}|X=x_0) &= \fr13\sum_{i\in\mathcal{N}_0} I(y_i=\text{Green}) = \fr13\times 1 = 0.33 
+%     \end{align*}
+%     Thus, the observation $x_0$ would be predicted as ``Red,'' since $\Pr(Y=\text{Red}|X=x_0) >  \Pr(Y=\text{Green}|X=x_0)$.
+%   \end{quote}
+% \item If the Bayes decision boundary in this problem is highly non-linear, \pts{2pts}
+%   then would we expect the best-fitting value for $K$ to be large or small? Explain your answer.
+%   \begin{quote}
+%     \gr We would expect the best-fitting $K$ to be small for a highly non-linear decision boundary.
+%     With smaller $K$, the classification is increasingly localized to the observation, and thus we have a more flexible classifier that can account for the complexity in the relationship between the predictors and the classes.
+%   \end{quote}
+% \end{enumerate}
+
+
+
+\section*{Problem 1 \quad {\it True/False questions (10 points)}}
+Respond ``T'' ({\it True})  or  ``F'' (\textit{False}) to the following statements. Use the boxes provided. Each response is worth 1 point.
+
+\bigskip
+
+\begin{enumerate}[\bf (i)]
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){\bf \bl F} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Supervised learning only constitutes modeling frameworks that are suitable for regression. {\bl Supervised learning includes both regression and classification.}
+  \end{minipage}
+
+  \smallskip
+
+  \item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){\bf\bl F} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Bayes' Theorem specifies a posterior probability $P(X|A)$ as inversely proportional to the product of its likelihood
+    $P(A|X)$ and prior $P(X)$. {\bl Directly proportional, not inversely}
+  \end{minipage}
+
+  \smallskip  
+  
+  \item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){\bf\bl T} %T
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    In the gradient descent optimization method, the second derivative of the loss function is not required to compute
+    the update step.
+  \end{minipage}
+
+ %  \smallskip
+  
+% \item \hfill
+%   \begin{minipage}{.1\linewidth}
+%     \framebox(40,40){} %F
+%   \end{minipage}\quad
+%   \begin{minipage}{.85\linewidth}
+%     Ordinary least squares (OLS) estimation assumes that the errors are correlated across observations.
+%   \end{minipage}
+
+ 
+    \smallskip
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){\bf\bl F} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Uncorrelated random variables are always independent of each other. {\bl Correlation only measures linear dependency.}
+  \end{minipage}
+  
+  
+    \smallskip
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){\bf\bl F} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    In assessing a classifier, the receiver operating characteristics (ROC) curve is generated by plotting sensitivity
+    versus specificity for different threshold values. {\bl versus 1$-$ specificity}
+  \end{minipage}
+
+  \smallskip
+    
+  \item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){\bf\bl T} %T
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    The determinant of a matrix can be given as the product of its eigenvalues.
+  \end{minipage}
+
+  \smallskip
+  
+ 
+% \item \hfill
+%   \begin{minipage}{.1\linewidth}
+%     \framebox(40,40){} %T
+%   \end{minipage}\quad
+%   \begin{minipage}{.85\linewidth}
+%     The least squares regression line always passes through the  centroid of a dataset $(\ol{X},\ol{Y})$.
+%   \end{minipage}
+
+%   \smallskip
+  
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){\bf\bl F} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    The inverse of a matrix only exists if the matrix is singular. {\bl nonsingular }
+  \end{minipage}
+
+  \smallskip
+  
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){\bf\bl F} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    An estimator is biased if the difference between its expectation and true value is zero. {\bl unbiased}
+  \end{minipage}
+
+  \smallskip
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){\bf\bl T}%T
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Leave-one-out-cross-validation (LOOCV) can be considered a special case of $k$-fold CV in which $k = n$, where $n$ is the number of observations in the dataset.
+  \end{minipage}
+
+\smallskip
+
+
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){\bf\bl T} %T
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    In bootstrapping, each observation $x_{i}$ in the original dataset is equally likely to be randomly selected for  each resampled point in the  sample.
+  \end{minipage}
+
+
+\end{enumerate}
+
+
+\section*{Problem 2 \quad {\it Bayes' theorem (9 pts)}}
+Given that $P (A) = 0.6$, $P (B) = 0.3$ and $P(C) = 0.1$ represent the production of machines in a
+factory. The conditional probabilities of defective items are $P(D|A) = 0.02$, $P (D|B) = 0.03$ and
+$P (D|C) = 0.04$.
+
+\begin{enumerate}[\bf (a)]
+ \item Find the probability $P(D)$. {\bl We apply the theorem of total probability.} \pts{3}
+  \begin{solution}
+       \begin{align*}
+        P(D) = 0.02(0.6) + 0.03(0.3) + 0.04(0.1) = \boxed{0.025}
+      \end{align*}
+\end{solution}
+  \item Find the \pts{3} probability that an item was produced by machine A, given that it is defective.
+    \begin{solution}
+      \begin{equation*}
+        \text{Bayes' Theorem: }        P(A|D) = \fr{P(D|A)P(A)}{P(D)} = \fr{0.02(0.6)}{0.025}  = \boxed{0.48}
+      \end{equation*}      
+    \end{solution}
+  \item Draw a Venn \pts{3} diagram depicting the interaction among the events $A$, $B$, $C$ and $D$ in sample space $S$.
+    \begin{solution}
+  \begin{center}
+    \begin{tikzpicture}[scale=.6]
+    \draw[thick] (0,0) rectangle (10,5) node[above left] {$\bm S$};
+    \filldraw[thick, pattern = north west lines, pattern color = green!50!black] (5,2.5) ellipse  (4.5 cm and 1 cm) node[] {$\bm{D}$};
+    \draw[thick] (6,0) -- (6,5);
+    \draw[thick] (9,0) -- (9,5);
+    \node at (3, 1) {$\bm{A}$};
+    \node at (7.5,1) {$\bm{B}$};
+    \node at (9.5,1) {$\bm{C}$};
+    %\begin{scope}
+    %\clip   (1.5,0) ellipse  (4 cm and 2 cm);
+    %\fill[pattern=north west lines, pattern color=green!50!black] (4,-3) rectangle (7,3);
+    %\end{scope}
+%    \draw[thick] (3,0) circle (2 cm) node[right] {$\bm{E_2}$};
+  \end{tikzpicture}
+\end{center}
+\end{solution}
+\end{enumerate}
+ 
+
+ 
+\section*{Problem 3\quad {\it Estimating a linear model (16 pts)}}
+ 
+Given a vector of predictor variable samples $\bm{x}^{T} = \begin{bmatrix} 10 & 5 & 7 & 19 & 11 & 8\end{bmatrix}$
+and corresponding response vector $\bm{y}^{T} = \begin{bmatrix}15 & 9 & 3 & 25 & 7 & 13 \end{bmatrix}$, the classical linear regression model can be written as
+\begin{equation*}
+  \hat{\bm y} = \bm X \hat{\bm w} 
+\end{equation*}
+
+
+\begin{enumerate}[\bf (a)]
+
+\item Write the design matrix $\bm X$ in full assuming the model has an intercept (hint: the matrix should have two
+  columns, the first being a column of 1's).  \pts{2}
+  \begin{solution}
+    \begin{equation*}
+      \bm X =
+      \begin{bmatrix}
+        1 & 10 \\
+        1 & 5 \\
+        1 & 7 \\
+        1 & 19 \\
+        1 & 11 \\
+        1 & 8 \\
+      \end{bmatrix}
+    \end{equation*}
+   \end{solution}
+  
+\item Using OLS (ordinary least squares) assumptions (see equation 4.59 on page 113 in \textbf{PMLI}), \pts{4} find $\bm{\hat w}$. (Show your work as much as possible, but the matrix multiplication can be done in Python/R/MATLAB. Include the code used if you are not submitting a Jupyter notebook.) 
+
+  \begin{solution}
+    Given all ordinary least squares (OLS) assumptions hold,
+    the expression for the best linear unbiased estimator, $\bm{\hat\beta}$ is defined in matrix form as
+\begin{equation*}
+   \hat{\bm \beta} = (\bm X^{T} \bm X)^{-1}\bm X^{T} \bm y
+ \end{equation*}
+
+ In R, for example, the code to compute the estimates might look like this:
+
+\begin{lstlisting}[language=R,basicstyle={\small\ttfamily}]
+library(matlib)
+z_mat = matrix(data = c(1,1,1,1,1,1,10,5,7,19,11,8),nrow=6,ncol=2)
+y = matrix(data = c(15, 9, 3, 25, 7, 13),nrow=6)
+z_1 = matrix(data = c(10, 5, 7, 19, 11, 8), nrow=6)
+hatbeta = inv(t(z_mat)%*%z_mat)%*%(t(z_mat))%*%y
+y_hat = z_mat%*%hatbeta
+\end{lstlisting}
+
+ The solution is:
+ \begin{equation*}
+   \hat{\bm\beta} =  \begin{bmatrix} -0.67 \\ 1.27  \end{bmatrix}
+\end{equation*}
+
+
+  \end{solution}
+
+
+\item  Find the vector of predicted values  $\bm{\hat y}$. \pts{2pts}
+  \begin{solution}
+    From the above code, we obtain:
+    \begin{equation*}
+  \bm \hat y^{T} = \lt(\bm X\bm{\hat\beta} \rt)^{T} =
+  \begin{bmatrix}
+    12 & 5.67 & 8.2 & 23.4 & 13.67 & 9.47
+  \end{bmatrix}
+\end{equation*}
+  \end{solution}
+
+\item Find the vector of residuals $\bm e$. \pts{2pts}
+  \begin{quote}
+\begin{lstlisting}[language=R,basicstyle={\small\ttfamily}]
+res = y - y_hat
+\end{lstlisting}
+    \bl The residual vector $\bm e$ is given by:
+    \begin{equation*}
+      \bm e = \bm y - \bm{\hat y} =
+      \begin{bmatrix}
+       \phantom{-}3.00 \\ \phantom{-}3.33 \\-5.20 \\ \phantom{-}1.60 \\-6.27\\\phantom{-}3.53
+      \end{bmatrix}
+    \end{equation*}
+  \end{quote}
+\item Compute the mean squared error (MSE) of this model. \pts{2pts}
+  \begin{quote}
+    In R, we use:
+\begin{lstlisting}[language=R,basicstyle={\small\ttfamily}]
+mse = (1/len(res))*sum(res^2)
+\end{lstlisting}
+    \bl The MSE is given by:
+    \begin{align*}
+      MSE &= \fr1n\sum_{i=1}^n (y_i - \hat y_i)^2  =  \fr1n\sum_{i=1}^n e_i^2\\
+          &= \fr16\lt(101.47\rt)\\
+          &= \boxed{16.91}
+    \end{align*}
+  \end{quote}
+
+   
+ 
+\item Compute the root mean squared error (RMSE) of the model. \pts{1}
+  \begin{solution}
+    \begin{align*}
+      RMSE &= \sqrt{MSE} \\
+           &= \sqrt{16.91}\\
+      &= \boxed{4.11}
+    \end{align*}
+  \end{solution}
+
+  
+\item Create a scatterplot of the data and show the least squares line \pts{3} in the plot.
+
+
+\end{enumerate}
+
+
+\section*{Problem 4 \quad {\it Logistic function (6 pts)}}
+The logistic sigmoid function is given by:
+\begin{equation}
+  \bm\sigma(z) := \fr{1}{1 + e^{-z}}
+\end{equation}
+
+\begin{enumerate}[\bf(a)]
+\item Produce a plot (in Python/R/Jupyter) of\pts{2} the function in the domain $z \in [-5,5]$.
+  \begin{solution}
+  \bl See \texttt{PS1-Solution.ipynb}.
+\end{solution}
+\item Show that its derivative is given by: \pts{4}
+  \begin{equation}
+    \bm\sigma'(z)  = \fr{d\bm\sigma(z)}{dz} = [1 - \bm\sigma(z)]\bm\sigma(z)
+  \end{equation}
+  \begin{solution}
+  We use the chain rule:
+  \begin{align*}
+    \bm\sigma'(z) &= -1(-e^{-z}) \fr{1}{(1 + e^{-z})^{2}} \\
+                  &= \fr{e^{-z}}{(1 + e^{-z})(1 + e^{-z})}\\
+                  &= \lt[\fr{e^{-z}}{1 + e^{-z}}\rt]\fr{1}{1 + e^{-z}}\\
+                  &= \lt[\fr{1 + e^{-z}}{1 + e^{-z}} - \fr{1}{1 + e^{-z}}\rt] \bm\sigma(z)\\
+                  &= \lt[1 - \bm\sigma(z)\rt] \bm\sigma(z)
+  \end{align*}
+\end{solution}
+
+\end{enumerate}
+
+\eject
+ \section*{Problem 5 \quad {\it Classifier performance (14 points) }}
+An estimated classification model produces the following confusion matrix on a test set:
+
+\begin{table}[h!]
+  \centering \small
+ % \caption{Confusion matrix (binary case)}
+ % \label{tab:conf}
+  \begin{tabular}{l l r r r}\toprule
+    && \multicolumn{3}{c}{\it Predicted} \\
+                                       &             & Class 0  & Class 1 & Total \\\midrule
+    \multirow{2}{*}{\it Observed}& Class 0 & 9650 & 17 & ? \\
+                                       & Class 1 &  265 & 68 & ? \\\midrule
+    & Total & ? & ? & \\\bottomrule
+  \end{tabular}
+\end{table}
+  
+\begin{enumerate}[\bf (a)]
+
+\item What is \pts{1} the number of false positives ($FP$)? {\bl $FP = 17$}
+
+\item What is \pts{1} the number of false negatives ($FN$)? {\bl $FN = 265$}
+
+\item What is \pts{1} the number of positive observations ($P$)? {\bl $P = FN + TP =  265 + 68 = 333$}
+  
+\item What is \pts{1} the number of predicted positive  observations ($P^{*}$)? {\bl $P^{*} = FP + TP =  17 + 68 = 85$}
+  
+\item Compute the test precision of the classifier. \pts{2} 
+  \begin{solution}
+    \begin{equation*}
+      \mathcal{P} = \fr{TP}{TP + FP} = \fr{TP}{P^{*}} = \fr{68}{68 + 17} = \fr{68}{85} = \boxed{0.8}
+    \end{equation*}
+  \end{solution}
+  
+\item Compute the test recall of the classifier. \pts{2} 
+  \begin{solution}
+    \begin{equation*}
+      \mathcal{R} = \fr{TP}{TP + FN} = \fr{TP}{P} = \fr{68}{68 + 265} = \fr{68}{333} = \boxed{0.2}
+    \end{equation*}
+  \end{solution}
+  
+\item Compute the test $F_1$-score of the classifier. \pts{2}
+    \begin{solution}
+    \begin{equation*}
+    F_{1} =2 \cdot \fr{\mathcal{P}\mathcal{R}}{\mathcal{P} + \mathcal{R}} =2\cdot\fr{0.8(0.2)}{0.8 + 0.2} =  \boxed{0.32}
+    \end{equation*}
+  \end{solution}
+  
+\item Compute the test \pts{2}  accuracy of the classifier.
+  \begin{solution}
+    \begin{equation*}
+      \mathcal{A} = \fr{TP + TN}{TP + TN + FP + FN} = \fr{68+9650}{68+9650+17+265} = \fr{9718}{10000} = \boxed{0.97}
+    \end{equation*}
+  \end{solution}
+\end{enumerate}
+
+\section*{Problem 6 \quad {\it Entropy (12 pts)}}
+\textbf{PMLI} Exercise 6.3 (page 218).
+\begin{enumerate}[\bf (a)]
+\item The joint entropy is given by \pts{2}
+  \begin{solution}
+    \begin{align*}
+      \mathbb{H}(X,Y) &= -\sum_{x,y}p(x,y)\log_{2}p(x,y) \\
+                      &=-\lt(3(0)\log_{2}0 +\fr{1}{4}\log_{2}\fr{1}{4} +  2\fr{1}{8}\log_{2}\fr{1}{8} + 6\fr{1}{16}\log_{2}\fr{1}{16}
+                        + 4\fr{1}{32}\log_{2}\fr{1}{32}\rt) \\
+                      &= -\lt(0 - \fr24 -\fr34 -\fr64 - \fr58\rt) \\
+                      &= 3\tfrac38
+    \end{align*}
+  \end{solution}
+
+\item The marginal entropies $\mathbb{H}(X)$ and $\mathbb{H}(Y)$ are given as follows. \pts{4}
+  \begin{solution}
+  First, we sum the columns to get $p(x)$ and we sum the rows to get $p(y)$.
+  \begin{align*}
+    p(X=1) &= \fr18 + \fr1{16} + \fr1{16} + \fr14 = \fr12 \\
+    p(X=2) &= \fr1{16} + \fr1{8} + \fr1{16} + 0 = \fr14 \\
+    p(X=3) &= \fr1{32} + \fr1{32} + \fr1{16} + 0 = \fr18 \\
+    p(X=4) &= \fr1{32} + \fr1{32} + \fr1{16} + 0 = \fr18 \\
+    p(Y=1) &= \fr18 + \fr1{16} +  \fr1{32} +  \fr1{32} = \fr14 \\
+    p(Y=2) &= \fr1{16} + \fr1{8} + \fr1{32} +  \fr1{32} = \fr14 \\
+    p(Y=3) &= \fr1{16} + \fr1{16} + \fr1{16} + \fr1{16} = \fr14 \\
+    p(Y=4) &= \fr1{4} + 0 + 0 + 0 = \fr14 \\    
+  \end{align*}
+  Then:
+    \begin{align*}
+      \mathbb{H}(X) &= -\mathbb{E}[\log_{2}p(X)] = -\sum_{x}p(x)\log_{2}p(x) \\
+                    &= -\lt(\fr12\log_{2}\fr12 + \fr14\log_{2}\fr14 + 2\fr18\log_{2}\fr18 \rt) 
+                    = -\lt(-\fr12 -\fr12 -\fr34\rt) \\
+                    &= 1\tfrac34 \\
+      \mathbb{H}(Y) &= -\mathbb{E}[\log_{2}p(Y)] = -\sum_{y}p(y)\log_{2}p(y) \\
+                    &= -\lt( 4\fr14\log_{2}\fr14 \rt) = 2
+    \end{align*}
+  \end{solution}
+\item The \pts{4} conditional entropies of $X$ on specific values $y$  are given by $\mathbb{H}(X|Y = y) = -\sum_{x} p(x|y)\log p(x|y)$. We evaluate them as follows:
+  \begin{solution}
+    First, we note that:
+    \begin{equation*}
+      p(x|y) = \fr{p(x,y)}{p(y)}
+    \end{equation*}
+    Thus, for $X = [1, 2, 3, 4]$:
+    \begin{align*}
+      p(X|Y= 1) &= 4\lt[\fr18, \fr1{16}, \fr 1{32}, \fr1{32}\rt] = \lt[\fr12, \fr14, \fr18, \fr18 \rt] \\
+      \text{Similarly, }      p(X|Y= 2) & = \lt[\fr14, \fr12, \fr18, \fr18 \rt] \\
+      p(X|Y= 3) & = \lt[\fr14, \fr14, \fr14, \fr14 \rt] \\
+      p(X|Y= 4) & = \lt[1, 0, 0, 0 \rt] \\
+    \end{align*}
+    The conditional entropies are therefore:
+    \begin{align*}
+      \mathbb{H}(X|Y= 1) &= -\lt(\fr12\log_2\fr12 + \fr{1}{4}\log_2\fr1{4} + 2\fr{1}{8}\log_2\fr1{8}\rt) \\
+                         &= -\lt(-\fr12 - \fr12 - \fr3{4} \rt) 
+                         = 1\tfrac{3}{4}\\
+      \mathbb{H}(X|Y= 2) &= 1\tfrac{3}{4}\\
+      \mathbb{H}(X|Y= 3) &= - \lt( 4\fr1{4}\log_2\fr1{4}\rt) = 2 \\
+      \mathbb{H}(X|Y= 4) &= - \lt( \log_21 + 0 + 0 + 0\rt) = 0
+    \end{align*}
+    The prior entropy on $X$ is $\mathbb{H}(X) = 1\fr34$. The posterior entropy on $X$, that is $\mathbb{H}(X|Y)$
+    increases when the conditional (posterior) variance of $X$ given a certain value of $Y$, $\mathbb{V}[X|Y=y]$ is
+    greater than the prior (marginal) variance of $X$, $\mathbb{V}[X]$.  For instance, at $Y=3$, each value of $X$ is
+    equally probable. Thus, there is more spread in that posterior (conditional) distribution. Hence the entropy
+    \textit{increases} compared to the prior. For $Y=1$ and $Y=2$, the posterior distributions are the same as the
+    prior. Thus, the entropy does not change.  For $Y=4$, the posterior has the least variance compared to the other
+    three, as the probability of $X=1$ given $Y=4$ is a certainty (100\%). The posterior entropy is thus 0 (no uncertainty regarding the value of $X$), as expected.
+
+  \end{solution}
+
+\item The conditional entropy is: \pts{1}
+  \begin{solution}
+    \begin{align*}
+      \mathbb{H}(X|Y) &= \sum_y p(y) \mathbb{H}(X|Y=y) \\
+                      &= \fr14\lt(2\cdot\fr74 + 2 + 0\rt) = 1\tfrac{3}{8}
+    \end{align*}
+    The posterior entropy on $X$ decreases (compared to the prior entropy) when averaged over the possible values of $Y$.
+  \end{solution}
+
+\item The mutual information between \pts{1} $X$ and $Y$ is given as:
+  \begin{solution}
+    \begin{align*}
+      \mathbb{I}(X;Y) &= \mathbb{KL}(p(x,y)||p(x)p(y)) = \sum_{y\in Y}\sum_{x\in X} p(x, y) \log_2\fr{p(x,y)}{p(x)p(y)}\\
+                      &=  \Bigl( 
+                        p_{XY}(1,1)\log_2\fr{p_{XY}(1,1)}{p_X(1)p_Y(1)} +
+                        p_{XY}(2,1)\log_2\fr{p_{XY}(2,1)}{p_X(2)p_Y(1)} + \\ &\qquad
+                        p_{XY}(3,1)\log_2\fr{p_{XY}(3,1)}{p_X(3)p_Y(1)} +
+                        p_{XY}(4,1)\log_2\fr{p_{XY}(4,1)}{p_X(4)p_Y(1)} + \\ &\qquad
+                        p_{XY}(1,2)\log_2\fr{p_{XY}(1,2)}{p_X(1)p_Y(2)} +
+                        p_{XY}(2,2)\log_2\fr{p_{XY}(2,2)}{p_X(2)p_Y(2)} + \\ &\qquad
+                        p_{XY}(3,2)\log_2\fr{p_{XY}(3,2)}{p_X(3)p_Y(2)} +
+                        p_{XY}(4,2)\log_2\fr{p_{XY}(4,2)}{p_X(4)p_Y(2)} + \\ &\qquad
+                        p_{XY}(1,3)\log_2\fr{p_{XY}(1,3)}{p_X(1)p_Y(3)} +
+                        p_{XY}(2,3)\log_2\fr{p_{XY}(2,3)}{p_X(2)p_Y(3)} + \\ &\qquad
+                        p_{XY}(3,3)\log_2\fr{p_{XY}(3,3)}{p_X(3)p_Y(3)} +
+                        p_{XY}(4,3)\log_2\fr{p_{XY}(4,3)}{p_X(4)p_Y(3)} + \\ &\qquad
+                        p_{XY}(1,4)\log_2\fr{p_{XY}(1,4)}{p_X(1)p_Y(4)} +
+                        p_{XY}(2,4)\log_2\fr{p_{XY}(2,4)}{p_X(2)p_Y(4)} + \\ &\qquad
+                        p_{XY}(3,4)\log_2\fr{p_{XY}(3,4)}{p_X(3)p_Y(4)} +
+                        p_{XY}(4,4)\log_2\fr{p_{XY}(4,4)}{p_X(4)p_Y(4)} \Bigr)         
+    \end{align*}
+    But this is frankly too tedious. Instead, we use equation 6.51 (PMLI) which specifies the MI in terms of entropies we have already computed:
+    \begin{align*}
+      \mathbb{I}(X;Y) &=  \mathbb{H}(X) + \mathbb{H}(Y) - \mathbb{H}(X,Y) \\
+                      &= \fr74 + 2 - \fr{27}{8} \\
+                      &=  \fr38
+    \end{align*}
+  \end{solution}
+\end{enumerate}
+\section*{Problem 7 \quad {\it Eigenvectors (6 pts)}}
+\textbf{PMLI} Exercise 7.2 (page 266). Note: you can check your answer with Python/R/Matlab (include the code you used).
+\begin{solution}
+  Given a matrix
+  \begin{equation*}
+    \bm A =
+    \begin{pmatrix}
+      2 & 0 \\ 0 & 3
+    \end{pmatrix}
+  \end{equation*}
+  The eigenvalues of $\bm A$ are obtained by solving hte characteristic equation det$(\la\bm I - \bm A) = 0$:
+  \begin{align*}
+    \text{det}
+    \begin{pmatrix}
+      \la -2 & 0 \\ 0 & \la -3 
+    \end{pmatrix} & =  0 \\
+    (\la -2)(\la - 3) - 0 &= 0 \\
+    \therefore \la_1, \la_2 &= 2, 3
+  \end{align*}
+  The eigenvectors are found by solving:
+  \begin{align*}
+    (\la_{i}\bm I - \bm A)\bm u_{i} &= \bm 0 \\
+    \text{For } \la_{1} = 2: \quad
+    \begin{pmatrix}
+      2 - 2 & 0 \\ 0 & 2 - 3 
+    \end{pmatrix}
+                       \begin{pmatrix}
+                         u_{11} \\ u_{12}
+                       \end{pmatrix} &=
+    \begin{pmatrix}
+      0 \\ 0
+    \end{pmatrix} \\
+    \begin{pmatrix}
+      0 & 0 \\ 0 & -1 
+    \end{pmatrix}
+                        \begin{pmatrix}
+                         u_{11} \\ u_{12}
+                       \end{pmatrix} &=
+                                       \begin{pmatrix}
+                                         0 \\ 0 
+                                       \end{pmatrix}\\
+  \end{align*}
+  For the above equation to be true, $u_{12}$ must equal 0. However, $u_{11}$ can be any non-zero value.
+  Since any $c\bm u$ can be an eigenvector, we choose the normalized vector of length 1. Thus:
+  \begin{equation*}
+    \bm u_{1} =
+    \begin{pmatrix}
+      1 \\ 0
+    \end{pmatrix}
+  \end{equation*}
+  Similarly, for $\la_{2} = 3$, $\bm u_{2} =
+  \begin{pmatrix}
+    0 \\ 1
+  \end{pmatrix}
+$
+\end{solution}
+
+\section*{Problem 8 \quad {\it Linear system of equations (5 pts)}}
+Reformulate the two equations:
+\begin{align*}
+  2x_{1} + 6x_{2} &= 8 \\
+  5x_{1} + x_{2} &= 0 
+\end{align*}
+as a system of linear equations, and solve it for $[x_{1} \; x_{2}]^{T}$ using linear algebra.
+\begin{solution}
+  In matrix form, the system of equations is:
+  \begin{equation*}
+    \begin{bmatrix}
+      2 & 6 \\ 5 & 1 
+    \end{bmatrix}
+    \begin{bmatrix}
+      x_{1}\\ x_{2}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+      8 \\ 0
+    \end{bmatrix}
+  \end{equation*}
+  We solve for $\bm x$ by multiplying both sides with the inverse of the coefficient matrix (you can do this by hand or use a computer to find this):
+  \begin{align*}
+    \begin{bmatrix}
+      x_{1}\\ x_{2}
+    \end{bmatrix}
+   & =  
+    \begin{bmatrix}
+      2 & 6 \\ 5 & 1 
+    \end{bmatrix}^{-1}
+    \begin{bmatrix}
+      8 \\ 0
+    \end{bmatrix}  = \fr{1}{2(1) - 6(5)}
+      \begin{bmatrix}
+        1 & -6 \\
+        -5 & 2 
+      \end{bmatrix}
+    \begin{bmatrix}
+      8 \\ 0
+    \end{bmatrix}    =
+    -\fr{1}{28}
+    \begin{bmatrix}
+      8 \\-40
+    \end{bmatrix} =
+    \begin{bmatrix}
+      -\fr27 \\[2mm] \phantom{-}\fr{10}7
+    \end{bmatrix}
+  \end{align*}
+\end{solution}
+
+ \section*{Problem 9 \quad {\it Subgradients (7 pts)}}
+\textbf{PMLI} Exercise 8.1 (page 314). [Context: the hinge loss is typically used as a loss function in classifier training, for example in support vector machines.]
+\textbf{Important:} Answer the question along the following steps:
+\begin{enumerate}[\bf (a)]
+\item Sketch/plot the hinge loss function $f(x)$.\pts{2}
+  
+\begin{solution}
+  The hinge loss function is given by:
+  \begin{equation*}
+    f(x) = (1 - x)_{+} = \max(0, 1 - x)
+  \end{equation*}
+  It can be plotted as follows:
+  \begin{center}
+    \begin{tikzpicture}[scale=1]
+      \begin{axis}[
+          axis lines = middle,
+          xlabel = $x$,
+          ylabel = {$f(x)$},
+          xtick={-2,-1,0,1,2,3},
+          ytick={0,1},
+          ymin=-0.5, ymax=2,
+          xmin=-2, xmax=3,
+          domain=-2:3,
+          samples=100,
+          width=10cm,
+          height=6cm,
+          grid=both,
+        ]
+        \addplot [
+          ultra thick,
+          blue,
+        ]
+        {max(0, 1 - x)};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+\end{solution}
+
+\item Write the piecewise subgradient/subderivative \pts{2} $\partial f(x)$ (see equation 8.14 on p.\ 276 for an example).
+  \begin{solution}
+   The hinge loss is given as $f(x) = (1-x)_{+}$. Its subgradient is:
+    \begin{equation*}
+      \partial f(x) =
+      \begin{cases}
+        \{-1\} & \text{ if } x < 1 \\
+        [-1,0]      & \text{ if } x = 1  \\
+        \{0\} & \text{ if } x > 1 \\
+      \end{cases}
+    \end{equation*}
+  \end{solution}
+\item Evaluate the subgradient at the specified \pts{3} points in the exercise: $\partial f(0)$, $\partial f(1)$, $\partial f(2)$.
+  \begin{solution}
+    \begin{align*}
+      \partial f(0) &= -1 \\
+      \partial f(1) &\in [-1,0] \quad \text{(Typically, 0 is used)}\\
+      \partial f(2) &= 0
+    \end{align*}
+  \end{solution}
+\end{enumerate}
+
+% \section*{Problem 10 \quad {\it Optimization (9 pts)}}
+% Implement an optimization algorithm of your choice to find  the value $\theta^*$ that maximizes the function
+% \begin{equation*}
+%   f(\theta) = \exp(-(\theta - 5)^{2}) + 0.1\sin(\theta -2)
+% \end{equation*}
+% in the interval $(0,12)$. Use any desired starting point. Show your code. Plot the function, indicating the optimal point obtained from your algorithm. State how many iterations you performed to obtain your result.
+ 
+% \begin{solution}
+%   \bl See \texttt{PS1-Solution.ipynb}.
+% \end{solution}
+ 
+ 
+
+ 
+
+% \begin{quote}
+%   \bl See \texttt{PS1-Solution.ipynb} for implementation in R.
+% \end{quote}
+
+  
+
+ 
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

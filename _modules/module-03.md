@@ -9,4 +9,4 @@ Thu, Oct 16
 
 Tue, Oct 21
 : **LECTURE 3B**{: .label .label-blue }[NN for Structured Data II](/assets/lectures/M3-DNNs/L3a-Neural-Networks-For-Structured-Data-II-Handout.pdf)
-: **NOTEBOOK**{: .label .label-activity}[XOR demonstration](/notebooks/xor-demonstration/)
+: **NOTEBOOK**{: .label .label-activity}[ANN-Exploration](/notebooks/ann-grid-search-and-regularization/)

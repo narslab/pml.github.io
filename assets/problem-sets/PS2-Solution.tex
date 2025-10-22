@@ -1,0 +1,471 @@
+\documentclass[11pt,twoside]{article}
+\usepackage{etex}
+
+\raggedbottom
+
+%geometry (sets margin) and other useful packages
+\usepackage{geometry}
+\geometry{top=1in, left=1in,right=1in,bottom=1in}
+ \usepackage{graphicx,booktabs,calc}
+ 
+\usepackage{listings}
+
+
+% Marginpar width
+%Marginpar width
+\newcommand{\pts}[1]{\marginpar{ \small\hspace{0pt} \textit{[#1]} } } 
+\setlength{\marginparwidth}{.5in}
+%\reversemarginpar
+%\setlength{\marginparsep}{.02in}
+
+ 
+%\usepackage{cmbright}lstinputlisting
+%\usepackage[T1]{pbsi}
+
+
+\usepackage{chngcntr,mathtools}
+%\counterwithin{figure}{section}
+%\numberwithin{equation}{section}
+
+%\usepackage{listings}
+
+%AMS-TeX packages
+\usepackage{amssymb,amsmath,amsthm} 
+\usepackage{bm}
+\usepackage[mathscr]{eucal}
+\usepackage{colortbl}
+\usepackage{color}
+
+
+\usepackage{subfig,hyperref,enumerate,polynom,polynomial}
+\usepackage{multirow,minitoc,fancybox,array,multicol}
+
+\definecolor{slblue}{rgb}{0,.3,.62}
+\hypersetup{
+    colorlinks,%
+    citecolor=blue,%
+    filecolor=blue,%
+    linkcolor=blue,
+    urlcolor=slblue
+}
+
+%%%TIKZ
+\usepackage{tikz}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{arrows,shapes,positioning}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shadows}
+\usetikzlibrary{patterns}
+%\usetikzlibrary{circuits.ee.IEC}
+\usetikzlibrary{decorations.text}
+% For Sagnac Picture
+\usetikzlibrary{%
+    decorations.pathreplacing,%
+    decorations.pathmorphing%
+}
+
+\tikzstyle arrowstyle=[black,scale=2]
+\tikzstyle directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrow[arrowstyle]{stealth}}}}]
+\tikzstyle reverse directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrowreversed[arrowstyle]{stealth};}}}]
+\tikzstyle dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrow[arrowstyle]{latex}}}}]
+\tikzstyle rev dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrowreversed[arrowstyle]{latex};}}}]
+
+\usepackage{ctable}
+
+%
+%Redefining sections as problems
+%
+\makeatletter
+\newenvironment{exercise}{\@startsection 
+	{section}
+	{1}
+	{-.2em}
+	{-3.5ex plus -1ex minus -.2ex}
+    	{1.3ex plus .2ex}
+    	{\pagebreak[3]%forces pagebreak when space is small; use \eject for better results
+	\large\bf\noindent{Part 1.\hspace{-1.5ex} }
+	}
+	}
+	%{\vspace{1ex}\begin{center} \rule{0.3\linewidth}{.3pt}\end{center}}
+	%\begin{center}\large\bf \ldots\ldots\ldots\end{center}}
+\makeatother
+
+%
+%Fancy-header package to modify header/page numbering 
+%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\addtolength{\headwidth}{\marginparsep} %these change header-rule width
+%\addtolength{\headwidth}{\marginparwidth}
+%\fancyheadoffset{30pt}
+%\fancyfootoffset{30pt}
+\fancyhead[LO,RE]{\small Oke}
+\fancyhead[RO,LE]{\small Page \thepage} 
+\fancyfoot[RO,LE]{\small PS 2 {\gr Solutions}} 
+\fancyfoot[LO,RE]{\small \scshape CEE 697M} 
+\cfoot{} 
+\renewcommand{\headrulewidth}{0.1pt} 
+\renewcommand{\footrulewidth}{0.1pt}
+%\setlength\voffset{-0.25in}
+%\setlength\textheight{648pt}
+
+
+\usepackage{paralist}
+
+\newcommand{\osn}{\oldstylenums}
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+\newcommand{\pt}{\phantom}
+\newcommand{\tf}{\therefore}
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\fr}{\frac}
+\newcommand{\dfr}{\dfrac}
+\newcommand{\ul}{\underline}
+\newcommand{\tn}{\tabularnewline}
+\newcommand{\nl}{\newline}
+\newcommand\relph[1]{\mathrel{\phantom{#1}}}
+\newcommand{\cm}{\checkmark}
+\newcommand{\ol}{\overline}
+\newcommand{\rd}{\color{red}}
+\newcommand{\bl}{\color{blue!80!black}}
+\newcommand{\pl}{\color{purple}}
+\newcommand{\og}{\color{orange!90!black}}
+\newcommand{\gr}{\color{green!40!black}}
+\newcommand{\nin}{\noindent}
+\newcommand{\la}{\lambda}
+\renewcommand{\th}{\theta}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,thick,inner sep=1pt] (char) {\small #1};}}
+
+\newcommand{\bc}{\begin{compactenum}[\quad--]}
+\newcommand{\ec}{\end{compactenum}}
+
+\newcommand{\n}{\\[2mm]}
+%% GREEK LETTERS
+\newcommand{\al}{\alpha}
+\newcommand{\gam}{\gamma}
+\newcommand{\eps}{\epsilon}
+\newcommand{\sig}{\sigma}
+
+\newcommand{\p}{\partial}
+\newcommand{\pd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpd}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\pdd}[2]{\frac{\partial^2{#1}}{\partial{#2}^2}}
+\newcommand{\mr}{\mathbb{R}}
+\newcommand{\xs}{x^{*}}
+
+\usepackage{changepage} % adjustwidth environment
+\newenvironment{solution}
+{\medskip\par\begin{adjustwidth}{.01\textwidth}{.01\textwidth}\bl}{\medskip\end{adjustwidth}}
+
+\newcommand{\nmfr}[3]{\Phi\left(\frac{{#1} - {#2}}{#3}\right)}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\lstset{language=C++,
+                basicstyle=\tiny\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{gray}\ttfamily,
+                morecomment=[l][\color{gray}]{\#}
+}
+
+
+\thispagestyle{empty}
+
+
+\nin{\LARGE Problem Set 2 {\gr Solutions} }\hfill{\bf Prof. Oke}
+
+
+\medskip\hrule\medskip
+
+
+\nin {\small CEE 697M: Data Mining and Machine Learning for Engineers
+\hfill\textit{ 03.07.2022}}
+
+\nin{\it \small Due February 25, 2022 at 11:59PM. Submit via Moodle.}\\
+
+\nin The standard problems are worth a total of \textbf{48 points}.
+
+
+\section*{Problem 1 \quad {\it Gaussian discriminant analysis  (8 pts)}}
+\begin{enumerate}[\bf (a)]
+ \item Assuming a distinct class covariance $\bm\Sigma_c$ in Gaussian discriminant analysis results in a quadratic  \pts{2} decision boundary (QDA), which can easily overfit the data. LDA, which assumes a common covariance $\bm\Sigma$ across classes, results in a linear decision boundary, and can thus prevent overfitting. List two other approaches to prevent overfitting in Gaussian discriminant analysis. 
+ \begin{solution}
+  \begin{enumerate}[\bf (i)]
+    \item Regularization of the covariance matrices (e.g., shrinkage towards a diagonal matrix; called ``diagonal LDA'')
+    \item Using MAP estimation: $\bm \hat{\Sigma}_{\text{map}} = \lambda \text{diag}(\hat{\Sigma}_{\text{mle}}) + (1-\lambda)\hat{\Sigma}_{\text{mle}}$
+  \end{enumerate}
+ \end{solution}
+\item Suppose we have features \pts{8} $x \in \mathbb{R}^p$, a two-class response with class sizes $n_1, n_2$ and the
+  target coded as $-n/n_1, n/n_2$.  Show that the LDA rule classifies to class 2 if
+  \begin{equation}
+    \label{eq:lda}
+    x^T \hat{\bm{\Sigma}}^{-1}(\hat\mu_2 - \hat\mu_1) > \fr12(\hat\mu_2 + \hat\mu_1)^T\hat{\bm{\Sigma}}^{-1}(\hat\mu_2 - \hat\mu_1) - \log(n_2/n_1),
+  \end{equation}
+  and class 1 otherwise. (\textit{Hint:} First write the priors $\pi_{1}$ and $\pi_{2}$. Then write the discriminant
+  functions $\delta_{1}$ and $\delta_{2}$. Knowing that the LDA classifier assigns an observation to class 2 when
+  $\delta_{2} > \delta_{1}$, expand this condition to obtain \eqref{eq:lda}.)
+
+  \begin{solution}
+    We have $K=2$ classes. The discrimant functions are thus:
+    \begin{align*}
+      \delta_1(x) &= x^T\bm{\hat\Sigma}^{-1}\hat\mu_1 - \fr12\hat\mu_1^T\bm{\hat\Sigma}^{-1}\hat\mu_1 + \log\pi_1 \\
+      \delta_2(x) &= x^T\bm{\hat\Sigma}^{-1}\hat\mu_2 - \fr12\hat\mu_2^T\bm{\hat\Sigma}^{-1}\hat\mu_2 + \log\pi_2
+    \end{align*}
+    And the priors are:
+    \begin{align*}
+      \pi_{1} &= \fr{n_{1}}{n_{1} + n_{2}} \\
+      \pi_{2} &= \fr{n_{2}}{n_{1} + n_{2}}
+    \end{align*}
+    The LDA classifier will assign an observation to class 2 if $\delta_{2} > \delta_{1}$:
+    \begin{align*}
+      \implies x^T\bm{\hat\Sigma}^{-1}\hat\mu_2
+      - \fr12\hat\mu_2^T\bm{\hat\Sigma}^{-1}\hat\mu_2 + \log\pi_2
+      & >   x^T\bm{\hat\Sigma}^{-1}\hat\mu_1 - \fr12\hat\mu_1^T\bm{\hat\Sigma}^{-1}\hat\mu_1 + \log\pi_1 \\                                    x^T\bm{\hat\Sigma}^{-1}\hat\mu_2 - x^T\bm{\hat\Sigma}^{-1}\hat\mu_1
+      & >   - \fr12\hat\mu_1^T\bm{\hat\Sigma}^{-1}\hat\mu_1 + \log\pi_1  + \fr12\hat\mu_2^T\bm{\hat\Sigma}^{-1}\hat\mu_2 - \log\pi_2 \\     
+      x^T\bm{\hat\Sigma}^{-1}(\hat\mu_2 - \hat\mu_{1})
+      & > \fr12\hat\mu_2^T\bm{\hat\Sigma}^{-1}\hat\mu_2
+        -  \fr12\hat\mu_1^T\bm{\hat\Sigma}^{-1}\hat\mu_1
+        - \log\fr{\pi_2}{\pi_{1}} \\
+      ~
+      & > \fr12\lt[
+        \hat\mu_2^T\bm{\hat\Sigma}^{-1}\hat\mu_2 -
+        \hat\mu_2^T\bm{\hat\Sigma}^{-1}\hat\mu_1 +
+        \hat\mu_1^T\bm{\hat\Sigma}^{-1}\hat\mu_2 -
+        \hat\mu_1^T\bm{\hat\Sigma}^{-1}\hat\mu_1
+        \rt] - \log\fr{n_2}{n_{1}} \\
+      ~
+      & >  \fr12\lt[
+        \hat\mu_2^T\bm{\hat\Sigma}^{-1}(\hat\mu_2 - \hat\mu_{1}) + \hat\mu_1^T\bm{\hat\Sigma}^{-1}(\hat\mu_2 - \hat\mu_{1})
+        \rt] + \log\fr{n_{2}}{n_{1}} \\
+      ~
+      & >  \fr12\lt[ ( \hat\mu_2 + \hat\mu_{1})^T
+        \bm{\hat\Sigma}^{-1}(\hat\mu_2 - \hat\mu_{1}) \rt] + \log\fr{n_{2}}{n_{1}} \qed
+    \end{align*}
+  \end{solution}
+\end{enumerate}
+
+
+%\eject
+
+
+ 
+
+\bigskip
+
+%\section*{Pr
+\section*{Problem 2 \quad {\it Logistic regression I (4 pts)}}
+
+In simple logistic regression with a multiple predictors $X^T = (1, X_1,\ldots,X_p)$, \pts{4pts}
+the logistic function is given by:
+\begin{equation}
+  \label{eq:1}
+  p(X) = \fr{1}{1 + e^{-\bm w\intercal\bm x}}
+\end{equation}
+where $\beta^T = (\beta_0, \beta_1, \ldots, \beta_p) $.
+Using this function, show explicitly that the log-odds or logit function of $p(X)$ is given by:
+\begin{equation}
+  \label{eq:2}
+  \log\lt(\fr{p(X)}{1 - p(X)}\rt) = \beta^T X
+\end{equation}
+
+
+\begin{solution}
+  First, the odds are given by:
+  \begin{equation*}
+ odds =\frac{p(X)}{1-p(X)}=\frac{\frac{e^{\beta^T X}}{1+e^{\beta^T X}}}{1-\frac{e^{\beta^T X}}{1+e^{\beta^T X}}}
+\end{equation*}
+We can rearange the denominator of the odds as follows:
+ 
+\begin{equation*}
+1-\frac{e^{\beta^T X}}{1+e^{\beta^T X}}=\frac{1+e^{\beta^T X}}{1+e^{\beta^T X}}-\frac{e^{\beta^T X}}{1+e^{\beta^T X}}=\frac{1+e^{\beta^T X}-e^{\beta^T X}}{1+e^{\beta^T X}}=\frac{1}{1+e^{\beta^T X}}
+\end{equation*}
+
+Thus, we can express the odss as: 
+\begin{equation*}
+\frac{p(X)}{1-p(X)} = \frac{\frac{e^{\beta^T X}}{1+e^{\beta^T X}}}{\frac{1}{1+e^{\beta^T X}}} = e^{\beta^T X}
+\end{equation*}
+
+Then, taking the natural log, we obtain:
+\begin{equation*}
+ \log\lt(\fr{p(X)}{1 - p(X)}\rt) = \beta^T X = \log(e^{\beta^T X})=\beta^T X
+\end{equation*}
+\end{solution}
+% \subsection*{Part 2.2}
+% ISLR Exercise 4.6 (a) and (b). \pts{5pts}
+
+\section*{Problem 3 \quad {\it Logistic regression II (8 pts)}}
+
+
+
+
+ \section*{Problem 4 \quad {\it Ridge regression (8 pts)}}
+\begin{solution}
+  \begin{eqnarray*}
+  J(\bm w, w_0) &=& (\bm y - \bm X\bm w - w_0\bm 1)^\top (\bm y - \bm X\bm w - w_0\bm 1) + \la \bm w^\top  \bm w \\
+&=& \bm y^\top \bm y - 2\bm y^\top  \bm X\bm w - 2w_0 \bm y^\top  \bm 1 + \bm w^\top \bm X^\top  \bm X\bm w + 2w_0 \bm w^\top  \bm X^\top  \bm 1 + w_0\bm 1^\top \bm 1 w_0 + \la \bm w^\top  \bm w \\
+&=& \bm y^\top \bm y - 2\bm y^\top  \bm X\bm w - 2w_0 n \ol{y}  + \bm w^\top \bm X^\top  \bm X\bm w + 2w_0 \bm 1 ^\top  \bm X\bm w + n w_0^2 + \la \bm w^\top  \bm w \\
+&=& \bm y^\top \bm y - 2\bm y^\top  \bm X\bm w - 2w_0 n \ol{y}  + \bm w^\top \bm X^\top  \bm X\bm w + 
+2w_0   \lt( \sum_n \sum_d x_{nd} w_d \rt) + n w_0^2 + \la \bm w^\top  \bm w \\
+&=& \bm y^\top \bm y - 2\bm y^\top  \bm X\bm w - 2w_0 n \ol{y}  + \bm w^\top \bm X^\top  \bm X\bm w + 
+\underbrace{2w_0 n\ol{\bm x}^\top \bm w}_{=0;\quad  \ol{\bm x}=0} + n w_0^2 + \la \bm w^\top  \bm w \\
+\therefore, \quad \pd{J(\bm w, w_0)}{w_0} &=& -2n\ol{y}  + 2nw_0 = 0 \\
+\implies \quad \hat w_0 &=& \ol{y} \\
+\text{and:} \quad \pd{J(\bm w, w_0)}{\bm w} &=& -2\bm X^\top  \bm y + 2\bm X^\top  \bm X\bm w + 2\la \bm w = 0 \\
+(\bm X^\top \bm X + \la \bm I)\bm w &=& \bm X^\top  \bm y \\
+\implies \quad \hat{\bm w} &=& (\bm X^\top  \bm X + \la \bm I)^{-1}\bm X^\top  \bm y  
+\end{eqnarray*}
+
+\end{solution}
+\section*{Problem 5 \quad {\it Exploration of ridge regression (8 pts)}}
+Consider the special case of performing regression without an intercept on a design matrix $\bm X$ with $n$ rows (observations) and $p$ columns (features). The following relationships hold:
+\begin{align}
+  \label{eq:0}
+  \begin{split}
+  n &= p \\
+  x_{ij} &=
+           \begin{cases}
+             1, & i = j \\
+             0, & i \ne j
+           \end{cases}
+         \end{split}
+\end{align}
+\begin{enumerate}[\bf (a)]
+\item Show algebraically  that the least squares solution is given by: \pts{3}
+  \begin{equation}
+    \label{eq:1}
+    \hat\beta_{j} = y_{j}
+  \end{equation}
+
+  %%%% SOLUTION
+    \begin{solution}
+    We recall that the least squares solution is given by:
+    \begin{equation*}
+      \hat\beta = (\bm X^T\bm X)^{-1}\bm X^T\bm y
+    \end{equation*}
+    We note that:
+    \begin{equation*}
+      \bm X =
+      \begin{pmatrix}
+        1 & 0 \\ 0 & 1
+      \end{pmatrix}
+    \end{equation*}
+    Thus,
+    \begin{align*}
+      \hat\beta &=
+                  \begin{pmatrix}
+                    \beta_1 \\ \beta_2
+                  \end{pmatrix} \\
+                &=
+\lt(
+                  \begin{pmatrix}
+                    1 &0 \\ 0 &1
+                  \end{pmatrix}^T
+                                \begin{pmatrix}
+                                  1 &0 \\ 0 &1                                  
+                                \end{pmatrix}\rt)^{-1} 
+                                              \begin{pmatrix}
+                                                1 &0 \\ 0 &1
+                                              \end{pmatrix}^T
+                                                            \begin{pmatrix}
+                                                              y_1 \\ y_2
+                                                            \end{pmatrix}\\
+                &=
+                  \begin{pmatrix}
+                    y_1 \\ y_2
+                  \end{pmatrix} \quad \text{(The transpose and inverse of an identity matrix gives the identity matrix)}
+    \end{align*}
+    Thus, $\hat \beta_j = y_j$.
+  \end{solution}
+  
+\item The ridge regression estimate is given by: \pts{5}
+  \begin{equation}
+    \label{eq:2}
+    \hat\beta^{R} = \arg\min_{\beta}\lt[RSS^{R}(\beta)\rt] = \arg\min_{\beta}\lt\{\sum_{j=1}^{p} (y_{j} - \beta_{j})^{2} + \la\sum_{j=1}^{p}\beta_{j}^{2}\rt\} 
+  \end{equation}
+  Show algebraically that the ridge solution is:
+  \begin{equation}
+    \label{eq:3}
+    \hat\beta_{j}^{R} = \fr{y_{j}}{1 + \la}
+  \end{equation}
+  
+
+  %%%% SOLUTION
+    \begin{solution}
+    We recall that the least squares solution is given by:
+    \begin{equation*}
+      \hat\beta = (\bm X^T\bm X)^{-1}\bm X^T\bm y
+    \end{equation*}
+    We note that:
+    \begin{equation*}
+      \bm X =
+      \begin{pmatrix}
+        1 & 0 \\ 0 & 1
+      \end{pmatrix}
+    \end{equation*}
+    Thus,
+    \begin{align*}
+      \hat\beta &=
+                  \begin{pmatrix}
+                    \beta_1 \\ \beta_2
+                  \end{pmatrix} \\
+                &=
+\lt(
+                  \begin{pmatrix}
+                    1 &0 \\ 0 &1
+                  \end{pmatrix}^T
+                                \begin{pmatrix}
+                                  1 &0 \\ 0 &1                                  
+                                \end{pmatrix}\rt)^{-1} 
+                                              \begin{pmatrix}
+                                                1 &0 \\ 0 &1
+                                              \end{pmatrix}^T
+                                                            \begin{pmatrix}
+                                                              y_1 \\ y_2
+                                                            \end{pmatrix}\\
+                &=
+                  \begin{pmatrix}
+                    y_1 \\ y_2
+                  \end{pmatrix} \quad \text{(The transpose and inverse of an identity matrix gives the identity matrix)}
+    \end{align*}
+    Thus, $\hat \beta_j = y_j$.
+  \end{solution}
+  
+ 
+\end{enumerate}
+
+\bigskip
+\section*{Problem 6 \quad {\it Poisson regression  (12 pts)}}
+The Poisson regression model is given by:
+\begin{equation}
+  p(y_n|\bm x_n, \bm w) = \text{Poi}(y_n|\exp(\bm w^\intercal \bm x_n)) = 
+  \fr{\exp(-\mu_n)\mu_n^{y_n}}{y_n!}
+  %\fr{\exp(-\exp(\bm w^\intercal \bm x_n))(\exp(\bm w^\intercal \bm x_n))^{y_n}}{y_n!}
+\end{equation}
+where $y_n \in \{0,1,2,\ldots\}$ is a count response, $\bm x_n$ is a vector of predictors, $\bm w$ is the weight vector and $\mu_n = \exp(\bm w^\intercal \bm x_n)$.
+
+\begin{enumerate}[\bf(a)]
+  \item Write the model in GLM form $\exp(y_n\eta_n - A(\eta_n) + h(y_n))$, identifying the canonical parameter $\eta_n$, the log partition function $A(\eta_n)$ and the base measure $h(y_n)$. \pts{8}
+  \item Derive the mean function $\ell^{-1}(\eta_n)$ by taking the derivative of $A(\eta_n)$. \pts{2}
+  \item What is the link function $\ell(\mu_n)$? \pts{1}
+  \item If the natural parameter of the Poisson distribution is $\eta_n = \log(\mu_n)$, is the link function canonical? \pts{1}
+\end{enumerate}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

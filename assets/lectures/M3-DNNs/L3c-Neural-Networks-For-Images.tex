@@ -1,0 +1,572 @@
+%\documentclass[smaller, handout]{beamer}
+\def\bmode{0} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+\if 0\bmode
+\documentclass[smaller]{beamer}
+\else \if 1\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout-Notes\space\jobname}
+\documentclass[smaller,handout]{beamer}
+\usepackage{handoutWithNotes}
+\pgfpagesuselayout{2 on 1 with notes}[letterpaper, landscape, border shrink=4mm]
+\else \if 2\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout\space\jobname}
+\documentclass[smaller,handout]{beamer}
+\fi
+\fi
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\coursetitle}{CEE 616: Probabilistic Machine Learning}
+\newcommand{\longlecturetitle}{M3 Deep Neural Networks:\\ L3c: Neural Networks for Images}
+\newcommand{\shortlecturetitle}{L3c: CNNs}
+\newcommand{\instructor}{Jimi Oke}
+\newcommand{\lecturedate}{Thu, Oct 23, 2025}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ \input{course-macros.tex}
+%\usepackage{MnSymbol}              
+\begin{document}
+\maketitle
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+  
+
+ 
+ 
+\section{Introduction}
+\begin{frame}
+  \frametitle{The convolutional neural network (CNN)}
+  \pause
+
+\visible<+->{  \begin{figure}
+    \centering
+    \includegraphics[width=.8\textwidth]{eye}
+
+    {\scriptsize Source: \url{https://s3mn.mnimgs.com/img/shared/content_ck_images/ck_5ab694d5e73f4.png}}
+\end{figure}}
+
+  \begin{itemize}[<+->]
+  \item Motivated by the image recognition process of the brain's visual cortex.
+
+  \item Groundbreaking study showed that \textit{local receptive fields}  activate neurons
+    in the visual cortex. (Hubel \& Wiesel, 1958; \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1363130/pdf/jphysiol01298-0128.pdf}{1959})
+
+  \item Earliest neural network for image recognitron introduced \href{https://www.rctn.org/bruno/public/papers/Fukushima1980.pdf}{(Fukushima, 1980)}
+
+  \item Milestone: introduction of \textit{LeNet-5} architecture for handwritten digit recognition \href{http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf}{(Yann LeCun et al., 1998)}
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Building blocks of a CNN}
+  \pause
+  \begin{itemize}[<+->]
+  \item \textbf{Input layer:} the image to be classified 
+  \item \textbf{Convolutional layer:} represents the action of a filter transmitting signals (features) from various
+    portions (receptive fields) of the preceding layer. The size of the receptive field is specified by the
+    \textit{convolutional kernel}. Each layer can have multiple feature maps representing different filters.
+  \item \textbf{Pooling layer:} subsamples signals from preceding layer to reduce dimensionality and extract dominant
+    features (subsample space determined by kernel size)
+  \item \textbf{Dense layer:} neuron outputs are flattened and fully connected %(usually with decreasing number of neurons)
+  \item \textbf{Output layer:} neurons equal to number of classes; with softmax activation
+  \end{itemize}
+
+  \visible<+->{
+  \begin{center}
+    \includegraphics[width=.6\textwidth]{cnn-ex1}
+  \end{center}
+
+  {\tiny Source: \url{https://neurdiness.wordpress.com/2018/05/17/deep-convolutional-neural-networks-as-models-of-the-visual-system-qa/}}
+}
+  
+\end{frame}
+
+\section{Convolution}
+\begin{frame}
+  \frametitle{Convolution}
+  \pause
+  A convolution is a mathematical operation that computes the  overlap of a function $\rd g$ as it shifts across a function $\bl f$. \pause
+
+  \medskip
+  
+  Thus, the convolution of $\bl f$ and $\rd g$ in the interval $[0,t]$ is given by: \pause
+  
+  \begin{equation}
+    (f\circledast g)(t) =\pause \int {\bl f}(\tau){\rd g} (t - \tau)d\tau
+  \end{equation}
+  \pause
+
+  Watch this animation for a better understanding: \url{https://youtu.be/C1N55M1VD2o}
+
+  \bigskip
+  
+  In CNN terminology: \pause
+  \begin{itemize}
+  \item The function $\bl f$ is the \textbf{\bl input}
+  \item The function $\rd g$ is the \textbf{\rd kernel}
+  \item The convolution (or output) is called the \textbf{\pl feature map}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Convolution (cont.)}
+  \pause
+  The convolution operation is commutative: \pause
+  \begin{equation}
+    (f\circledast g)(t) = \pause (g\circledast f)(t)
+  \end{equation}
+  \pause
+    In CNNs, convolutions are typically
+    \pause
+    \begin{itemize}
+    \item performed on a 2D image $I$ (input) \pause
+    \item using a 2D kernel $K$ (dimensions $M\times N$)\pause
+    \end{itemize}
+    Thus, the discrete 2D convolution is given by: \pause
+    \begin{equation}
+      (I\circledast K)(i,j) = \pause\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}I(m,n)K(i-m,j-n)
+    \end{equation}
+    \pause
+    By the commutative property, we can write \pause
+    \begin{equation}
+      (K\circledast I)(i,j) = \pause\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}I(i-m,j-n)K(m,n)
+    \end{equation} \pause
+    which is more straightforward to compute (the kernel is \textit{flipped} relative to the input)
+  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Convolution and cross-correlation}
+  In reality, NN libraries typically compute the \textbf{cross-correlation}:
+  \pause
+  \begin{equation}
+    (K*I)(i,j) = \pause\sum_{m=0}^{M-1}\sum_{n=0}^{N-1}I(i+m, j+n)K(m,n)
+  \end{equation}
+  \pause
+  which is equivalent to convolution performed without \textit{kernel flipping}.
+  \pause
+  \visible<+->{  \begin{figure}
+      \centering
+      \includegraphics[width=.3\textwidth, trim={0 0 9in 0}, clip]{Comparison_convolution_correlation}
+      \caption{Convolution versus cross-correlation. {\tiny Source: \url{https://en.wikipedia.org/wiki/Convolution}}}
+    \end{figure}
+    }
+    \pause
+
+    If the kernel is symmetric (which it is in practice), then cross-correlation and convolution are equivalent.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Convolution example}
+  \pause
+  Here, we compute $(K*I)(2,3)$ with $M = 3$ and $N = 3$ ($3\times 3$ kernel) \pause
+  
+    \visible<+->{
+    \begin{figure}
+      \centering
+      \includegraphics[width=.45\textwidth]{art4_one_conv}
+      
+      {\tiny Source: \url{https://sgugger.github.io/convolution-in-depth.html}}
+      \end{figure}
+    }
+    \pause
+    \begin{eqnarray*}\small
+      (K*I)(2,3) &=& \pause \sum_{m=0}^{2}\sum_{n=0}^{2}I(2+m, 3+n)K(m,n) \\\pause
+                 &=& \sum_{m=0}^{2}\Big[I(2+m, 3)K(m,0)\\
+                 && \quad\quad + ~ I(2+m, 4)K(m,1) \\
+                 && \quad\qquad + ~ I(2+m, 5)K(m,2)\Big]
+    \end{eqnarray*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Zero-padding}\pause
+\begin{itemize}
+  \item Convolving an $f_h \times f_w$ filter over an image of size $x_h \times x_w$ produces an output of size $(x_h -f_h + 1)\times (x_w - f_w +1)$ (\textbf{valid convolution})\pause
+  \item But this reduces the spatial dimensions of the image at each layer\pause
+  \item To preserve spatial dimensions, \textbf{zero-padding} is used: adding zeros around the border of the input image (\textbf{same convolution})\pause
+  \item Thus, for an input of size $x_h \times x_w$, adding padding of size $p_h$ and $p_w$ results in an output of size $(x_h - f_h + 2p_h + 1)\times (x_w - f_w + 2p_w + 1)$\pause
+\end{itemize}
+  
+
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Striding}\pause
+
+  Striding refers to the step size $s$ with which the kernel moves across the input image. \pause
+  \begin{itemize}[<+->]
+    \item   Striding is used to reduce redundancy and thus speed up computation.
+  \item A stride of 1 means the kernel is applied to every possible position.
+  \item A stride of 2 means the kernel is applied every other position, effectively downsampling the feature map.
+  \end{itemize}
+  \pause
+  Thus, given an input of size $x_h \times x_w$ and kernel size of $f_h \times f_w$, if we use a zero-padding of $p_h$ and $p_w$ and strides of $s_h$ and $s_w$, then the output has size:\pause
+
+  \begin{equation}
+    \lfloor \fr{x_h - f_h + 2p_h +s_h}{s_h}\rfloor \times \lfloor \fr{x_w - f_w + 2p_w +s_w}{s_w} \rfloor
+  \end{equation}
+\end{frame}
+
+
+\section{CNN structure}
+\begin{frame}
+  \frametitle{Example structure of a CNN}\pause
+  Convolutional layers enable the encoding of spatial relationships between neurons (pixels)\pause
+  \begin{itemize}
+  \item Weight sharing reduces number of parameters (i.e.\ same kernel/filter used for each feature map)\pause
+  \item Complexity handled by increasing feature maps\pause
+  \item Multiple convolutional layers can be stacked to add depth
+  \end{itemize}
+  \pause
+  \visible<+->{
+  \begin{center}
+    \includegraphics[width=.9\textwidth]{cnn-ex2}
+  \end{center}
+  {\tiny Source: \url{https://towardsdatascience.com/mnist-handwritten-digits-classification-using-a-convolutional-neural-network-cnn-af5fafbc35e9}}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Convolutional layer}
+  \pause
+  The convolutional layer consists of several filters (kernels), each corresponding to a feature map. 
+
+  \begin{itemize}
+  \item Input: tensor of size $h_{1}\times w_{1} \times d_{1}$
+    \begin{itemize}
+    \item For the first convolutional layer: $d_{1} = 1$ (single-channel/grayscale image); $D_{1}=3$ (color/RGB image)
+    \end{itemize}
+    \pause
+  \item Hyperparameters: \pause
+    \begin{itemize}
+    \item number of filters $F$
+    \item kernel size (local receptive field) $f_h, f_w$
+    \item stride length $s$
+    \item amount of zero padding $p$ (typically same on both sides)
+    \end{itemize}
+    \pause
+  \item Output: tensor of size $h_{2}\times w_{2}\times d_{2}$:\pause
+    \begin{itemize}
+    \item $h_{2} = (h_{1} - f_h + 2p + s)/s$
+    \item $w_{2} = (w_{1} - f_w + 2p + s)/s$
+    \item $d_{2} = F$
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Convolutional layer operation}
+  \pause
+  $d_{1} = 3$ (3-channel input) and $F = 2$ (2 filters). \pause
+
+  \visible<+->{
+    \centering
+    \includegraphics[width=.7\textwidth]{convolution}
+    
+    {\tiny Source: \url{https://cs231n.github.io/convolutional-networks/} (animated)}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Pooling layer}
+  \pause
+  Pooling spatially downsamples the output of a convolutional layer via a summary statistic of nearby values at a given location
+  \pause
+  \begin{itemize}
+  \item Introduced to ensure shift/translation invariance in a trained network\pause
+  \item Leads to robust performance\pause
+  \item Typically, \textbf{max} pooling or \textbf{average} pooling is used
+  \end{itemize}
+  \pause
+  \visible<+->{
+    \centering
+    \includegraphics[width=.4\textwidth]{pooling}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Training hyperparameters in a CNN}
+  Several decisions must be made in selecting hyperparameters for training a CNN.
+
+  \begin{itemize}[<+->]
+  \item Number of convolutional layers and feature maps in each layer
+  \item Convolutional kernel size
+  \item Stride length (spacing of filters)
+  \item Choice of pooling function (max, average, etc)
+  \item Number of dense layers
+  \item Activation function in each layer (ReLU, tanh, etc)
+  \end{itemize}
+
+ 
+\end{frame}
+
+\begin{frame}
+  \frametitle{Normalization layers}\pause
+  Normalization layers are often used to improve training performance and stability. \pause
+  \begin{itemize}
+    \item Batch Normalization (BN): normalizes activations within a mini-batch
+    \begin{eqnarray*}
+      \tilde{\bm z}_n &=& \bm\gamma \odot \hat{\bm z}_n + \bm\beta, \quad \hat{\bm z}_n = \frac{\bm z_n - \bm\mu_{\text{batch}}}{\sqrt{\bm\sigma_{\text{batch}}^2 + \eps}}
+    \end{eqnarray*}
+    \item Layer Normalization (LN): normalizes across features for each training example
+    \item Instance Normalization (IN): normalizes across spatial dimensions for each channel
+  \end{itemize}
+
+  
+
+\end{frame}
+\section{Architectures}
+\begin{frame}
+  \frametitle{CNN architectures for classification}
+  \pause
+
+   Various high-performing deep architectures have been developed in recent years that can be adapted for other problems: \pause
+  
+   \begin{itemize}[<+->]
+   \item \href{http://vision.stanford.edu/cs598_spring07/papers/Lecun98.pdf}{LeNet}
+  \item \href{https://papers.nips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf}{AlexNet}
+  \item \href{https://arxiv.org/abs/1409.1556}{VGGNet}
+  \item \href{https://arxiv.org/abs/1512.03385}{ResNet}
+  \item \href{https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43022.pdf}{Inception}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{LeNet-5}
+  \pe
+  \begin{itemize}[<+->]
+  \item Created by Yann LeCun in 1998
+  \item 5 convolutional layers
+  \item Developed to classify handwritten digits (technology adopted by USPS and banks)
+  \end{itemize}
+  \pe
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{lenet-5}
+
+    {\tiny Source: \url{https://www.datasciencecentral.com/lenet-5-a-classic-cnn-architecture/}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{AlexNet}
+  \pe
+  \begin{itemize}[<+->]
+  \item ReLU activations instead of tanh
+  \item Dropout (instead of weight decay)
+  \item Stacking of convolutional layers for larger receptive fields
+  \end{itemize}
+  \pe
+  \begin{center}
+    \includegraphics[width=.8\textwidth]{AlexNet-1}
+
+    {\tiny Source: \url{https://neurohive.io/en/popular-networks/alexnet-imagenet-classification-with-deep-convolutional-neural-networks/}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{VGGNet}
+  \pe
+  \begin{itemize}[<+->]
+  \item Developed by Visual Geometry Group at Oxford
+  \item Smaller receptive fields than AlexNet
+  \item 16-19 layers deep
+  \end{itemize}
+  \pe
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{vgg}
+
+    {\tiny Source: \url{https://www.kaggle.com/code/blurredmachine/vggnet-16-architecture-a-complete-guide}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{ResNet}
+  \pe
+  \begin{itemize}
+  \item Residual blocks: training nonlinear layer $\mc{F}$ to fit residual:\pe
+    \begin{equation}
+      \bm x_{\ell + 1} = \varphi(\bm x_{\ell} + \mc{F} (\bm x_{\ell}))
+    \end{equation}\pe
+    instead of total output:\pe
+    \begin{equation}
+      \bm x_{\ell + 1} = \mc{F} (\bm x_{\ell})
+    \end{equation}
+    \pe
+  \item The introduction of skip connections allow for very deep networks (e.g.\ up to 1001 layers)
+  \end{itemize}
+  \pe
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{residual-block}
+
+    {\tiny Source: \url{https://paperswithcode.com/method/residual-connection}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Inception (GoogLeNet)}
+  \pe
+  \begin{itemize}[<+->]
+  \item First introduction of inception module (v1)
+  \item Allows for multiple filter sizes at the same level
+  \item $1\times 1$ convolutions reduce dimensionality (channels)
+  \end{itemize}
+  \pe
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{inception-module.png}
+
+    {\tiny Source: \url{https://datahacker.rs/building-inception-network/}}
+  \end{center}
+\end{frame}
+
+\section{Other  tasks}
+\begin{frame}
+  \frametitle{Image tagging}
+  \pe
+  \begin{itemize}[<+->]
+  \item Assign multiple labels to single image (multi-label prediction; each tag predicted independently)\pe
+  \item Output space: $\mc{Y} = \{0,1\}^C$, where $C$ is the number of tag types \pe
+  \item Final layer of CNN has logistic sigmoid units (activations) instead of softmax
+  \end{itemize}
+  \pe
+
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{photoTagging1.jpg}
+
+    {\tiny Source: \url{https://izadinia.github.io/files/DeepTagging-mmcommons.pdf}}
+  \end{center}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Object detection}
+  \pe
+  \begin{itemize}
+  \item Variable number of objects of interest in a given image (open world problem) \pe
+  \item Returns set of labeled bounding boxes around objects of interest \pe
+  \item Popular models for object detection: \pe
+    \begin{itemize}
+    \item \href{https://arxiv.org/pdf/1506.02640.pdf}{YOLO} (You Only Look Once)\pe
+    \item \href{https://arxiv.org/pdf/1512.02325.pdf}{SSD} (Single shot detector)\pe
+    \end{itemize}
+  \end{itemize}
+
+  
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{YOLO.jpg}
+
+    {\tiny Source: \url{https://aigeekprogrammer.com/yolo-fast-object-detection-and-classification/}}
+  \end{center}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Semantic segmentation}
+  \pe
+  \begin{itemize}
+  \item Predicts a class label for each pixel rather than an image, e.g. $y_i \in \{1,\ldots,c\}$ where 1$\equiv$sky, 2$\equiv$sheep, 3$\equiv$grass, etc \pe
+  \item Achieved via encoder-decoder network (captures high-level features in 2D bottleneck)\pe
+  \item Popular model: \href{https://link.springer.com/chapter/10.1007/978-3-319-24574-4_28}{U-Net}\pe
+  \end{itemize}
+
+      
+    \begin{minipage}[h]{.6\linewidth}
+    \includegraphics[width=\textwidth]{unet-architecture-paper}
+
+    {\tiny Source: \url{https://paperswithcode.com/method/u-net}}      
+    \end{minipage}
+    \begin{minipage}[h]{.36\linewidth}
+      \includegraphics[width=\textwidth]{segmented-image}
+      \raggedright
+    {\tiny Source: \url{https://towardsai.net/p/l/machine-learning-7}}
+    \end{minipage}
+ 
+
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Instance segmentation}
+  \pe
+
+  \begin{itemize}
+  \item Combines object detection and semantic segmentation\pe
+    \item For object instance, a \textit{2d shape mask} is predicted instead of the bounding box\pe
+  \item Achieved by applying \textbf{semantic segmentation} to each detected box in order to label each pixel
+    as foreground or background\pe
+  \item Popular models: \pe
+    \begin{itemize}
+    \item \href{https://arxiv.org/pdf/1703.06870.pdf}{Mask R-CNN}\pe
+    \item \href{https://arxiv.org/pdf/1506.01497.pdf}{Faster R-CNN}
+    \end{itemize}
+  \end{itemize}
+  \pe
+
+    
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{segmentation}
+
+    {\tiny Source: \url{https://kharshit.github.io/blog/2019/08/23/quick-intro-to-instance-segmentation}}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Human pose estimation}
+  \pe
+  \begin{itemize}
+  \item Predicts location of fixed set of skeletal keypoints (in 2D or 3D)\pe
+  \item Popular models: \pe
+    \begin{itemize}
+    \item \href{https://link.springer.com/chapter/10.1007/978-3-030-01264-9_17}{PersonLab}\pe
+    \item \href{https://arxiv.org/pdf/1812.08008.pdf}{OpenPose}
+    \end{itemize}
+  \end{itemize}
+
+  \pe
+
+    \begin{center}
+    \includegraphics[width=.5\textwidth]{shoot1-pose}
+
+    {\tiny Source: \url{https://frl.nyu.edu/tricking-openpose/}}
+  \end{center}
+  
+\end{frame}
+
+\section{Outlook}
+\begin{frame}
+  \frametitle{Summary}
+  \begin{itemize}
+  \item Basic convolutional neural networks for image classification consist of:
+    \begin{itemize}
+    \item input layer
+    \item convolutional layers (multiple filters=feature maps)
+    \item pooling layers
+    \item dense/fully-connected layers
+    \item output layer
+    \end{itemize}
+  \item Visualize and experiment with a CNN for handwritten digit recognition: \url{https://www.cs.ryerson.ca/~aharley/vis/conv/}
+    \item Reading: \textbf{PMLI} 14; \textbf{DL} 9
+  \end{itemize}
+\end{frame}
+ 
+\appendix
+
+ 
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

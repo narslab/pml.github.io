@@ -10,3 +10,7 @@ Thu, Oct 16
 Tue, Oct 21
 : **LECTURE 3B**{: .label .label-blue }[NN for Structured Data II](/assets/lectures/M3-DNNs/L3b-Neural-Networks-For-Structured-Data-II-Handout.pdf)
 : **NOTEBOOK**{: .label .label-activity}[ANN-Exploration](/notebooks/ann-grid-search-and-regularization/)
+
+Thu, Oct 23
+: **LECTURE 3C**{: .label .label-blue }[NN for Images](/assets/lectures/M3-DNNs/L3c-Neural-Networks-For-Images-Handout.pdf)
+: **NOTEBOOK**{: .label .label-activity}[ANN-Exploration](/notebooks/cnn-mnist-example-using-keras/)

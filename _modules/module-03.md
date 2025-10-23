@@ -13,4 +13,4 @@ Tue, Oct 21
 
 Thu, Oct 23
 : **LECTURE 3C**{: .label .label-blue }[NN for Images](/assets/lectures/M3-DNNs/L3c-Neural-Networks-For-Images-Handout.pdf)
-: **NOTEBOOK**{: .label .label-activity}[ANN-Exploration](/notebooks/cnn-mnist-example-using-keras/)
+: **NOTEBOOK**{: .label .label-activity}[CNN-MNIST](/notebooks/cnn-mnist-example-using-keras/)

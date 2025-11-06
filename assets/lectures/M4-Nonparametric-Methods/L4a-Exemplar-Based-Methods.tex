@@ -1,0 +1,594 @@
+%\documentclass[smaller, handout]{beamer}
+\def\bmode{0} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+\if 0\bmode
+\documentclass[smaller]{beamer}
+\else \if 1\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout-Notes\space\jobname}
+\documentclass[smaller,handout]{beamer}
+\usepackage{handoutWithNotes}
+\pgfpagesuselayout{2 on 1 with notes}[letterpaper, landscape, border shrink=4mm]
+\else \if 2\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout\space\jobname}
+\documentclass[smaller,handout]{beamer}
+\fi
+\fi
+\fi
+
+%\setbeamertemplate{section in head/foot}{}
+%\setbeamertemplate{section in head/foot shaded}{\textcolor{white}{\insertsectionhead}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\coursetitle}{CEE 697M: Probabilistic Machine Learning}
+\newcommand{\longlecturetitle}{M4 Nonparametric Methods:\\ L4a: Exemplar-based methods}
+\newcommand{\shortlecturetitle}{L4a: Exemplar-Based Methods}
+\newcommand{\instructor}{Jimi Oke}
+\newcommand{\lecturedate}{Wed, Apr 19, 2023}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ \input{course-macros.tex}
+              
+\begin{document}
+\maketitle
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+
+
+ 
+  
+ 
+\section{Introduction}
+
+\begin{frame}
+  \frametitle{Nonparametric modeling}
+  \pe
+  Parametric models seek to estimate $p(\bm y|\bm\th)$ (unconditional case) or $p(\bm y|\bm x,\bm\th)$ (conditional case).
+
+  \pe
+
+  \begin{itemize}
+  \item $\bm\th$ is a fixed-dimensinoal vector of \textbf{parameters}\pe
+  \item Estimation is performed using a dataset $\mc D = \{(\bm x_{n},\bm y_{n}) : n=1:N\}$\pe
+  \item There is an assumed functional form: $\bm y \sim f_{\bm\th}(\bm x)$
+  \end{itemize}
+\pe
+\bigskip
+
+\textbf{Nonparametric models} are defined based on similarity between a test input $\bm x$ at each training input $\bm x_{n}$: $d(\bm x, \bm x_{n})$
+\pe
+\begin{itemize}
+\item No assumption of functional form on model parameters\pe
+\item Effective number of parameters can grow with size of dataset $|\mc D|$\pe
+\item Known as \textbf{exemplar-based models} (as training samples are used to make each future prediction)\pe
+\item Other names: instance-based learning, memory-based learning
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Exemplar-based models}
+  \pe
+  We will consider the following exemplar approaches: \pe
+  \begin{itemize}
+  \item K-nearest neighbors (KNN)
+  \item Kernel density estimation
+  \item Kernel [local] regression
+  \end{itemize}
+\end{frame}
+
+\section{KNN}
+\begin{frame}
+  \frametitle{K nearest neighbor classifier}
+  \pe Basic idea: classify new/test input $\bm x$ by assigning to most probable (majority) label in the neighborhood of
+  $\bm x$ (closest examples) from the training set. \pe
+
+  Thus, we estimate:\pe
+  \begin{equation}
+    p(y = c |\bm x, \mc D) = \fr1K \sum_{n\in N_{K}(\bm x,\mc D)}\mb I(y_{n}= c)
+  \end{equation}
+  \pe
+  \begin{itemize}
+  \item  $c$ class label\pe
+  \item $K$: number of training samples in neighborhood  \pe
+  \item $N_{K}(\bm x,\mc D)$: neighborhood of $\bm x$ (size $K$) based on dataset $\mc D$
+  \end{itemize}
+\end{frame}
+
+
+  \begin{frame}
+    \frametitle{Illustration of KNN}
+
+    \begin{figure}[h!]
+      \centering
+      \includegraphics[width=.9\textwidth]{2-14}
+      \caption{Illustration of the KNN approach on a training set of 12 observations and the resulting decision boundary. (ESL Fig 2.14)}
+      \label{fig:knn}
+    \end{figure}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Bias-variance trade-off in KNN}
+    \pause
+    \begin{figure}[h!]
+      \centering
+      \includegraphics[width=.9\textwidth]{2-16}
+      \caption{Comparing decision boundaries $K = 1$ and $K=100$ for a dataset of 100 observations. Which model has
+        lower bias? Which one gives a higher variance?  The Bayes decision boundary is the purple dashed line (ESL Fig
+        2.16)}
+      \label{fig:knn2}
+    \end{figure}
+  \end{frame}
+
+    \begin{frame}
+    \frametitle{Approximating Bayes decision boundary with KNN}
+    \begin{figure}[h!]
+      \centering
+      \includegraphics[width=.5\textwidth]{2-15}
+      \caption{KNN decision boundary with $K=10$ on the same training data set. (ESL Fig 2.15)}
+    \end{figure}
+  \end{frame}
+ 
+  \begin{frame}
+    \frametitle{Training and test error rates for KNN}
+    \begin{figure}[h!]
+      \centering
+      \includegraphics[width=.7\textwidth]{2-17}
+      \caption{KNN training error rate (blue, 200 observations) and test error rate (orange, 5000
+        observations). Flexibility increases as $K$ decreases. Which $K$ should you choose? (ESL Fig 2.17)}
+      \label{fig:knn3}
+    \end{figure}
+  \end{frame}
+
+\begin{frame}
+  \frametitle{KNN  considerations}
+  \pe
+
+  \begin{itemize}
+  \item    To find the points in the neighborhood $N_{K}$, we need to determine the $K$-closest points to input $\bm x$. \pe
+    This is done via a specified distance metric:\pe
+ $     d(\bm x,\bm x') \in \mb R^{+}$
+    \pe
+    (e.g. Euclidean, Mahalanobis) \pe
+  \item $K=1$ induces a Voronoi tessellation: partitioning of input sapce such that all points $\bm x \in V(\bm x_{n})$ are closer to $\bm x_{n}$ than to any other point \pe (From a modeling perspective, this is overfitting)
+    \pe
+    \begin{center}
+      \includegraphics[width=.3\textwidth]{VoronoiDiagram}
+
+      {\tiny Source: \url{https://package.elm-lang.org/packages/ianmackenzie/elm-geometry/latest/VoronoiDiagram2d}}
+    \end{center}
+
+    \pe
+  \item Suffers under high dimensionality\pe
+  \item Memory intensive
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{KNN extension: open set recognition}
+  \pe
+  KNN is readily applicable to open set recognition (set of classes $\mc C$ not fixed).\pe
+  \begin{itemize}
+  \item Novelty/out-of-distribution/anomaly detection\pe
+        \begin{center}
+      \includegraphics[width=.3\textwidth]{anomaly}
+
+      {\tiny Source: \url{https://www.intechopen.com/chapters/74393}}
+    \end{center}
+
+  \item Incremental/online/life-long/continual learning: any potentially new label is added to new class $C_{t+1}$; dataset augmented\pe
+  \item Few-shot classification (for person re-identification or face verification)
+    
+  \end{itemize}
+\end{frame}
+
+\section{Metric learning}
+\begin{frame}
+  \frametitle{Distance metrics}
+  \pe
+  The [semantic] distance between points $\bm x$ and $\bm x'$ is specified by a distance metric $d(\bm x,\bm x')\in\mb R^{+}$. \pe
+
+  \begin{itemize}
+  \item Alternately, the similarity $s(\bm x,\bm x')$ can be computed \pe
+
+  \item Distance/similarity required for KNN, unsupervised learning (e.g.\ clustering) among other tasks \pe
+
+  \item  Common  metrics: \pe
+  \begin{itemize}
+  \item Euclidean distance: \pe
+    \begin{equation}
+      d_{\bm E}(\bm x,\bm x') = \sqrt{(\bm x-\bm x')\tr(\bm x- \bm x')}
+    \end{equation}
+    \pe
+  \item Mahalanobis distance: \pe
+    \begin{equation}
+      d_{\bm M}(\bm x,\bm x') = \sqrt{(\bm x-\bm x')\tr\bm M(\bm x- \bm x')}
+    \end{equation}
+    \pe
+    where $\bm M$ is the Mahalanobis distance matrix\pe
+  \end{itemize}
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Distance metrics}
+ 
+    
+    The process of finding the optimal $\bm  M$ is called \textbf{metric learning}\pe
+  \begin{itemize}
+
+    
+  \item When $D$ is large, we typically learn an embedding (mapping): $\bm e = f(\bm x)$ and then compute $d_{\bm M}(\bm e,\bm e')$ instead. \pe
+  \item When $f$ is a deep neural network, this process is termed \textbf{deep metric learning}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Methods for estimating $\bm M$}
+  \pe
+  \begin{itemize}
+  \item Large margin nearest neighbors (LMNN) \pe
+
+  \item Neighborhood component analysis (NCA) \pe
+
+  \item Latent coincidence analysis (LCA) \pe
+
+  \item Minimization of classification and ranking losses (with mining techniques and proxy methods): \pe
+    \begin{itemize}
+    \item Pairwise/contrastive loss\pe
+    \item Triplet loss\pe
+    \item N-pairs loss
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+\section{Density kernels}
+\begin{frame}
+  \frametitle{Density kernel}
+  \pause
+
+  A density kernel $\mc K(x)$ %or $\mc K(\bm x, \bm x')$
+  is a weighting function that specifies a mapping or transformation of an input
+  $x$: $\mc K : \mb R \to \mb R_{+}$. \pe
+
+  Density kernels have two important properties:\pe
+
+  \begin{itemize}
+  \item \textbf{Normalization}: \pe
+    \begin{equation}
+      \int x \mc K (x) dx = 0
+    \end{equation}
+    \pe
+
+  \item \textbf{Symmetry}: \pe
+    \begin{equation}
+      \mc K(-x) = \mc K x
+    \end{equation}
+  \end{itemize}
+
+  \pause
+
+
+      Kernels have several uses, e.g.\pause
+    \begin{itemize}[<+->]
+    \item density function estimation
+    \item {\gr local regression} (our focus)
+    \item smoothing time series
+    \end{itemize}  
+  \end{frame}
+
+  
+\begin{frame}
+  \frametitle{Kernel functions}
+        \visible<+->{
+        \begin{figure}
+          \centering
+          \includegraphics[width=.4\textwidth]{kernels}
+          \caption{Popular kernel functions}
+    \end{figure}
+    }
+    \pause
+  \begin{itemize}
+  \item Triangular: $\mc K(x) = (1 - |x|)$
+  \item Epanechnikov: $\mc K(x) = \fr34(1 - x^{2})$
+  \item Triweight: $\mc K(x) = \fr{35}{32} (1-x^{2})^{3}$
+  \item Tricube: $\mc K(x) = \fr{70}{81}(1-|x|^{3})^{3}$
+    \item Gaussian: $\mc K(x) = \fr1{\sqrt{2\pi}}e^{-\fr12x^{2}}$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Radial basis function }
+  \pe
+  The radial basis function (RBF) kernel is a generalization of a density kernel to an input vector $\bm x$:\pe
+  \begin{equation}
+    \mc K_{h} (\bm x) \propto \mc K_{h}(||\bm x||)
+  \end{equation}
+  \pe
+  where $h$ is the bandwidth parameter: \pe
+
+  The RBF Gaussian kernel is thus given by: \pe
+  \begin{equation}
+    \mc K_{h}(\bm x) = \fr{1}{h^{D}(2\pi)^{D/2}}\prod_{d=1}^{D}\exp\lt[ -\fr1{2h^{2}}x^{2}_{d}\rt]
+  \end{equation}
+
+  \pe
+
+  \begin{block}{Bandwidth parameter}
+    \pe
+    Specifies the width of the kernel:\pe
+      \begin{equation}
+        \mc K_{h} := \fr1h \mc K\lt(\fr xh\rt)
+  \end{equation}
+
+  \end{block}
+\end{frame}
+ 
+\section{Kernel smoothing}
+
+\begin{frame}
+  \frametitle{K-nearest neighbor smoother}
+  \pause
+  In the simple case of the KNN kernel, we use the neighborhood average:\pause
+  \begin{equation}
+    \hat f(x_0) = \fr1k\sum_{i\in N_K(x_0)} y_ i
+  \end{equation}
+  \pause
+  where $N_K(x_0)$ is the $K$-nearest neighborhood of $x_0$.
+  \pause
+  \medskip
+  
+  \begin{minipage}[]{.43\linewidth}
+  \begin{itemize}[<+->]
+  \item All points in the neighborhood are equally weighted
+  \item The resulting $\hat f(x)$ is not smooth
+  \item To achieve smoothness, we weight observations by distance to the target point
+  \end{itemize}
+\end{minipage}\pause
+\begin{minipage}[]{.55\linewidth}
+  \visible<+->{
+    \begin{figure}[h!]
+      \centering
+      \includegraphics[width=.9\textwidth,trim={0 16cm 11cm 4.5cm},clip]{ESL6-1}
+      \caption{KNN equally-weighted kernel}
+    \end{figure}
+  }
+\end{minipage}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Nadaraya-Watson smoother}\pause
+ \textbf{\rd Nadaraya-Watson} kernel-weighted average implements distance-based weighting:\pause
+  \begin{equation}
+    \label{eq:20}\rd 
+   \mb{E}[y|\bm x, \mc D] = \pe \hat f(x_{0}) \pause = \fr{\sum_{i=1}^{n}K_{\la}(x_{0},x_{i})y_{i}}{\sum_{i=1}^{n}K_{\la}(x_{0},x_{i})}
+  \end{equation}
+  \pause
+  where $K_\la$ can be any kernel function. \pause
+
+  \medskip
+  If we use the popular  \textbf{\bl Epanechnikov} (quadratic) kernel, then: \pause
+  \begin{equation}\bl
+    \label{eq:25}
+    K_{\la}(x_{o},x_i) \pause  = D\lt( \fr{|x_i - x_{0}|}{\la}\rt)
+  \end{equation}
+  \pause where
+  \begin{equation}
+    \label{eq:26}\bl    
+    D(t) = \pause
+    \begin{cases}
+      \fr34\lt(1 -  t^{2}\rt)  & |t| \le 1 \\ \pause
+      0 & \text{otherwise}
+    \end{cases}
+  \end{equation}
+  \pause
+  In $D$, the half-width (or \textit{bandwidth}) of the neighborhood is given by $\la$. 
+\end{frame}
+
+\begin{frame}
+  \frametitle{Nadaraya-Watson smoother (Epanechnikov kernel)}
+  \pause
+  
+  \visible<+->{\begin{figure}[h!]
+      \centering
+      \includegraphics[width=.47\textwidth,trim={10.5cm 16cm 2cm 4.5cm},clip]{ESL6-1}
+      \caption{Nadaraya-Watson estimate of $\hat f(x)$ using the Epanechnikov kernel.  Half-width is fixed at $\la =0.2$}
+    \end{figure}
+  }
+  \pause The half-width can be generalized as any function
+  $h_\la$ of the target point $x_{0}$:\pause
+  \begin{equation}
+    \label{eq:27}
+    K_{\la}(x_{0},x_i) \pause  = D\lt( \fr{|x_i - x_{0}|}{h_{\la}(x_{0})}\rt)
+  \end{equation}
+\end{frame}
+
+\section{Local regression}
+
+\begin{frame}
+  \frametitle{Kernels as a localization device}
+  \pause
+  Rather than estimate a regression function $f(X)$ over the entire $\mathbb{R}^{D}$, we can estimate the response at each training point using a weighted average:
+  \begin{itemize}[<+->]
+  \item only observations close a target point $x_0$ are used in estimating $f$ at that point
+  \item the function defining how the points in the neighborhood of $x_0$ are weighted is called a \textbf{kernel}: \pause $K_\la(x_0,x_i)$ where $\la$ controls the width of the neighborhood
+  \item this is a localized/memory-based approach
+  \item the resulting $\hat f(X)$ is smooth in $\mathbb{R}^D$
+  \end{itemize}
+  \pause
+
+    Using kernel functions, we can estimate $\hat f (X)$ in two ways:
+    \pause
+  \begin{enumerate}[<+->]
+  \item \textbf{Nonparametric}: define an averaging function (kernel) to estimate $y_{0}$ for each point $x_{0}$
+  \item \textbf{Parametric}: estimate a linear model for each point $x_{0}$
+  \end{enumerate}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Local linear regression}
+  \pause
+  Using a nonparametric average function produces biased estimates at the boundaries.\pause
+
+  \visible<+->{
+    \begin{figure}[h!]
+      \centering
+      \includegraphics[width=.77\textwidth,decodearray={0 .75 0 .75 0 1},
+      trim={1cm 14.8cm 0cm 5.7cm},clip]{ESL6-3}
+      \caption{Locally weighted average (Nadaraya-Watson) versus local linear regression. }
+    \end{figure}
+  }
+  To correct this, we can estimate a linear model at each point $x_0$ by solving a weighted least squares:
+  \pause
+  \begin{equation}
+    \min_{\al(x_0),\beta(x_0)}\sum_{i=1}^n K_\la(x_0, x_i)[y_i - \alpha(x_0) - \beta(x_0)x_i]^2
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Local linear regression estimates}
+  \pause
+  Let $b(x)^T = (1,x)$ and:
+  \begin{equation}
+    \bm B =
+    \begin{pmatrix}
+      1 & x_1 \\
+      1 & x_2 \\
+      \vdots & \vdots \\
+      1 & x_n 
+    \end{pmatrix}
+    \quad
+    \bm W(x_0) = 
+    \begin{pmatrix}
+      K_\la(x_0,x_1) & 0 & \cdots & 0 \\
+      0             & K_\la(x_0,x_2) & \cdots & 0 \\
+      \vdots & \vdots & \ddots & \vdots \\
+      0 & 0 & \cdots & K_\la(x_0,x_n)
+    \end{pmatrix}
+  \end{equation}
+  Then the solution to the locally weighted regression problem is:\pause
+  \begin{eqnarray}
+    \hat f(x_0) &=& \pause {\pl b(x_0)^T(\bm B^T\bm W(x_0)\bm B)^{-1}\bm B^T\bm W(x_0)}\bm y  \\\pause
+    \hat f(x_{0})   &=& \pause {\pl \sum_{i=1}^n \ell_i(x_0) }y_i
+  \end{eqnarray}
+  \pause
+  The weights $\ell_i(x_0)$ are called the \textbf{\pl equivalent kernel}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Effect of equivalent kernel}
+  \pause
+  The equivalent kernel (local regression) corrects the bias from local average kernel methods to the first order.\pause
+  
+  
+   \begin{figure}[h!]
+      \centering
+      \visible<+->{\includegraphics[width=.95\textwidth,decodearray={0 .75 0 .75 0 1},
+      trim={1cm 15.2cm 0cm 5.7cm},clip]{ESL6-4}}
+      \caption{  \visible<+->{Green points show the weights $\ell_i(x_0)$ (rescaled for display purposes) along with those for the
+          Nadaraya-Watson (N-W) local average (yellow shaded region; also rescaled).}
+          \visible<+->{The correction effect of local
+        regression can be observed.}}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Local polynomial regression}
+  \pause
+  \begin{itemize}[<+->]
+  \item Higher-order terms in $\hat f(x)$ are required to reduce bias in curved regions
+  \item Local polynomial regression can correct this at the cost of higher variance
+  \item Given by:\pause
+    \begin{equation}
+      \hat f(x_0) = \hat\alpha(x_0) + \sum_{j=1}^d\hat\beta_j(x_0)x_0^j
+    \end{equation}
+    \pause
+    where $\hat f(x_0)$ is the solution to:\pause
+    \begin{equation}
+      \min_{\alpha(x_0),\beta(x_0),j=1,\ldots,d} \sum_{i=1}^nK_\la (x_0,x_i)\lt[y_i-\alpha(x_0)-\sum_{j=1}^d\beta_j(x_0)x_i^j\rt]^2
+    \end{equation}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bias correction of local quadratic regression}
+  \pause
+  \visible<+->{
+     \begin{figure}[h!]
+      \centering
+      \includegraphics[width=1\textwidth,decodearray={0 .75 0 .75 0 1},
+      trim={2cm 12.7cm 2cm 7.7cm},clip]{ESL6-5}
+  \caption{The local linear regression estimator is biased in curved regions. A higher-order local fit (in this case, quadratic) can eliminate this.}
+  \end{figure}}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Local regression algorithms} \pause
+
+  \begin{itemize}
+  \item LOESS: locally estimated scatterplot smoothing \pause
+    \begin{itemize}
+    \item Identical approached earlier developed in 1964 by
+\href{https://pubs.acs.org/doi/pdf/10.1021/ac60214a047}{Savitzky and Golay} for smoothing noisy data (known as the
+Savitzky-Golay filter)
+    \item ``Rediscovered'' by
+\href{https://www.engineering.iastate.edu/~shermanp/STAT447/Lectures/Cleveland%20paper.pdf}{William Cleveland in 1979}
+    \end{itemize}
+
+  \item LOWESS: locally weighted scatterplot smoothing
+    \begin{itemize}
+    \item Extension of LOESS by
+\href{https://sites.stat.washington.edu/courses/stat527/s14/readings/Cleveland_Delvin_JASA_1988.pdf}{Cleveland and Susan
+Devlin (1988)}
+    \end{itemize}
+
+  \item LOESS can be considered a generalization of LOWESS, as it fits multivariate data, while LOWESS is for univariate
+cases
+  \end{itemize}
+\end{frame}
+
+\section{Outlook}
+\begin{frame}
+  \frametitle{Summary}
+  \pause
+  \begin{itemize}[<+->]
+
+  \item Kernel smoothing methods can be used for flexible functional fitting
+  \item Local regression generates a linear/polynomial fit at each target point using a kernel weighted loss function
+  \end{itemize}
+
+  \pause
+  Reading:
+  \begin{itemize}[<+->]
+  \item \textbf{PMLI} 16
+  \item \textbf{ESL 6.1} One-dimensional Kernel Smoothers (pp.\ 191--199)
+  \item \textbf{ISLR 7.6:} Local Regression (pp.\ 280--282)
+ % \item \textbf{ISLR 7.7:} Generalized Additive Models (pp.\ 282--287)
+ % \item \textbf{ISLR 7.8:} Lab: Non-linear Modeling (pp.\ 287--297)
+
+  \end{itemize}
+\end{frame}
+
+
+
+% \appendix\addtocounter{part}{-1}
+% \begin{frame}
+%   \frametitle{Kernel functions}
+%   \begin{itemize}
+%   \item Triangular: $K(u) = (1 - |u|)$
+%   \item Epanechnikov: $K(u) = \fr34(1 - u^{2})$
+%   \item Triweight: $K(u) = \fr{35}{32} (1-u^{2})^{3}$
+%   \item Tricube: $K(u) = \fr{70}{81}(1-|u|^{3})^{3}$
+%     \item Gaussian: $K(u) = \fr1{\sqrt{2\pi}}e^{-\fr12u^{2}}$
+%   \end{itemize}
+% \end{frame}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

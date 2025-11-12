@@ -1,0 +1,434 @@
+
+ 
+% \usepackage[T1]{fontenc} 
+% \usepackage{lmodern} 
+%\usepackage{etex}
+ %\newcommand{\num}{6{} }
+
+% \usetheme[
+%   outer/progressbar=foot,
+%   outer/numbering=fraction,
+%   block=fill,
+%   inner/subsectionpage=progressbar
+% ]{metropolis}
+\usetheme{Madrid}
+\useoutertheme[subsection=false]{miniframes} % Alternatively: miniframes, infolines, split
+\useinnertheme{circles}
+% %\useoutertheme{Frankfurt}
+% \usecolortheme{beaver}
+% %\useoutertheme{crane}
+% %\useoutertheme{metropolis}
+\usepackage[backend=biber,style=authoryear,maxcitenames=2,maxbibnames=99,safeinputenc,url=false, eprint=false]{biblatex}
+%\addbibresource{bib/references.bib}
+% \AtEveryCitekey{\iffootnote{{\tiny}\tiny}{\tiny}}
+
+% %\usepackage{pgfpages}
+% %\setbeameroption{hide notes} % Only slides
+% %\setbeameroption{show only notes} % Only notes
+% %\setbeameroption{hide notes} % Only notes
+% %\setbeameroption{show notes on second screen=right} % Both
+
+% % \usepackage[sfdefault]{Fira Sans}
+
+% % \setsansfont[BoldFont={Fira Sans}]{Fira Sans Light}
+% % \setmonofont{Fira Mono}
+
+% %\usepackage{fira}
+% %\setsansfont{Fira}
+% %\setmonofont{Fira Mono}
+% % To give a presentation with the Skim reader (http://skim-app.sourceforge.net) on OSX so
+% % that you see the notes on your laptop and the slides on the projector, do the following:
+% % 
+% % 1. Generate just the presentation (hide notes) and save to slides.pdf
+% % 2. Generate onlt the notes (show only nodes) and save to notes.pdf
+% % 3. With Skim open both slides.pdf and notes.pdf
+% % 4. Click on slides.pdf to bring it to front.
+% % 5. In Skim, under "View -> Presentation Option -> Synhcronized Noted Document"
+% %    select notes.pdf.
+% % 6. Now as you move around in slides.pdf the notes.pdf file will follow you.
+% % 7. Arrange windows so that notes.pdf is in full screen mode on your laptop
+% %    and slides.pdf is in presentation mode on the projector.
+
+% % Give a slight yellow tint to the notes page
+% \setbeamertemplate{note page}{\pagecolor{yellow!5}\insertnote}\usepackage{palatino}
+
+% %\usetheme{metropolis}
+% %\usecolortheme{beaver}
+ \usepackage{tipa}
+% \usepackage{enumerate}
+\definecolor{darkcandyapplered}{HTML}{A40000}
+\definecolor{lightcandyapplered}{HTML}{e74c3c}
+
+% %\setbeamercolor{title}{fg=darkcandyapplered}
+
+% \definecolor{UBCblue}{rgb}{0.04706, 0.13725, 0.26667} % UBC Blue (primary)
+% \definecolor{UBCgrey}{rgb}{0.3686, 0.5255, 0.6235} % UBC Grey (secondary)
+
+% % \setbeamercolor{palette primary}{bg=darkcandyapplered,fg=white}
+% % \setbeamercolor{palette secondary}{bg=darkcandyapplered,fg=white}
+% % \setbeamercolor{palette tertiary}{bg=darkcandyapplered,fg=white}
+% % \setbeamercolor{palette quaternary}{bg=darkcandyapplered,fg=white}
+% % \setbeamercolor{structure}{fg=darkcandyapplered} % itemize, enumerate, etc
+% % \setbeamercolor{section in toc}{fg=darkcandyapplered} % TOC sections
+% % \setbeamercolor{frametitle}{fg=darkcandyapplered,bg=white} % TOC sections
+% % \setbeamercolor{title in head/foot}{bg=white,fg=white} % TOC sections
+% % \setbeamercolor{button}{fg=darkcandyapplered} % TOC sections
+
+% % % Override palette coloring with secondary
+% % \setbeamercolor{subsection in head/foot}{bg=lightcandyapplered,fg=white}
+
+%\usecolortheme{crane}
+% \makeatletter
+% \setbeamertemplate{headline}{%
+%   \begin{beamercolorbox}[colsep=1.5pt]{upper separation line head}
+%   \end{beamercolorbox}
+%   \begin{beamercolorbox}{section in head/foot}
+%     \vskip1pt\insertsectionnavigationhorizontal{\paperwidth}{}{}\vskip1pt
+%   \end{beamercolorbox}%
+%   \ifbeamer@theme@subsection%
+%     \begin{beamercolorbox}[colsep=1.5pt]{middle separation line head}
+%     \end{beamercolorbox}
+%     \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+%       leftskip=.3cm,rightskip=.3cm plus1fil]{subsection in head/foot}
+%       \usebeamerfont{subsection in head/foot}\insertsubsectionhead
+%     \end{beamercolorbox}%
+%   \fi%
+%   \begin{beamercolorbox}[colsep=1.5pt]{lower separation line head}
+%   \end{beamercolorbox}
+% }
+% \makeatother
+
+% Reduce size of frame box
+\setbeamertemplate{frametitle}{%
+    \nointerlineskip%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.0ex,dp=0.6ex]{frametitle}
+        \hspace*{1ex}\insertframetitle%
+    \end{beamercolorbox}%
+}
+
+
+%\setbeamercolor{frametitle}{bg=darkcandyapplered!80!black!90!white}
+%\setbeamertemplate{frametitle}{\bf\insertframetitle}
+
+%\setbeamercolor{footnote mark}{fg=darkcandyapplered}
+%\setbeamercolor{footnote}{fg=darkcandyapplered!70}
+%\Raggedbottom
+%\setbeamerfont{page number in head/foot}{size=\tiny}
+%\usepackage[tracking]{microtype}
+
+
+% %\usepackage[sc,osf]{mathpazo}   % With old-style figures and real smallcaps.
+% %\linespread{1.025}              % Palatino leads a little more leading
+
+% % Euler for math and numbers
+% %\usepackage[euler-digits,small]{eulervm}
+% %\AtBeginDocument{\renewcommand{\hbar}{\hslash}}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{graphbox}
+\usepackage{animate}
+\usepackage{media9}
+\usepackage{adjustbox}
+
+% %\mode<presentation> { \setbeamercovered{transparent} }
+
+\setbeamertemplate{navigation symbols}{}
+\makeatletter
+\def\beamerorig@set@color{%
+  \pdfliteral{\current@color}%
+  \aftergroup\reset@color
+}
+\def\beamerorig@reset@color{\pdfliteral{\current@color}}
+\makeatother
+
+
+% %=== GRAPHICS PATH ===========
+\graphicspath{{./m4-images/}}
+% % Marginpar width
+% %Marginpar width
+% %\setlength{\marginparsep}{.02in}
+
+
+% %% Captions
+% % \usepackage{caption}
+% % \captionsetup{
+% %   labelsep=quad,
+% %   justification=raggedright,
+% %   labelfont=sc
+% % }
+
+% \setbeamerfont{caption}{size=\footnotesize}
+% \setbeamercolor{caption name}{fg=darkcandyapplered}
+
+% %AMS-TeX packages
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{mathtools} 
+\usepackage{bm}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+% \usepackage{color}
+
+% %https://tex.stackexchange.com/a/31370/2269
+\usepackage{cancel}
+\renewcommand{\CancelColor}{\color{red}} %change cancel color to red
+\makeatletter
+\let\my@cancelto\cancelto %copy over the original cancelto command
+\newcommand<>{\cancelto}[2]{\alt#3{\my@cancelto{#1}{#2}}{\mathrlap{#2}\phantom{\my@cancelto{#1}{#2}}}}
+% redefine the cancelto command, using \phantom to assure that the
+% result doesn't wiggle up and down with and without the arrow
+\makeatother
+
+
+% % \usepackage{comment}
+\usepackage{enumerate}
+\usepackage{hyperref}
+% \usepackage{minitoc,array}
+% \definecolor{slblue}{rgb}{0,.3,.62}
+\hypersetup{
+    colorlinks,%
+    citecolor=blue,%
+    filecolor=blue,%
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+% \usepackage{epstopdf}
+% \epstopdfDeclareGraphicsRule{.gif}{png}{.png}{convert gif:#1 png:\OutputFile}
+% \AppendGraphicsExtensions{.gif}
+
+% %\usepackage{listings}
+
+% %%% TIKZ
+\usepackage{forest}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+% \usepackage{pgfgantt}
+\usepackage{neuralnetwork}
+
+\usetikzlibrary{fit,arrows,arrows.meta,shapes,positioning,shapes.geometric}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shadows,automata}
+\usetikzlibrary{patterns}
+\usetikzlibrary{trees,mindmap,backgrounds}
+%\usetikzlibrary{circuits.ee.IEC}
+\usetikzlibrary{decorations.text}
+% % For Sagnac Picture
+% \usetikzlibrary{%
+%     decorations.pathreplacing,%
+%     decorations.pathmorphing%
+% }
+% \tikzset{no shadows/.style={general shadow/.style=}}
+% %
+% %\usepackage{paralist}
+
+\tikzset{
+  font=\Large\sffamily\bfseries,
+  red arrow/.style={
+    midway,red,sloped,fill, minimum height=3cm, single arrow, single arrow head extend=.5cm, single arrow head indent=.25cm,xscale=0.3,yscale=0.15,
+    allow upside down
+  },
+  black arrow/.style 2 args={-stealth, shorten >=#1, shorten <=#2},
+  black arrow/.default={1mm}{1mm},
+  tree box/.style={draw, rounded corners, inner sep=1em},
+  node box/.style={white, draw=black, text=black, rectangle, rounded corners},
+}
+
+% %%% FORMAT PYTHON CODE
+% %\usepackage{listings}
+% % Default fixed font does not support bold face
+% \DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{8} % for bold
+% \DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{8}  % for normal
+
+% % Custom colors
+% \definecolor{deepblue}{rgb}{0,0,0.5}
+% \definecolor{deepred}{rgb}{0.6,0,0}
+% \definecolor{deepgreen}{rgb}{0,0.5,0}
+
+% %\usepackage{animate}
+
+% % Python style for highlighting
+% % \newcommand\pythonstyle{\lstset{
+% % language=Python,
+% % basicstyle=\footnotesize\ttm,
+% % otherkeywords={self},             % Add keywords here
+% % keywordstyle=\footnotesize\ttb\color{deepblue},
+% % emph={MyClass,__init__},          % Custom highlighting
+% % emphstyle=\footnotesize\ttb\color{deepred},    % Custom highlighting style
+% % stringstyle=\color{deepgreen},
+% % frame=tb,                         % Any extra options here
+%     % showstringspaces=false            % 
+% % }}
+
+% % % Python environment
+% % \lstnewenvironment{python}[1][]
+% % {
+% % \pythonstyle
+% % \lstset{#1}
+% % }
+% % {}
+
+% % % Python for external files
+% % \newcommand\pythonexternal[2][]{{
+% % \pythonstyle
+% % \lstinputlisting[#1]{#2}}}
+
+% % Python for inline
+% % 
+% % \newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+% %\usepackage{algorithm2e}
+
+\newcommand{\eps}{\epsilon}
+\newcommand{\bX}{\mb X}
+\newcommand{\by}{\mb y}
+\newcommand{\bbe}{\bm\beta}
+\newcommand{\beps}{\bm\epsilon}
+\newcommand{\bY}{\mb Y}
+
+\newcommand{\osn}{\oldstylenums}
+\newcommand{\dg}{^{\circ}}
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+\newcommand{\pt}{\phantom}
+\newcommand{\tf}{\therefore}
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\fr}{\frac}
+\newcommand{\dfr}{\dfrac}
+\newcommand{\ul}{\underline}
+\newcommand{\tn}{\tabularnewline}
+\newcommand{\nl}{\newline}
+\newcommand\relph[1]{\mathrel{\phantom{#1}}}
+\newcommand{\cm}{\checkmark}
+\newcommand{\ol}{\overline}
+\newcommand{\rd}{\color{red}}
+\newcommand{\bl}{\color{blue}}
+\newcommand{\pl}{\color{purple}}
+\newcommand{\og}{\color{orange!90!black}}
+\newcommand{\gr}{\color{green!40!black}}
+\newcommand{\lbl}{\color{CornflowerBlue}}
+\newcommand{\dca}{\color{darkcandyapplered}}
+\newcommand{\nin}{\noindent}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,thick,inner sep=1pt] (char) {\small #1};}}
+
+\newcommand{\bc}{\begin{compactenum}[\quad--]}
+\newcommand{\ec}{\end{compactenum}}
+
+\newcommand{\p}{\partial}
+\newcommand{\pd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpd}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\pdd}[2]{\frac{\partial^2{#1}}{\partial{#2}^2}}
+\newcommand{\pde}[3]{\frac{\partial^2{#1}}{\partial{#2}\partial{#3}}}
+\newcommand{\nmfr}[3]{\Phi\left(\frac{{#1} - {#2}}{#3}\right)}
+\newcommand{\Err}{\text{Err}}
+\newcommand{\err}{\text{err}}
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+%%%% GREEK LETTER SHORTCUTS %%%%%
+\newcommand{\la}{\lambda}
+\renewcommand{\th}{\theta}
+\newcommand{\al}{\alpha}
+\newcommand{\G}{\Gamma}
+\newcommand{\si}{\sigma}
+\newcommand{\Si}{\Sigma}
+
+
+\pgfmathdeclarefunction{poiss}{1}{%
+  \pgfmathparse{(#1^x)*exp(-#1)/(x!)}%
+  }
+
+\pgfmathdeclarefunction{gauss}{2}{%
+  \pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+\pgfmathdeclarefunction{expo}{2}{%
+  \pgfmathparse{#1*exp(-#1*#2)}%
+}
+
+\pgfmathdeclarefunction{expocdf}{2}{%
+  \pgfmathparse{1 -exp(-#1*#2)}%
+}
+
+\newcommand{\mb}{\mathbb}
+\newcommand{\mc}{\mathcal}
+\newcommand{\tr}{^{\top}}
+\newcommand{\empt}[2]{$#1^{( #2 )}$}
+\newcommand{\pe}{\pause}
+% \usepackage{pst-plot}
+
+% \usepackage{pstricks-add}
+% \usepackage{auto-pst-pdf}   
+
+% \psset{unit = 3}
+
+% \def\target(#1,#2){%
+%  {\psset{fillstyle = solid}
+%   \rput(#1,#2){%
+%     \pscircle[fillcolor = white](0.7,0.7){0.7}
+%     \pscircle[fillcolor = blue!60](0.7,0.7){0.5}
+%     \pscircle[fillcolor = white](0.7,0.7){0.3}
+%     \pscircle[fillcolor = red!80](0.7,0.7){0.1}}}}
+% \def\dots[#1](#2,#3){%
+%     \psRandom[
+%       dotsize = 2pt,
+%       randomPoints = 25
+%     ](!#2 #1 0.04 sub sub #3 #1 0.04 sub sub)%
+%      (!#2 #1 0.04 sub add #3 #1 0.04 sub add)%
+%      {\pscircle[linestyle = none](#2,#3){#1}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title[\shortlecturetitle]{ {\normalsize \coursetitle}
+  \\ \longlecturetitle}
+\date[\lecturedate]{\footnotesize \lecturedate}
+\author{{\bf \instructor}}
+\institute[UMass Amherst]{
+%\titlegraphic{\hfill
+  \begin{tikzpicture}[baseline=(current bounding box.center)]
+    \node[anchor=base] at (-7,0) (its) {\includegraphics[scale=.3]{UMassEngineering_vert}} ;
+  \end{tikzpicture}
+  % \hfill\includegraphics[height=1.5cm]{logo}
+}
+
+%https://tex.stackexchange.com/questions/55806/mindmap-tikzpicture-in-beamer-reveal-step-by-step
+  \tikzset{
+    invisible/.style={opacity=0},
+    visible on/.style={alt={#1{}{invisible}}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    },
+  }
+
+
+% https://tex.stackexchange.com/questions/446468/labels-with-arrows-for-an-equation
+% https://tex.stackexchange.com/a/402466/121799
+\newcommand{\tikzmark}[3][]{
+\ifmmode
+\tikz[remember picture,baseline=(#2.base)] \node [inner sep=0pt,#1](#2) {$#3$};
+\else
+\tikz[remember picture,baseline=(#2.base)] \node [inner sep=0pt,#1](#2) {#3};
+\fi
+}
+
+% \lstset{language=matlab,
+%                 basicstyle=\scriptsize\ttfamily,
+%                 keywordstyle=\color{blue}\ttfamily,
+%                 stringstyle=\color{blue}\ttfamily,
+%                 commentstyle=\color{gray}\ttfamily,
+%                 morecomment=[l][\color{gray}]{\#}
+%               }
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

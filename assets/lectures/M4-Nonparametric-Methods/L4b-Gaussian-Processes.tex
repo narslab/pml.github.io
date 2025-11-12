@@ -1,0 +1,458 @@
+%\documentclass[smaller, handout]{beamer}
+\def\bmode{0} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+\if 0\bmode
+\documentclass[smaller]{beamer}
+\else \if 1\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout-Notes\space\jobname}
+\documentclass[smaller,handout]{beamer}
+\usepackage{handoutWithNotes}
+\pgfpagesuselayout{2 on 1 with notes}[letterpaper, landscape, border shrink=4mm]
+\else \if 2\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout\space\jobname}
+\documentclass[smaller,handout]{beamer}
+\fi
+\fi
+\fi
+
+%\setbeamertemplate{section in head/foot}{}
+%\setbeamertemplate{section in head/foot shaded}{\textcolor{white}{\insertsectionhead}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\coursetitle}{CEE 697M: Probabilistic Machine Learning}
+\newcommand{\longlecturetitle}{M4 Nonparametric Methods:\\ L4b: Gaussian Processes}
+\newcommand{\shortlecturetitle}{L4b: Gaussian Processes}
+\newcommand{\instructor}{Jimi Oke}
+\newcommand{\lecturedate}{Fri, Apr 21, 2023}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ \input{course-macros.tex}
+              
+\begin{document}
+\maketitle
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+
+
+ 
+  
+ 
+%\section{Introduction}
+ 
+
+\section{Introduction}
+
+\begin{frame}
+  \frametitle{Gaussian processes}
+  \pe Given a domain $\mc X$, a Gaussian process (GP) defines a joint distribution over functions of the form
+  $f: \mc X\in \mb R$. \pe
+  
+  \begin{block}{Assumptions}
+    \pe
+    \begin{itemize}
+    \item Function values for $M>0$ inputs $\bm f = [f(\bm x_{1}), \ldots , f(\bm x_{M})]$ is jointly Gaussian \pe
+      \begin{itemize}
+      \item Mean: \pe $\bm \mu = m(\bm x_{1}, \ldots, \bm x_{M})$, \pe where $m$ is a mean function \pe
+      \item Covariance: \pe $\bm \Sigma_{ij} = \mc K(\bm x_{i}, \bm x_{j})$, \pe where $\mc K$ is a Mercer kernel
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+  \pe
+  More formally, a GP can be considered as a finite number of r.v.'s which have a joint Gaussian distribution \pe
+  \begin{equation}
+    \bm f(\bm x) = \mc {GP} (\bm \mu, \bm \Sigma_{ij})
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Gausssian processes and kernels}
+  \pe
+
+  \begin{itemize}
+  \item The structure of the covariance $\bm \Sigma_{ij}$ is specified by a \textbf{kernel function} (which imposes a prior assumption of the distribution)\pe
+  \item Gaussian processes can be used for: \pe
+    \begin{itemize}
+    \item regression \pe
+    \item classification \pe
+    \item clustering
+    \end{itemize}    
+  \end{itemize}
+  \pe
+  
+  \begin{center}
+    \includegraphics[width=.3\textwidth]{gp-ex}
+
+    {\tiny Source: \url{http://krasserm.github.io/2018/03/19/gaussian-processes/}}
+  \end{center}
+  
+\end{frame}
+
+% \section{Local regression}%
+
+\section{Mercer kernels}
+\begin{frame}
+  \frametitle{Mercer kernel}
+  \pe
+  \begin{itemize}
+  \item Nonparametric methods require an approach to map \textbf{prior knowledge} regarding the pairwise
+    similarity of input vectors $(\bm x_i,\bm x_j)$
+    \pe
+
+  \item This is achieved using a kernel function $\mc K$ \pe
+  \item A Mercer kernel is any symmetric function $\mc K: \mc X \times \mc X \to\mb R^+$ such that: \pe
+    \begin{equation}
+      \sum_{i=1}^N\sum_{j=1}^N \mc K(\bm x_i, \bm x_j) c_ic_j \ge 0
+    \end{equation}
+    \pe
+    for any set of $N$ points $\bm x_i\in \mc X$ and any $c_i \in \mb R$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Gram matrix view}
+  \pe
+  The Gram (or kernel) matrix is defined as:\pe
+  \begin{equation}
+    \bm K =
+    \begin{pmatrix}
+      \mc K(\bm x_1,\bm x_1) & \cdots & \mc K(\bm x_1,\bm x_N) \\
+      \vdots & \ddots & \vdots \\
+      \mc K(\bm x_N,\bm x_1) & \cdots & \mc K(\bm x_N,\bm x_N)       
+    \end{pmatrix}
+  \end{equation}
+  If $\bm K$ is \textbf{positive definite} for any set of unique inputs $\bm x_i \in \mc X, n = 1:N$, then $\mc K$ is a Mercer kernel.
+  \pe
+  \begin{itemize}
+  \item Thus, a Mercer kernel is also known as a positive definite kernel
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mercer's theorem}
+  \pe
+  Any [symmetric] positive definite matrix $\bm K$ can be eigendecomposed as:\pe
+  \begin{equation}
+    \bm K = \bm U\tr \bm \Lambda\bm U
+  \end{equation}
+  \pe
+  where $\bm \Lambda$ is a diagonal matrix of eigenvalues \pe $\la_i > 0$ and $\bm U$ the matrix of eigenvectors.
+  \pe
+  \begin{itemize}
+  \item Each element $k_{ij}$ can be written as: \pe
+      \begin{equation}
+        k_{ij} = (\bm \Lambda^{\fr12}\bm u_i)\tr (\bm \Lambda^{\fr12}\bm u_j) \pe \equiv \bm \phi(\bm x_i)\tr\bm \phi(\bm x_j)
+      \end{equation}
+      \pe where $\bm u_i$ is the $i$-th column/row of $\bm U$.\pe
+    \item We can then express each element as an inner product of feature vectors specified by $\bm u_i$: \pe
+      \begin{equation}
+        k_{ij} = \sum_{m}\phi_m(\bm x_i)\phi_m(\bm x_j)
+      \end{equation}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Popular Mercer kernels}\pe
+  \begin{itemize}
+  \item \textbf{Squared exponential} (SE)/RBF kernel (below: $\ell =1$)\pe
+
+      
+  \begin{center}
+    \includegraphics[width=.1\textwidth]{se-matrix}
+
+    {\tiny Source: \url{https://peterroelants.github.io/posts/gaussian-process-kernels/}}
+  \end{center}
+  \pe
+
+    \item \textbf{Periodic} kernels (below: $\ell = 1, p=1$) \pe
+          
+  \begin{center}
+    \includegraphics[width=.1\textwidth]{periodic-matrix}
+
+    {\tiny Source: \url{https://peterroelants.github.io/posts/gaussian-process-kernels/}}
+  \end{center}
+  \pe
+  
+\item \textbf{Automatic relevancy determination} (ARD) kernel \pe
+
+\item Kernels can be composed by addition, multiplication and other operations
+
+  \end{itemize}
+\end{frame}
+\begin{frame}
+  \frametitle{Squared exponential kernel}
+  \pe
+  The squared exponential (SE) kernel is given by:
+  \pe
+  \begin{equation}
+    \mc K(\bm x,\bm x') = \exp\lt[-\fr{||\bm x - \bm x'||^2}{2\ell^2}\rt]
+    \end{equation}
+    \pe
+    where $\ell$ is the length scale (or \textbf{bandwidth}) parameter \pe
+    \begin{itemize}
+    \item Note that the SE kernel kernel measures similarity between $\bm x$ and $\bm x'$ using a scaled Euclidean distance\pe
+    \item SE is also referred to as Gaussian, RBF or exponentiated quadratic
+    \end{itemize}
+  \end{frame}
+
+  
+\section{Joint MVNs}
+\begin{frame}
+  \frametitle{Joint Gaussian r.v.'s}
+  \pe
+  If two random vectors $\bm x_1$ and $\bm x_2$ are jointly Gaussian, then their joint probability is given by:\pe
+  \begin{equation}
+    p
+  \begin{pmatrix}
+    \bm x_1\\ \bm x_2
+  \end{pmatrix}
+  = \mc N (\bm\mu,\bm\Sigma) \pe = 
+  \mc N \lt(
+  \begin{pmatrix}
+    \bm \mu_1 \\\bm \mu_2
+  \end{pmatrix}, 
+  \begin{pmatrix}
+    \bm\Sigma_{11} &   \bm \Sigma_{12}\\
+    \bm\Sigma_{21} &   \bm \Sigma_{22}
+  \end{pmatrix}
+  \rt)
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Marginalization}
+  \pe
+  Provides the distribution on each vector (partial information).\pe
+
+  The marginal distributions are given by: \pe
+
+  \begin{eqnarray}
+    p(\bm x_1) &=& \pe \mc N(\bm x_1|\bm mu_1,\bm\Sigma_{11}) \\\pe
+    p(\bm x_2) &=& \pe \mc N(\bm x_2|\bm mu_2,\bm\Sigma_{22})
+  \end{eqnarray}
+
+  \pe
+  Marginal distributions are also Gaussian.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Conditioning}
+
+  \pe
+
+  The \textbf{posterior} conditional distribution is:\pe
+  \begin{equation}
+    p(\bm x_1 |\bm x_2) = \mc N(\bm x_1|\bm \mu_{1|2},\bm\Sigma_{1|2})
+  \end{equation}
+  \pe
+  where:
+  \begin{eqnarray*}
+    \bm \mu_{1|2} &=&\pe \bm \mu_1 + \bm\Sigma_{12}\Sigma_{22}^{-1}(\bm x_2 -\bm\mu_2) \quad \pe \text{(posterior mean)}\\\pe
+    \bm \Sigma_{1|2} &=& \pe \bm\Sigma_{11} - \bm\Sigma_{12}\bm\Sigma_{22}^{-1}\bm\Sigma_{21} \quad
+                         \pe \text{(posterior covariance)}
+  \end{eqnarray*}
+\end{frame}
+
+\section{Noise-free}
+\begin{frame}
+  \frametitle{Noise-free observations}
+  \pe
+  In standard GP, we assume that observations in the training set are noise-free (exact output based on a known function $f$):
+  \pe
+  
+  \begin{eqnarray}
+    \mc D &=& \{(\bm x_{n}, y_{n}): n=1:N\} \\\pe
+    y_{n} &=& f (\bm x_{n}) \pe \quad \text{(noise-free observation)}
+  \end{eqnarray}
+  \pe
+  \begin{center}
+    \includegraphics[width=.3\textwidth]{gp-noise-free-2}
+
+    {\tiny Source: \url{https://www.aidanscannell.com/post/gaussian-process-regression/}}
+  \end{center}
+  \pe
+
+  To predict function outputs for new inputs $\bm x^{*}$, we estimate the \textit{posterior conditional distribution}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Joint distribution}
+  The joint distribution $\bl p(\bm f_{X},\bm f_{*}|\bm X,\bm X_{*})$ of function outputs is given by: \pe
+  
+  \begin{equation}\bl
+    \begin{pmatrix}
+      \bm f_{X} \\ \bm f_{*}
+    \end{pmatrix}
+    \pe
+    \sim
+    \mc N\lt(
+    \begin{pmatrix}
+      \bm \mu_{X} \\ \bm \mu_{*}
+    \end{pmatrix},
+    \begin{pmatrix}
+      \bm K_{X,X} & \bm K_{X,*} \\
+      \bm K_{X,*}\tr & \bm K_{*,*}
+    \end{pmatrix}
+    \rt)
+  \end{equation}
+  \pe
+  where:
+  \begin{itemize}
+  \item $\bm f_{X}$: function outputs over training set (interpolator): $[f(\bm x_{1}),\ldots, f(x_{N})]$\pe
+  \item $\bm f_{*}$: function outputs over test set: $[f(\bm x^{*}_{1}),\ldots, f(x^{*}_{N_{*}})]$\pe
+  \item Test inputs: $\bm X_{*} \in \bm R^{N_{*}\times D}$; \pe training inputs: $\bm X \in \mb R^{N\times D}$\pe
+  \item Mean vectors: \pe $\bm \mu_{X} = m(\bm x_{1}, \ldots, \bm x_N)$ and \pe $\bm \mu_{*} = m(\bm x^{*}_{1}, \ldots, \bm x^{*}_{N_{*}})$ \pe
+  \item Block covariance matrix: \pe
+    \begin{itemize}
+    \item $\bm K_{X,X} = \mc K(\bm X, \bm X) \in \mb R^{N\times N}$  \pe
+    \item    $\bm K_{X,*} = \mc K(\bm X, \bm X_{*}) \in \mb R^{N\times N_{*}}$  \pe
+    \item    $\bm K_{*,*} = \mc K(\bm X_{*}, \bm X_{*}) \in \mb R^{N_{*}\times N_{*}}$
+  \end{itemize}
+
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Posterior conditional distribution}
+  \pe
+
+  We sample predictions from the posterior conditional distributon, which is specified as: \pe
+
+  \begin{eqnarray}
+    p(\bm f_{*}|\bm X_{*}, \mc D) \pe &=& \mc N(\bm f_{*}|\bm u_{*|X}, \bm \Sigma_{*|X}) \pe \\ \pe
+    \bm \mu_{*|X} \pe &=& m(\bm X_{*}) + \bm K_{X,*}\tr K_{X,X}^{-1}(\bm f_{X} - m(\bm X)) \\ \pe
+    \bm \Sigma_{*|X} \pe &=& \bm K_{*,*} - \bm K_{X,*}\tr \bm K_{X,X}^{-1}\bm K_{X,*}
+  \end{eqnarray}
+  
+\end{frame}
+
+\section{Noisy}
+\begin{frame}
+  \frametitle{Noisy observations}
+  \pe
+  If we have a noisy realization of the underlying function, then:\pe
+  \begin{equation}
+    y_n = f(\bm x_n) + \epsilon_n
+  \end{equation}
+  \pe
+  where $\epsilon_n \sim \mc N(0,\sigma_y^2)$.
+  
+  \pe
+  The covariance of the observed noisy responses $\bm y$ is thus given by: \pe
+  \begin{equation}
+    \text{Cov} [\bm y|\bm X] = \pe \bm K_{X,X} + \sigma_y^2\bm{I}_N \pe \equiv \hat{\bm K}_{X,X}
+  \end{equation}
+  \pe
+  In scalar form, this can be written as:\pe
+
+  \begin{equation}
+    \text{Cov}[y_i, y_j] = \pe \text{Cov}[f_i, f_j] + \text{Cov}[\epsilon_i,\epsilon_j] \pe =
+    \mc{K}(\bm x_i,\bm x_j) + \sigma_y^2\delta_{ij}
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Joint density}
+  \pe
+  The joint distribution of the  observed data $\bm y$ and the noise-free function on test points $\bm f_*$ is: \pe
+  \begin{equation}
+        \begin{pmatrix}
+      \bm f_{X} \\ \bm f_{*}
+    \end{pmatrix}
+    \pe
+    \sim
+    \mc N\lt(
+    \begin{pmatrix}
+      \bm \mu_{X} \\ \bm \mu_{*}
+    \end{pmatrix},
+    \begin{pmatrix}
+      \hat{\bm K}_{X,X} & \bm K_{X,*} \\
+      \bm K_{X,*}\tr & \bm K_{*,*}
+    \end{pmatrix}
+    \rt)
+  \end{equation}
+  \pe
+  Note that this has the same form as the joint distribution in the noise-free case, except: $\bm K_{X,X}$ is replaced by $\hat{\bm K}_{X,X}$, which is the covariance of the training inputs with a constant variance $\sigma_y^2$ added to all the diagonal terms.
+
+    \pe
+  
+  \begin{center}
+    \includegraphics[width=.3\textwidth]{gp-noise}
+
+    {\tiny GPR example with noisy inputs. Source: \url{https://www.aidanscannell.com/post/gaussian-process-regression/}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Posterior predictive density}
+  \pe
+  The conditional posterior distribution (posterior predictive) is given by:
+
+    \begin{eqnarray}
+    p(\bm f_{*}|\bm X_{*}, \mc D) \pe &=& \mc N(\bm f_{*}|\bm u_{*|X}, \bm \Sigma_{*|X}) \pe \\ \pe
+    \bm \mu_{*|X} \pe &=& m(\bm X_{*}) + \bm K_{X,*}\tr \hat{\bm K}_{X,X}^{-1}(\bm y - m(\bm X)) \\ \pe
+    \bm \Sigma_{*|X} \pe &=& \bm K_{*,*} - \bm K_{X,*}\tr \hat{\bm K}_{X,X}^{-1}\bm K_{X,*}
+  \end{eqnarray}
+\end{frame}
+
+\section{Kernel learning}
+\begin{frame}
+  \frametitle{Optimizing kernel parameters}
+  \pe
+  The value of kernel [hyper]parameters $\bm \th$ affects prediction performance.\pe
+  \begin{itemize}
+  \item In SE kernels, we want to optimize the length scale $\ell$\pe
+  \item For ARD kernels, we want to learn/optimize the characteristic length scale $\ell_d$ and the variance $\sigma^2$\pe
+  \item Hyperparameters can be learned via \textbf{maximum marginal likelihood}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Maximum marginal likelihood}
+  \pe
+  Assuming the mean function is zero, the prior is given by:\pe
+  \begin{equation}
+    p(\bm f|\bm X,\bm\th) = \mc N(\bm f|\bm 0,\bm K)
+  \end{equation}
+  \pe
+  and the likelihood of each observation (conditioned on the latent function $\bm f$) can be written as:\pe
+  \begin{equation}
+    p(\bm y|\bm f,\bm X) = \prod_{n=1}^N\mc N(y_n |f_n,\sigma_y^2)
+  \end{equation}
+  \pe
+  The marginal likelihood is thus given by:\pe
+  \begin{equation}
+    p(\bm y|\bm X,\bm \th) = \int p(\bm y|\bm f,\bm X) p(\bm f|\bm X,\bm\th) d\bm f
+  \end{equation}
+  \pe
+  To find the optimal kernel parameters $\bm\th$, we maximize the \textbf{\rd log marginal likelihood}: \pe
+  \begin{equation}\rd
+    \log p(\bm y|\bm X,\bm\th) = \pe
+    \log \mc N(\bm y|\bm 0 ,\hat{\bm K}_{X,X}) \pe =
+    -fr12\bm y\tr\hat{\bm K}_{X,X}^{-1}\bm y - \fr12\log|\hat{\bm K}_{X,X}| - \fr{N}{2}\log(2\pi)
+  \end{equation}
+\end{frame}
+\section{Outlook}
+\begin{frame}
+  \frametitle{Reading}
+ 
+  \begin{itemize}[<+->]
+\item \textbf{PMLI 17.1-2}
+\item \url{https://colab.research.google.com/github/krasserm/bayesian-machine-learning/blob/dev/gaussian-processes/gaussian_processes.ipynb}
+\item \url{https://peterroelants.github.io/posts/gaussian-process-kernels/}
+\item \url{https://github.com/aidanscannell/probabilistic-modelling/blob/master/notebooks/gaussian-process-regression.ipynb}
+  \end{itemize}
+\end{frame}
+
+
+
+%\appendix\addtocounter{part}{-1}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

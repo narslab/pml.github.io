@@ -201,19 +201,35 @@
 % %%% TIKZ
 % \usepackage{forest}
 \usepackage{tikz}
+\usepackage{forest}
+\usepackage{tikz-3dplot}
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
 \usepackage{neuralnetwork}
 %\usepackage{pgfgantt}
 \pgfplotsset{compat=newest}
 
-\usetikzlibrary{fit,arrows,shapes,positioning,shapes.geometric}
+\usetikzlibrary{fit,arrows,arrows.meta,shapes,positioning,shapes.geometric}
 \usetikzlibrary{decorations.markings}
 \usetikzlibrary{shadows,automata}
 \usetikzlibrary{patterns}
 \usetikzlibrary{trees,mindmap,backgrounds}
 %\usetikzlibrary{circuits.ee.IEC}
 \usetikzlibrary{decorations.text}
+
+
+\tikzset{
+  font=\Large\sffamily\bfseries,
+  red arrow/.style={
+    midway,red,sloped,fill, minimum height=3cm, single arrow, single arrow head extend=.5cm, single arrow head indent=.25cm,xscale=0.3,yscale=0.15,
+    allow upside down
+  },
+  black arrow/.style 2 args={-stealth, shorten >=#1, shorten <=#2},
+  black arrow/.default={1mm}{1mm},
+  tree box/.style={draw, rounded corners, inner sep=1em},
+  node box/.style={white, draw=black, text=black, rectangle, rounded corners},
+}
+
 % % For Sagnac Picture
 % \usetikzlibrary{%
 %     decorations.pathreplacing,%
@@ -355,6 +371,7 @@
 \newcommand{\mb}{\mathbb}
 \newcommand{\mc}{\mathcal}
 \newcommand{\tr}{^{\top}}
+\newcommand{\empt}[2]{$#1^{( #2 )}$}
 \newcommand{\pe}{\pause}
 % \usepackage{pst-plot}
 

@@ -1,0 +1,345 @@
+
+\documentclass[11pt]{article}
+\usepackage{etex}
+
+\raggedbottom
+
+%geometry (sets margin) and other useful packages
+\usepackage{geometry}
+\geometry{top=1in, left=1in,right=1in,bottom=1in}
+ \usepackage{graphicx,booktabs,calc}
+ 
+\usepackage{listings}
+
+
+% Marginpar width
+%Marginpar width
+\newcommand{\pts}[1]{\leavevmode\marginpar{\hfill\small\textit{[#1]}\hfill}} 
+\setlength{\marginparwidth}{.5in}
+%\reversemarginpar
+%\setlength{\marginparsep}{.02in}
+
+ 
+%\usepackage{cmbright}lstinputlisting
+%\usepackage[T1]{pbsi}
+
+
+\usepackage{chngcntr,mathtools}
+%\counterwithin{figure}{section}
+%\numberwithin{equation}{section}
+
+%\usepackage{listings}
+
+%AMS-TeX packages
+\usepackage{amssymb,amsmath,amsthm} 
+\usepackage{bm}
+\usepackage[mathscr]{eucal}
+\usepackage{colortbl}
+\usepackage{color}
+
+
+\usepackage{subfig,hyperref,enumerate,polynom,polynomial}
+\usepackage{multirow,minitoc,fancybox,array,multicol}
+
+\definecolor{slblue}{rgb}{0,.3,.62}
+\hypersetup{
+    colorlinks,%
+    citecolor=blue,%
+    filecolor=blue,%
+    linkcolor=blue,
+    urlcolor=slblue
+}
+
+%%%TIKZ
+\usepackage{tikz}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{arrows,shapes,positioning}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shadows}
+\usetikzlibrary{patterns}
+%\usetikzlibrary{circuits.ee.IEC}
+\usetikzlibrary{decorations.text}
+% For Sagnac Picture
+\usetikzlibrary{%
+    decorations.pathreplacing,%
+    decorations.pathmorphing%
+}
+
+\tikzstyle arrowstyle=[black,scale=2]
+\tikzstyle directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrow[arrowstyle]{stealth}}}}]
+\tikzstyle reverse directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrowreversed[arrowstyle]{stealth};}}}]
+\tikzstyle dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrow[arrowstyle]{latex}}}}]
+\tikzstyle rev dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrowreversed[arrowstyle]{latex};}}}]
+
+\usepackage{ctable}
+
+%
+%Redefining sections as problems
+%
+\makeatletter
+\newenvironment{exercise}{\@startsection 
+	{section}
+	{1}
+	{-.2em}
+	{-3.5ex plus -1ex minus -.2ex}
+    	{1.3ex plus .2ex}
+    	{\pagebreak[3]%forces pagebreak when space is small; use \eject for better results
+	\large\bf\noindent{Part 1.\hspace{-1.5ex} }
+	}
+	}
+	%{\vspace{1ex}\begin{center} \rule{0.3\linewidth}{.3pt}\end{center}}
+	%\begin{center}\large\bf \ldots\ldots\ldots\end{center}}
+\makeatother
+
+%
+%Fancy-header package to modify header/page numbering 
+%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\addtolength{\headwidth}{\marginparsep} %these change header-rule width
+%\addtolength{\headwidth}{\marginparwidth}
+%\fancyheadoffset{30pt}
+%\fancyfootoffset{30pt}
+\fancyhead[LO,RE]{\small Oke}
+\fancyhead[RO,LE]{\small Page \thepage} 
+\fancyfoot[RO,LE]{\small PS 4} 
+\fancyfoot[LO,RE]{\small \scshape CEE 697M} 
+\cfoot{} 
+\renewcommand{\headrulewidth}{0.1pt} 
+\renewcommand{\footrulewidth}{0.1pt}
+%\setlength\voffset{-0.25in}
+%\setlength\textheight{648pt}
+
+
+\usepackage{paralist}
+
+\newcommand{\osn}{\oldstylenums}
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+\newcommand{\pt}{\phantom}
+\newcommand{\tf}{\therefore}
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\fr}{\frac}
+\newcommand{\dfr}{\dfrac}
+\newcommand{\ul}{\underline}
+\newcommand{\tn}{\tabularnewline}
+\newcommand{\nl}{\newline}
+\newcommand\relph[1]{\mathrel{\phantom{#1}}}
+\newcommand{\cm}{\checkmark}
+\newcommand{\ol}{\overline}
+\newcommand{\rd}{\color{red}}
+\newcommand{\bl}{\color{blue}}
+\newcommand{\pl}{\color{purple}}
+\newcommand{\og}{\color{orange!90!black}}
+\newcommand{\gr}{\color{green!40!black}}
+\newcommand{\nin}{\noindent}
+\newcommand{\la}{\lambda}
+\renewcommand{\th}{\theta}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,thick,inner sep=1pt] (char) {\small #1};}}
+
+\newcommand{\bc}{\begin{compactenum}[\quad--]}
+\newcommand{\ec}{\end{compactenum}}
+
+\newcommand{\n}{\\[2mm]}
+%% GREEK LETTERS
+\newcommand{\al}{\alpha}
+\newcommand{\gam}{\gamma}
+\newcommand{\eps}{\epsilon}
+\newcommand{\sig}{\sigma}
+
+\newcommand{\p}{\partial}
+\newcommand{\pd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpd}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\pdd}[2]{\frac{\partial^2{#1}}{\partial{#2}^2}}
+\newcommand{\mr}{\mathbb{R}}
+\newcommand{\xs}{x^{*}}
+\newenvironment{solution}
+{\medskip\par\quad\quad\begin{minipage}[c]{.8\textwidth}}{\medskip\end{minipage}}
+
+\newcommand{\nmfr}[3]{\Phi\left(\frac{{#1} - {#2}}{#3}\right)}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheoremstyle{mystyle}
+  {\topsep}{\topsep}{\normalfont}{}{\Large\bfseries}{\newline}{0em \bigskip\bigskip}
+  {\thmname{#1}\thmnumber{ #2 }\thmnote{\it #3}\vspace{.5em}}
+\theoremstyle{mystyle}
+\newtheorem{prob}{Problem}
+
+\begin{document}
+
+\lstset{language=C++,
+                basicstyle=\tiny\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{gray}\ttfamily,
+                morecomment=[l][\color{gray}]{\#}
+}
+
+
+\thispagestyle{empty}
+
+
+\nin{\LARGE Problem Set 4 }\hfill{\bf Oke}
+
+\medskip\hrule\medskip
+
+\nin {\small CEE 616: Probabilistic Machine Learning
+\hfill\textit{ 11.06.2025}}
+
+\nin{\it \small Due Nov 20, 2025 at 11:59PM. Submit on Canvas.}\\
+
+%\nin The standard problems are worth a total of \textbf{89 points}, with \textbf{13 extra credit [EC] points} available.
+
+ 
+
+\subsubsection*{Submission instructions}
+There are two options for submission:
+\begin{enumerate}
+\item JupyterLab Notebook. Please name your notebook as follows: \\ \texttt{<lastname>-<firstname>-PS4.ipynb}
+\item R/Python/MATLAB script \textit{and} PDF document with supporting responses.
+  Your PDF should have complete responses to all the questions (including all the required plots).
+  Your script should be clearly commented, producing all the results and plots you show in your PDF document.
+  The filenames should be in a similar format as described above.
+\end{enumerate}
+Whenever datasets are provided, be sure to leave the relative path and filenames as originally given in order to ensure that your scripts will run properly.
+For instance, here, all the data sets are found in the \texttt{data} folder. So, when you call \texttt{read.csv()}, use the relative path, e.g. \texttt{data/Default.csv}.
+This way, when you submit your work, you need not include the data. I will have the exact same folder and will be able to run all the scripts as the same path will be referenced.
+
+\eject
+
+
+\begin{prob}[Neural networks for structured data---regression (18 pts; 5 pts EC)]
+	~
+\begin{enumerate}[\bf (a)]
+	\item Develop a feed-forward neural network model (Model 1) to predict the average house value based on the 8 features in the
+	\href{https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_california_housing.html}{California
+		housing dataset}.  Note that the target variable in the scikit-learn implementation is in units of $\$100,000$.  As a starting point, you
+	may use the model in \texttt{L3a-Regression-ANN.ipynb} for this problem. (Use the \texttt{validation\_split} argument
+	in your \texttt{fit()} call so that the validation loss is obtained from a further partitioning of the training data.)
+	\begin{enumerate}[\bf (i)]
+		\item Summarize or plot the structure of your ANN.\pts{2}
+		\item Show the plot of training/validation loss vs.\ epoch.\pts{4} Explain how you might use this plot to prevent overfitting the model.
+		\item Report the performance (e.g.\ MSE) of your model on the left-out test set.\pts{3} Plot the predictions
+		(\texttt{y\_pred}) against the observations (\texttt{y\_true}).
+	\end{enumerate}
+	\item Create two alternative ANNs by modifying the hyperparameters (e.g.\ number of dense layers, number of neurons in
+	each dense layer, activation function, etc.). Call these ``Model 2'' and ``Model 3,'' respectively.
+	\begin{enumerate}[\bf (i)]
+		\item Briefly discuss how you arrived at Models 2 and 3 \pts{2} (e.g.\ What were your considerations? What did you explore?) 
+		\item Summarize or plot the structure of both Models 2 and 3.\pts{2}
+		\item Show the plot of training/validation loss vs.\ epoch for each of these models.\pts{2}
+	\end{enumerate}
+	\item Compare the performance \pts{3} of all three  models on the left-out test set using a table and one or more plots.
+	State the best-performing model.
+\end{enumerate}
+\textbf{Extra Credit:} Use one of the Keras \pts{5}
+\href{https://keras-team.github.io/keras-tuner/documentation/tuners/}{tuners}\footnote{Keras tuners: \url{https://keras-team.github.io/keras-tuner/documentation/tuners/}} to find the best hyperparameters within a
+specified range. Report on any improvements to the best model you identified in part (c).
+\end{prob}
+
+
+\begin{prob}[Neural networks for structured data---classification (8 pts)]
+Estimate a neural network to predict the \texttt{Default} class (Yes/No) using all three variables \texttt{student},
+\texttt{balance} and \texttt{income} in the \texttt{data/Default.csv} file.  Summarize your model. Report training/validation
+loss/accuracy plots (or other metrics, e.g.\ precision/recall), test performance, etc.
+\end{prob}
+
+\begin{prob}[Neural networks for image classification (18 pts; 4pts EC)]
+	~
+\begin{enumerate}[\bf (a)]
+	\item Develop a convolutional neural network to predict handwritten digits from the MNIST dataset.\pts{6}
+	You may use \texttt{L3c-CNN-MNIST.ipynb} as a starting point. 
+	Your model should be substantially different from the example shown in class.
+	Perform a few experiments on some of the hyperparameters and \textit{optimizers} to arrive at your final model. In particular discuss the impact of the optimizers you implemented in your modeling experiments.
+	
+	\item Plot the trajectory of the training and validation loss and accuracy. \pts{3} At which epoch do you observe the optimal state of the network?
+	\item Obtain a classification report and discuss the performance of your model. \pts{3}
+	\item Plot the confusion matrix using a heat map. \pts{2}
+	\item Regularization approaches \pts{4}  such as dropout can significantly improve the performance of a neural network.
+	Insert one or more dropout layers following each dense layer. (Experiment with rates from 0.1 through 0.5.)
+	Comment on the impact on model performance.
+\end{enumerate}
+\end{prob}
+
+\begin{prob}[Kernel exploration (15 pts)]
+  Stationary kernels are Mercer kernels whose values only depend on the elementwise differences between inputs $\bm r = \bm x - \bm x'$. Thus, we can write:
+  \begin{equation}
+    \mathcal K(\bm x, \bm x') = \mathcal K(\bm r)
+  \end{equation}
+  Now, we will explore a few stationary kernels in 1D:
+
+  \begin{enumerate}[\bf (a)]
+  \item  \pts{5}\textbf{Squared exponential (SE) kernel}
+    \begin{equation}
+      \mathcal K(r; \sigma^{2}) = \sigma^{2} \exp\lt( - \fr{r^{2}}{2\ell^{2}}\rt)
+    \end{equation}
+    where $\sigma^{2}$ is the variance amplitude parameter and $e\ll$ is the bandwidth or length scale parameter.  Plot
+    the SE kernel in the domain $r \in [-5,5]$, $r\in\mathbb R$, for various $\ell$ and $\sigma^{2}$ values (you can
+    plot these on the same or different axes; but consolidate as much as possible for clarity). How do $\sigma^{2}$ and
+    $\ell$ affect the shape of the kernel?
+    
+
+  \item \pts{5}\textbf{Periodic or exponential sine squared kernel}
+    \begin{equation}
+      \mathcal K(r;\ell,p) = \sigma^{2}\exp\lt[-\fr2{\ell^{2}}\sin^{2}\lt(\pi\fr{r}{p}\rt) \rt]
+    \end{equation}
+    where $\sigma^{2}$ is the amplitude, $p$ is the period and $\ell$ the length scale. Explore and desribe the impacts
+    of $p$ and $\ell$ on the periodic kernel function. Generate plots supporting your description. For simplicity, you
+    can assume $\sigma^{2} = 1$.
+
+  \item \pts{5}\textbf{Cosine kernel}
+    \begin{equation}
+      \mathcal K(r; p) = \cos \lt[2\pi \fr{r}{p}\rt]
+    \end{equation}
+    where $p$ is the period. Explore and desribe the impacts
+    of $p$ on the cosine kernel function. Generate plots supporting your description. For simplicity, you
+    can assume $\sigma^{2} = 1$.
+  \end{enumerate}
+
+  
+\end{prob}
+
+\begin{prob}[Support vector machines  (16 pts; 6 pts EC)]
+In this problem, you will fit a support vector machine (SVM) in order to predict
+if a credit card customer will default on their payment based on their income, balance and student status\footnote{If using the \texttt{student} variable proves problematic, you may leave it out of your model.}.
+
+ 
+\begin{enumerate}[\bf (a)]
+ 
+\item Convert the \texttt{student} variable into \pts{1} an appropriate type (e.g. \texttt{category}, \texttt{numeric}).
+ 
+ \item Randomly split your dataset into a training set and a test set. \pts{1}
+  
+\item Now, find the best model (within reason, and using a feasible approach) for the following kernel choices:
+  \begin{enumerate}[\bf i.]
+  \item linear \pts{3}
+  \item polynomial \pts{3}
+  \item radial \pts{3}
+  \end{enumerate}
+ \textit{Hint:} Select reasonable parameter ranges within which to perform a  grid search. 
+  
+\item Compare the \pts{5} performance of the best models for the three kernel choices, using the test set. Tabulate (or plot) the performance metrics.  Which of the approaches gives the best performance? (Do not simply consider the accuracy; also observe the precision, recall, AUC, etc) Provide ample justification for your response. 
+
+\end{enumerate}
+\textbf{Extra Credit:} \pts{4} Generate 2D plots the decision boundaries for the models in part (c), using the \texttt{income} and \texttt{balance} features.
+\end{prob}
+
+
+
+
+ 
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

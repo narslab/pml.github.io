@@ -1,0 +1,807 @@
+%\documentclass[smaller, dvipsnames, handout]{beamer}
+\def\bmode{2} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+\if 0\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Presentation\space\jobname}
+\documentclass[usenames,dvipsnames,smaller]{beamer}
+\else \if 1\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout-Notes\space\jobname}
+\documentclass[usenames,dvipsnames,smaller,handout]{beamer}
+\usepackage{handoutWithNotes}
+\pgfpagesuselayout{2 on 1 with notes}[letterpaper, landscape, border shrink=4mm]
+\else \if 2\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout\space\jobname}
+\documentclass[usenames,dvipsnames,smaller,handout]{beamer}
+\fi
+\fi
+\fi
+
+
+%\setbeamertemplate{section in head/foot}{}
+%\setbeamertemplate{section in head/foot shaded}{\textcolor{white}{\insertsectionhead}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\coursetitle}{CEE 616: Probabilistic Machine Learning}
+\newcommand{\longlecturetitle}{M4 Nonparametric Methods:\\ L4D: Trees and Ensemble Methods}
+\newcommand{\shortlecturetitle}{L4D: Trees and Ensemble Methods}
+\newcommand{\instructor}{Jimi Oke}
+\newcommand{\lecturedate}{Tue, Nov 18, 2025}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{course-macros.tex}
+%\setbeamercolor{local structure}{fg=white}
+
+\begin{document}
+\maketitle
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+
+\section{Introduction}
+
+\begin{frame}
+  \frametitle{Decision trees}\pause
+
+  \begin{itemize}[<+->]
+  \item Consider a regression problem  with continuous response $y$ and inputs $X_1$ and $X_2$.
+
+  \item  Now, imagine we want to model response $y$ as a constant across different regions of the input space.
+
+  \item   One option can be:
+
+  \begin{figure}[h!]
+    \centering
+    \includegraphics<5->[width=.5\textwidth, trim={0cm 17.5cm 10cm 3cm}, clip]{ESL9-2}
+    %\caption{Partitioning input space for predicting a region-wise constant response}
+  \end{figure}
+
+\item Can you describe the region using inequalities?
+\item How would you estimate response $y$ in each region?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Recursive binary partitioning}\pause
+  In order to ensure simplicity and interpretability, we consider splitting a dataset using the \textbf{recursive binary partitioning} (RBP) algorithm
+  \pause
+
+    \begin{figure}[h!]
+    \centering
+    \includegraphics<3->[width=.5\textwidth, trim={10cm 17.5cm 0cm 3cm}, clip]{ESL9-2}
+    %\caption{Recursive binary partitioning of input space}
+  \end{figure}
+  \pause
+  \vspace{-2ex}
+  Steps:
+  \begin{enumerate}[<+->]
+  \item Split the input space at $X_1 = t_1$; the response is modeled as the mean of $y$ in each region
+  \item Split the region $X_1 \le t_1$ at $X_2 = t_2$ and the region $X_1 > t_1$ at $X_1 = t_3$
+  \item Split the region $X_1 > t_3$ at $X_2 = t_4$
+  \end{enumerate}
+  \pause
+  Thus we obtain 5 regions. In each case, the \textit{decision} is to choose the \textbf{variable} and the \textbf{split-point} that provide the best fit.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Decision trees (cont.)}
+  \pause
+
+  \begin{figure}[h!]
+    \centering
+    \includegraphics<2->[width=.9\textwidth, trim={0cm 8.5cm 0cm 11cm}, clip]{ESL9-2}
+    % \caption{Recursive binary partitioning of input space}
+  \end{figure}
+  \pause
+
+  \begin{itemize}
+  \item The partitioning steps can be displayed as a \textbf{decision tree}
+  \item The split points are the \textbf{internal nodes}
+  \item Lines connecting the nodes are called \textit{branches}
+  \item The final regions are \textbf{terminal nodes} or \textbf{leaves} ($R_1$, $R_2$, $R_3$, $R_4$ and $R_5$ in the figure)
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Ensemble learning}
+  \pause
+      Ensemble methods employ various techniques to combine predictions from multiple models. \pause
+          This approach can be termed ``learning by committee''
+
+  % Now, imagine the men represent \textbf{various models} and the elephant were the \textbf{response} being predicted. \\
+
+  % \medskip
+  
+  % \pause
+
+  % \begin{itemize}[<+->]
+  % \item How would we take advantage of the different perspectives offered by each model?
+  % \end{itemize}
+  % \pause
+
+  %\begin{block}{Learning by committee}
+  \begin{minipage}{.5\linewidth}
+
+ 
+    \begin{center}
+      \includegraphics[width=.8\textwidth]{combining-classifiers}
+
+      {\tiny Source: \url{http://www.scholarpedia.org/article/File:Combining_classifiers2.jpg}}
+    \end{center}
+
+ 
+  \end{minipage}\pe
+  \begin{minipage}{.45\linewidth}
+    
+    We will consider three approaches with a focus on decision trees: \pause
+
+    \begin{enumerate}
+    \item \textbf{Bagging:} average/majority vote over bootstrap sample \pause
+    \item \textbf{Random Forests:} average/majority vote over collection of de-correlated trees \pause
+    \item \textbf{Boosting:} weighted aggregation of weak learners
+    \end{enumerate}
+  \end{minipage}
+  \end{frame}
+
+ 
+  
+\section{Regression trees}
+
+\begin{frame}
+  \frametitle{Regression tree}
+  Given $D$ features and $N$ observations, how do we predict the response for an observation $\bm x_0$ using a regression tree?
+
+  \bigskip
+  
+  \pause
+  The goal is to partition the input space into $M$ regions using the \textbf{recursive binary partitioning} (RBP) approach.
+
+  \bigskip
+  
+  \begin{itemize}[<+->]
+  \item This is a greedy, top-down approach
+  \item We find the RSS-minimizing split (variable-cutpoint pair) for each subsequent region
+  \item Tree-growing is terminated using a reasonable stopping condition
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Recursive binary partitioning decision}
+
+    \pause
+    For a given $j$th variable and split point $s$, we have a pair of half-planes:\pause
+    \begin{eqnarray}
+      R_1(j,s) &=& \{\bm x :\bm x_j < t\}\\\pause
+      R_2(j,s) &=& \{\bm x : \bm x_j \ge t\}
+    \end{eqnarray}
+    \pause
+    Find splitting variable $j^*$ and point $s^*$ that solve:
+    \begin{equation}\bl
+      j^*, s^* = \pause
+      \arg\min_{j,t}\lt[ \sum_{x_i \in R_1(j,t)} (y_i - \hat y_{R_1})^2 + \sum_{x_i \in R_2(j,t)} (y_i - \hat y_{R_2})^2  \rt]
+    \end{equation}
+    \pause
+    where \pause
+    \begin{eqnarray}
+      \hat y_{R_1} &=& \text{ave} (y_i : \bm x_i \in R_1 (j,t)) \\\pe
+      \hat y_{R_2} &=& \text{ave} (y_i : \bm  x_i \in R_2 (j,t)) 
+    \end{eqnarray}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Overfitting and pruning}
+  \pause
+  \begin{itemize}[<+->]
+  \item Earlier, we mentioned  tree partitioning ends when the appropriate terminating condition is met
+      \begin{itemize}[<+->]
+      \item Traditional thresholding can be myopic, as a potentially better solutions could be discarded.
+      \end{itemize}
+    
+  \item Also, we want to avoid excessively large trees, as these are prone to overfitting
+  \item How then can we guarantee the best result?
+    % \item Key question: how do we avoid overfitting by keeping tree size to an acceptable minimum?
+  \end{itemize}
+  \pause
+  \begin{alertblock}{Strategy}
+    \pause
+    \begin{itemize}[<+->]
+    \item Grow a large tree $T_0$ to a minimum specified node size
+    \item Use \textit{cost-complexity pruning} to prune $T_0$ to find an acceptable subtree $T \subset T_0$
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Cost-complexity pruning}
+  \pause
+  Let $m$ be the index of terminal nodes (recall that each node represents a region). Then let: \pause
+  \begin{eqnarray}
+    N_m      &=& \sum_{i=1}^{N} \mb I(\bm x_i \in R_m) \\\pe
+    \hat y_m &=& \fr1{N_m}\sum_{\bm x_i\in R_m} y_i \\ \pe
+    Q_m(T)   &=& \fr1{N_m}\sum_{\bm x_i\in R_m} (y_i - \hat y_m)^2 \quad \text{(a measure of impurity)}
+  \end{eqnarray}
+  \pause
+  The \textbf{\pl cost-complexity criterion} is then given by:
+  \begin{equation}\pl
+    C_\alpha(T) = \sum_{m = 1}^{|T|} N_m Q_m(T) + \alpha |T| 
+  \end{equation}
+  \pause
+  where $|T|$ is the number of terminal nodes in $T$ and $\alpha \ge 0$ is a tuning parameter.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Cost-complexity pruning (cont.)}
+  \pause
+  Using the cost-complexity criterion, we find subtree $T_\alpha \subseteq T_0$ that minimizes $C_\alpha(T)$. \\ \pause
+
+  \medskip
+  
+  \begin{itemize}[<+->]
+  \item $\alpha |T|$ is a complexity penalty term
+  \item If $\alpha = 0$, then $T_\alpha = T_0$
+  \item Larger $\alpha$ values result in smaller trees $T_\alpha$
+  \item We find $T_\alpha$ using a procedure known as \textit{\bl weakest link pruning}\footnote{Consult ESL p.\ 308 for further details on this algorithm.}
+  \end{itemize}
+
+  \medskip
+  \pe
+
+  Your final question should be, how do we find the optimal $\hat\alpha$?
+  \pause
+  \begin{alertblock}{Answer}
+    Cross-validation \pause ($k$-fold)
+  \end{alertblock}
+\end{frame}
+\section{Classification trees}
+\begin{frame}
+  \frametitle{Classification trees}
+  \begin{itemize}[<+->]
+  \item In regression trees, the predicted response for an observation in a certain region (terminal node) is given by the \textit{mean response} of observations at that node
+  \item In classfication trees, the \textit{most commonly occurring class} is the predicted response
+  \item To make the binary splits in classification trees, we use a suitable impurity measure in place of the RSS
+  \end{itemize}
+  \pause
+  The proportion of class $c$ observations in node $m$ is given by:\pause
+  \begin{equation}\bl
+    \hat p_{mc} = \fr1{N_m}\sum_{\bm x_i\in R_m} \mb I(y_i = c)
+  \end{equation}
+  We then classify observations in node $m$ to the class with maximum representation:\pause
+  \begin{equation}
+    c(m) = \arg\max_k\hat p_{mc}
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Node impurity measures}
+  \pause
+  The recursive binary partitioning splits the observations into regions $R_m$ to minimize \textbf{node impurity} at $m$, measured by:
+  \pe
+  \begin{itemize}[<+->]
+  \item \textbf{Misclassification error}
+    \begin{equation}
+      E = \fr1{N_m}\sum_{i\in R_m}\mb I (y_i \ne c(m)) = 1 - \hat p_{mc(m)}
+    \end{equation}
+    \pause
+    where $ck(m) = \arg\max_k\hat p_{mc}$
+
+  \item  \textbf{Gini index}\pause
+    \begin{equation}
+      G = \sum_{c\ne c'}\hat p_{mc}\hat p_{mc'} = \pause \sum_{c=1}^C\hat p_{mc}(1 - \hat p_{mc})
+    \end{equation}
+
+  \item \textbf{Cross-entropy (deviance)} \pause
+    \begin{equation}
+      D = - \sum_{c=1}^C\hat p_{mc}\log\hat p_{mc}
+    \end{equation}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Node impurity measures (cont.)}
+  \pause
+
+  \begin{itemize}[<+->]
+  \item The Gini index and the cross-entropy are more sensitive to changes in node probabilities
+  \item They are also continuously differentiable can be readily optimized  
+  \end{itemize}
+  
+  \pause
+  \begin{figure}[h!]
+    \centering
+    \includegraphics<3->[width=.9\textwidth, trim={1cm 12cm 1cm 8cm}, clip]{ESL9-3}
+    \caption{Various impurity measures plotted against $p$ in the two-class case}
+  \end{figure}
+
+  \pause
+  Typically, the misclassification error is used in pruning, while the others are used in growing the tree
+\end{frame}
+
+ 
+ 
+\section{Bagging}
+
+\begin{frame}
+  \frametitle{BAGGING: Bootstrap AGGregatING}
+  \pause
+
+  Consider a training data set \pause $\mc D = \{(\bm x_1,y_1), (\bm x_2, y_2), \ldots, (\bm x_n,y_n)\}$. \pause
+  Let a fitted decision tree be given by $\hat f(\bm x)$. \pause
+
+  \begin{itemize}[<+->]
+  \item Predictions have low bias but high variance (trees are unstable)
+  \item Obtaining  predictions from trees fitted to $B$ bootstrap samples reduces  variance (\textbf{bagging})
+  \end{itemize}
+
+  \pause
+
+  
+  \begin{adjustbox}{width=.6\textwidth, center}
+    \begin{forest}
+  for tree={l sep=3em, s sep=3em, anchor=center, inner sep=0.7em, fill=blue!50, circle, where level=2{no edge}{}}
+  [
+  Training Data, node box
+  [sample and feature bagging, node box, alias=bagging, above=4em
+  [,red!70,alias=a1[[,alias=a2][]][,red!70,edge label={node[above=1ex,red arrow]{}}[[][]][,red!70,edge label={node[above=1ex,red arrow]{}}[,red!70,edge label={node[below=1ex,red arrow]{}}][,alias=a3]]]]
+  [,red!70,alias=b1[,red!70,edge label={node[below=1ex,red arrow]{}}[[,alias=b2][]][,red!70,edge label={node[above=1ex,red arrow]{}}]][[][[][,alias=b3]]]]
+  [~~$\dots$~,scale=2,no edge,fill=none,yshift=-4em]
+  [,red!70,alias=c1[[,alias=c2][]][,red!70,edge label={node[above=1ex,red arrow]{}}[,red!70,edge label={node[above=1ex,red arrow]{}}[,alias=c3][,red!70,edge label={node[above=1ex,red arrow]{}}]][,alias=c4]]]]
+  ]
+  \pause
+  \node[tree box, fit=(a1)(a2)(a3)](t1){};\pause
+  \node[tree box, fit=(b1)(b2)(b3)](t2){};\pause
+  \node[tree box, fit=(c1)(c2)(c3)(c4)](tn){};\pause
+  \node[below right=0.5em, inner sep=0pt] at (t1.north west) {Tree 1};\pause
+  \node[below right=0.5em, inner sep=0pt] at (t2.north west) {Tree 2};\pause
+  \node[below right=0.5em, inner sep=0pt] at (tn.north west) {Tree $B$};\pause
+  \draw[black arrow={5mm}{4mm}] (bagging) -- (t1.north);
+  \draw[black arrow] (bagging) -- (t2.north);
+  \draw[black arrow={5mm}{4mm}] (bagging) -- (tn.north);
+  % \visible<+->{
+  \pause
+  \path (t1.south west)--(tn.south east) node[midway,below=4em, node box] (mean) {mean in regression or majority vote in classification};
+ \draw[black arrow={5mm}{5mm}] (t1.south) -- (mean);
+  \draw[black arrow] (t2.south) -- (mean);
+  \draw[black arrow={5mm}{5mm}] (tn.south) -- (mean);
+  % \visible<+->{
+  \pause
+  \node[below=3em of mean, node box] (pred) {prediction};
+  \draw[black arrow] (mean) -- (pred);
+\end{forest}
+\end{adjustbox}
+
+
+\end{frame}
+
+ 
+\begin{frame}
+  \frametitle{Bagging algorithm}
+     \pause
+
+    \begin{enumerate}[<+->]
+    \item Sample with replacement from $\mc D$ to generate $B$ bootstrap samples, $\{\mc D^{*b}: b= 1 1, 2, \ldots, B\}$
+
+    \item Fit a decision tree to each $\mc D^{*b}$ to obtain prediction $\hat f^{*b}(\bm x)$
+
+    \item  Obtain the \textbf{\bl bagging estimate}: \pause
+      \begin{enumerate}[\bf a]
+      \item Regression: Average the predictions      \pe
+      \begin{equation}\bl
+        \hat f_{\text{bag}}(\bm x) =\pause \fr 1 B \sum_{b=1}^B \hat f^{*b}(\bm x)
+      \end{equation}
+      \pe
+         \item Classification: majority vote \pe
+       \begin{equation}\bl
+        \hat f_{\text{bag}}(\bm x) = \argmax_{c} \sum_{b=1}^{B} \mb I( \hat f^{*b}(\bm x) = c)
+      \end{equation}
+     \end{enumerate}
+
+    \end{enumerate}
+ \end{frame}
+\begin{frame}
+  \frametitle{Example 1: Bagging trees on simulated dataset}
+  \pause
+  Given a dataset of $n=30$ observations with $p=5$ predictors \pause
+  \begin{itemize}[<+->]
+  \item Pairwise correlation for each predictor is 0.95
+  \item 200 bootstrap samples are created and unpruned decision trees are fitted
+  \item High correlations leads to high variance in individual decision tree estimates %(6 are shown below)
+%  \item 
+  \end{itemize}
+
+  \begin{figure}\centering
+    \visible<6->{\includegraphics[width=.55\textwidth, trim={1cm 13cm 2cm 3.5cm}, clip]{ESL8-9}}
+    \visible<7->{\includegraphics[width=.4\textwidth, trim={2cm 12cm 2cm 4cm}, clip]{ESL8-10}}
+    
+    \caption{\footnotesize (L): Fitted trees on 6 bootstramp samples. (R): Test errors.}
+\end{figure}
+
+\end{frame}
+
+% \begin{frame}
+%   \frametitle{Example 1: Bagging trees on simulated dataset (cont.)}
+%   \pause
+
+%   Bagging reduces the variance in prediction.
+%   \pause
+  
+%   \begin{figure}[h!]
+%     \centering
+%     \visible<3->{\includegraphics[width=.7\textwidth, trim={2cm 12cm 2cm 4cm}, clip]{ESL8-10}}
+%     \caption{Errors from classification by majority (consensus) vote are shown in orange, while those from averaging probabilities are shown in green.}
+%   \end{figure}
+% \end{frame}
+
+\begin{frame}
+  \frametitle{Out-of-bag error}
+  \pause
+
+  Bootstrap samples only contain 63\% of the unique observations on average. Why?\pe
+
+  \begin{itemize}[<+->]
+  \item Observations left out of  bootstrap sample are \textbf{out-of-bag} (OOB) instances\pe
+  \item Errors can be computed on each OOB instance per bootstrap sample \pe
+  \item These are then averaged to obtain a validation error estimate  for use in hyperparameter selection
+  \end{itemize}
+  \pause
+  
+  \begin{figure}[h!]
+      \centering
+      \visible<6->{\includegraphics[width=.35\textwidth, trim={1cm .7cm 1cm 1cm}, clip]{8-8}}
+      \caption{\footnotesize Comparing test (validation set approach) and OOB (similar to cross-validation) errors
+        on bagging and random forest estimates on the \texttt{Heart} dataset (survival of heart transplant patients).}
+  \end{figure}
+\end{frame}
+  
+\begin{frame}
+  \frametitle{Feature importance}
+  \pause
+
+  Bagging provides stability (reduced variance) at the expense of simplicity (interpretability). \pause
+
+  \begin{itemize}[<+->]
+  \item To aid inference, we compute \textbf{feature importances} of bagged tree predictors: \pe
+    \begin{equation}
+      fi_{d}(T) = \sum_{m=1}^{M-1}G_{m}\mb I(t_{m} = d)
+    \end{equation} \pe
+    where
+    \begin{itemize}
+    \item $fi_{d}(T)$ is the importance of feature $d$ in tree $T$ \pe
+    \item $G_{m}$ is the gain in accuracy (reduction in loss) at node $m$\pe
+    \item $j_{m} =d$ if node $m$ uses feature $d$ as its splitting variable $t$
+    \end{itemize}\pe
+  \item These are then averaged over all $B$ trees (estimators) \pe
+  \item {Regression trees:} total amount of RSS decreases due to splits 
+  \item {Classification trees:}  Gini index used  
+  \end{itemize}
+\end{frame}
+
+
+\section{Random Forests}
+
+\begin{frame}
+  \frametitle{Random forests}
+  \pause
+
+  Invented by \href{https://link.springer.com/content/pdf/10.1023/A:1010933404324.pdf}{\bl Leo Breiman in 2001},
+  \textbf{random forests} build on bagging by fitting \textit{decorrelated} trees on the bootstrap samples.\pe
+
+  \begin{itemize}[<+->]
+ 
+  \item   Implemented by splitting the observations by considering only a \textit{random} subset $S \subset D$ of predictors.
+    
+  \item Helps to further reduce variance when predicted values are highly correlated across samples (due to correlated predictors).
+
+  \item In bagging, $S=D$.
+
+  \item Recommended values of $S$: \pause   $S = \floor*{\fr D 3}$ (regression); $S = \sqrt{D}$ (classification)
+  \end{itemize}
+  \pe
+  \begin{block}{Algorithm}
+    \pe
+      \begin{enumerate}[<+->]
+  \item For $b = 1$ to $B$: \pause
+    \begin{enumerate}[(a)]
+    \item Draw a bootstrap sample $\mc D^*$ of size $N$ from training dataset\pause
+    \item Grow a random-forest tree $T_b$ to fit the sample by RBP as follows until minimum node size is reached:\pause
+      \begin{enumerate}[i.]
+      \item Randomly select subset $S_{m}$ of the $D$ predictors at node $m$\pause
+      \item Pick the best predictor/split-point $(j,t)$ from $S_{m}$ \pause
+      \item Split node $m$ into two daughter nodes\pause
+      \end{enumerate}
+    \end{enumerate}
+  \item Output the ensemble of trees $\{T_b\}_1^B$
+  \end{enumerate}
+  \end{block}
+\end{frame}
+
+% \begin{frame}
+%   \frametitle{Random forests algorithm}
+%   \pause
+%   \begin{enumerate}[<+->]
+%   \item For $b = 1$ to $B$: \pause
+%     \begin{enumerate}[(a)]
+%     \item Draw a bootstrap sample $\mc D^*$ of size $n$ from training dataset\pause
+%     \item Grow a random-forest tree $T_b$ to fit the sample by recursive binary partitioning as follows until minimum node size is reached:\pause
+%       \begin{enumerate}[i.]
+%       \item Randomly select subset $S_{m}$ of the $D$ predictors at node $m$\pause
+%       \item Pick the best predictor/split-point $(j,t)$ from $S_{m}$ \pause
+%       \item Split node $m$ into two daughter nodes\pause
+%       \end{enumerate}
+%     \end{enumerate}
+%   \item Output the ensemble of trees $\{T_b\}_1^B$
+%   \end{enumerate}
+
+%   \pe
+
+% %   \pause
+  
+% %   \begin{block}{To make a prediction at point $x$:}
+% %   \pause
+% %   \begin{itemize}[<+->]
+% %   \item {\it Regression:} \pause $\hat f_{rf}^B(x) = \fr1B\sum_{b=1}^B T_b(x)$
+% %   \item {\it Classification:} \pause Let $\hat C_b(x)$ be the class prediction of the $b$th random-forest tree. \pause
+
+% %     Then $\hat C_{rf}^B(x) = \text{majority vote} \{\hat C_b(x)\}_1^B$
+% %   \end{itemize}
+% % \end{block}
+
+% \end{frame}
+
+ 
+\begin{frame}
+  \frametitle{Feature importance in random forests}
+  \begin{minipage}[t]{.4\linewidth}
+  \begin{itemize}[<+->]
+  \item Since the feature subset in each step of partitioning is random in all the $B$ trees, the standard variable importance approach is not effective in random forests
+
+  \item Instead, OOB samples are used to determine the variable importance
+  \item This is done by perturbing each variable $j$ in the OOB samples and then averaging the decrease in accuracy across the trees
+  \item Illustrated on the \texttt{spam} dataset:
+  \end{itemize}
+\end{minipage}
+\pause\quad
+\begin{minipage}[t]{.55\linewidth}
+    \begin{figure}[h!]
+      \centering
+      \visible<6->{\includegraphics[width=.75\textwidth, trim={4.5cm 8cm 4cm 4.4cm}, clip]{ESL15-5}}
+      \caption{\footnotesize Variable importance computed on a scale of 0-100
+        from (Left) gradient boosted model (via Gini index) and (Right) random forest model (via OOB).
+      Rankings are comparable, but relative values are not.}
+  \end{figure}
+\end{minipage}
+
+\end{frame}
+
+
+\section{Boosting}
+
+\begin{frame}
+  \frametitle{Boosting}\pause
+  Generally, boosting refers to the approach of sequentially weighting the predictions of weak learners to obtain a
+  final prediction
+  \pause
+
+ It can be considered as a method of fitting an {\bl additive model}:\pause
+    \begin{equation}\bl
+      f(\bm x;\bm \th) = \sum_{m=1}^M\beta_m b_{m}(\bm x; \bm\th_m)
+    \end{equation}
+    \pause
+    where:
+    \begin{itemize}
+    \item $\beta_m$ are the expansion coefficients (weights) \pe
+    \item $b_{m}(\bm x;\bm\th_{m})$ are elementary (simple) basis  functions of $\bm x$ characterized by a set of parameters $\bm\th_{m}$, e.g.
+      \pe
+      \begin{itemize}
+      \item Shallow decision trees: $\bm\th_{m}$ parameterizes the split variable/split-point $(j, t)$ at the internal
+        nodes and the predictions at the terminal nodes\pause
+      \item Single-hidden-layer neural networks: $b(\bm x; \bm\th_{m}) = \bm \sigma(\bm w^T\bm x)$, where $\bm\sigma(t) = 1/(1+e^{-t})$ 
+      \end{itemize}      
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Boosting (cont.)}
+  \pause
+
+  \begin{itemize}[<+->]
+ 
+  \item To fit such additive models, we minimize the sum of the loss functions across the basis expansions. \pause
+
+    \begin{equation}
+      \min_{\{\beta_{m},\bm\th_{m}\}^{M}_{1}}\sum_{i=1}^{N}\ell\lt(y_{i},\sum_{m=1}^{M}\beta_{m}b(\bm x_{i};\bm\th_{m})\rt)
+    \end{equation}
+\pause
+
+    \item Choices for $\ell$ include: squared error, likelihood-based, exponential (Adaboost)
+
+           \item Fitting can be efficiently done via the \textit{forward stagewise additive modeling} algorithm\footnote{ESL
+        10.1--10.5}
+   \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Forward stagewise additive modeling}
+  \pause
+  \begin{enumerate}
+  \item Initialize $f_{0}(\bm x) = 0$\pause
+
+  \item For $m = 1$ to $M$:\pause
+    \begin{enumerate}[(a)]
+    \item Find:
+      \begin{equation*}
+        (\beta_{m},\bm\th_{m}) = \arg\min_{\beta,\bm\th}\sum_{i=1}^{M}\ell(y_{i},f_{m-1}(\bm x_{i}) + \beta b(\bm x_{i};\bm\th))
+      \end{equation*}
+      \pause
+    \item Set $f_{m}(\bm x) = f_{m-1}(\bm x) + \beta_{m}b(\bm x;\bm\th_{m})$
+    \end{enumerate}
+  \end{enumerate}
+  \pause
+  \bigskip
+  
+  If $\ell$ is specified as squared error (typical for regression), then:\pause
+  \begin{eqnarray}
+    \ell(y,f(\bm x)) &=& (y - f(\bm x))^{2} \\\pause
+    \ell(y_{i}, f_{m-1}(\bm x_{i}) + \beta b(\bm x_{i};\bm\th)) &=& \pause ({\bl y_{i} - f_{m-1}(\bm x_{i})} - \beta b(\bm x_{i};\bm\th))^{2}\\\pause
+    &=& ({\bl r_{im}} - \beta b(\bm x_{i},\bm\th))^{2}
+  \end{eqnarray}
+  \pause
+  where $\bl r_{im}$ is the \textbf{residual} of model $m$ on the $i$th observation.  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Boosting trees}
+  \pause
+  Boosting can be used as a ``slow learning'' approach for decision trees
+\pause
+  \begin{itemize}[<+->] 
+  \item First we generate $B$ bootstrap samples
+  \item Starting with an initial tree, we fit a subsequent tree to the residuals from the first model
+  \item We then update the tree and its residuals using a fraction $\la$ of the predictions of the new tree
+  \item The estimation and residual update step is repeated until the $B$th sample is used
+  \item The boosted model is then given by the weighted sum of the fitted tree estimates
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Boosted regression tree algorithm}
+  \pause
+  \begin{enumerate}[<+->]
+  \item Set $\hat f(\bm x) = 0$ and $r_i = y_i$ for all $i$ in training dataset
+  \item For $b=1,2, \ldots, B$, repeat:\pause
+    \begin{enumerate}[(a)]
+    \item Fit a tree $\hat f^b$ with $d$ splits ($d+1$ terminal nodes) to training data $(\bm x,r)$\pause
+    \item Update $\hat f$ by adding in a shrunken version of new tree:\pause
+      \begin{equation}
+        \hat f(\bm x) \leftarrow \hat f(\bm x) + \la \hat f^b(\bm x)
+      \end{equation}\pause
+    \item Update residuals:\pause
+      \begin{equation}
+        r_i \leftarrow r_i - \la \hat f^b(\bm x_i)
+      \end{equation}
+      \pause
+    \end{enumerate}
+  \item Output boosted model:\pause
+    \begin{equation}
+      \hat f(\bm x) = \sum_{b=1}^B \la \hat f^b(\bm x)
+    \end{equation}
+  \end{enumerate}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Notes on boosting trees}
+  \pause
+  \begin{itemize}[<+->]
+  \item There are three tuning parameters to consider:\pause
+    \begin{itemize}[<+->]
+    \item Number of trees $B$. If $B$ is too large, model is prone to overfitting. We choose $B$ by cross-validation
+      \medskip
+      
+    \item Shrinkage/learning parameter $\la > 0$ (typically 0.01 or 0.001)
+      \medskip
+      
+    \item Number of splits $d$ in each tree (interaction depth); $d=1$ is a typical choice (in this case,
+      the trees are referred to as ``stumps'')
+      
+    \end{itemize}
+    \bigskip
+
+    
+  \item The sequential fitting of $\hat f(\bm x)$ is analogous to \textit{gradient descent} (since we are minimizing a loss function in each split)
+    \begin{itemize}[<+->]
+    \item Thus, $r_i$ can be updated via the gradient of the loss function
+      \medskip
+      
+    \item Hence, the procedure is referred to as \textbf{\rd gradient boosting}
+
+    \item The popular modeling package \texttt{XGBoost} (Extreme Gradient Boosting) is based on this idea but introduces regularization and second-order gradients
+    %   \medskip
+
+    % \item Implemented in R via the \texttt{gbm} package
+    %   \medskip
+      
+    % \item Scikit-learn has a nice ensemble methods
+    %   \href{https://scikit-learn.org/stable/modules/ensemble.html}{\bl\underline{documentation}}
+
+    %   \medskip
+      
+    % \item A nice introduction to gradient boosting is available \href{http://www.ccs.neu.edu/home/vip/teach/MLcourse/4_boosting/slides/gradient_boosting.pdf}{\bl\underline{here}}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Boosting perfomance}
+  \pause
+  Boosting typically outperforms random forests and depth-1 trees perform better than other choices for $d$.
+  \pause
+
+  \visible<3->{\includegraphics[width=.7\textwidth]{8-11}}
+\end{frame}
+
+\section{Summary}
+\begin{frame}
+  \frametitle{Further issues and topics}
+  \pause
+  \begin{itemize}[<+->]
+
+  \item  The methods described in this lecture are generally referred to as the CART implementation (classification and regression tree).
+  \item Other approaches exist, e.g. PRIM (Patient Rule Induction Method) and ID3 (and its successors)
+\end{itemize}
+
+\pause
+
+\begin{alertblock}{Potential issues with trees and mitigations}
+  \begin{itemize}[<+->]
+  \item \textbf{Multilevel categorical variables:} the greater the number of levels, the more prone to the tree is to overfitting
+  \item \textbf{Missing data:} dropping incomplete observations can reduce accuracy; imputation methods can be used
+  \item \textbf{Tree instability:} errors or changes to data can drastically affect results\\ \pause
+    \textit{Bagging} can be used to address this (next lecture)
+  \item \textbf{Lack of smoothness:} can be addressed using MARS (Multivariate Adaptive Regression Splines)
+  \end{itemize}
+\end{alertblock}
+  
+\end{frame}
+
+
+
+
+
+\begin{frame}
+  \frametitle{Reading}\pause
+  
+  \begin{itemize}[<+->]
+  \item \textbf{PMLI} 18
+\item \textbf{ESL} Section 9.2
+\item ISLR 8.3
+\item Bagging: ESL 8.7
+\item Random Forests: ESL 15
+\item Boosting: ESL 10 (Very dense chapter. You may want to focus on 10.1--10.3, 10.7, 10.10, 10.13, 10.14.)
+\end{itemize}
+\pause
+\bigskip
+
+Further reading/study:\pause
+\begin{itemize}[<+->]
+\item \textbf{PRIM}: ESL 9.3 and Friedman's paper at \url{http://statweb.stanford.edu/~jhf/ftp/prim.pdf}. \\
+  
+  PRIM/CART can be used in scenario discovery. For a brief overview, see Jan Kwakkel's blog \href{https://waterprogramming.wordpress.com/2015/08/05/scenario-discovery-in-python/}{\bl\bf post}.
+
+\item \textbf{MARS}: ESL 9.4. This article provides a readily digestible overview: \url{http://uc-r.github.io/mars}.
+\end{itemize}
+ 
+ 
+\end{frame}
+
+ 
+%\appendix
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -10,3 +10,5 @@ Thu, Nov 6
 
 Thu, Nov 13
 : **LECTURE 4C**{: .label .label-blue }[Support Vector Machines](/assets/lectures/M4-Nonparametric-Methods/L4c-Support-Vector-Machines-Handout.pdf)
+
+Tue, Nov 18: **LECTURE 4D**{: .label .label-blue }[Trees and Ensemble Methods](/assets/lectures/M4-Nonparametric-Methods/L4d-Trees-and-Ensemble-Methods-Handout.pdf)

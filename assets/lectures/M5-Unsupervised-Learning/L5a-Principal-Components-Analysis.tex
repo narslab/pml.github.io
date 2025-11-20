@@ -1,0 +1,881 @@
+%\documentclass[smaller, handout, dvipsnames]{beamer}
+\def\bmode{0} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+\if 0\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Presentation\space\jobname}
+\documentclass[usenames,dvipsnames,smaller]{beamer}
+\else \if 1\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout-Notes\space\jobname}
+\documentclass[usenames,dvipsnames,smaller,handout]{beamer}
+\usepackage{handoutWithNotes}
+\pgfpagesuselayout{2 on 1 with notes}[letterpaper, landscape, border shrink=4mm]
+\else \if 2\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout\space\jobname}
+\documentclass[usenames,dvipsnames,smaller,handout]{beamer}
+\fi
+\fi
+\fi
+
+
+%\setbeamertemplate{section in head/foot}{}
+%\setbeamertemplate{section in head/foot shaded}{\textcolor{white}{\insertsectionhead}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\coursetitle}{CEE 616: Probabilistic Machine Learning}
+\newcommand{\longlecturetitle}{M5 Unsupervised Learning:\\ L5A:  Principal Components Analysis}
+\newcommand{\shortlecturetitle}{L5A: PCA}
+\newcommand{\instructor}{Jimi Oke}
+\newcommand{\lecturedate}{Thu, Nov 20, 2025}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{course-macros.tex}
+%\setbeamercolor{local structure}{fg=white}
+
+\begin{document}
+\maketitle
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+
+ 
+
+\section{Introduction}
+
+\begin{frame}
+  \frametitle{Unsupervised vs. supervised learning}
+
+  \begin{center}
+    \includegraphics<2->[width=.45\textwidth,trim={0 0 22cm 0}, clip]{supunsup}\quad
+    \includegraphics<3->[width=.45\textwidth,trim={22cm 0 0 0}, clip]{supunsup}
+  \end{center}
+
+  \pause
+
+  \begin{itemize}[<+->]
+  \item Supervised learning: given response $y$ and $p$ features measured on the same observations, predict $y$ on the $x_j$
+  \item Unsupervised learning: only $p$ features; no given response; what then can we learn about the data?
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Learning tools}
+  \pause
+  \begin{block}{Supervised}
+  Goal: predict or infer a response (regression or classification)
+  \begin{itemize}[<+->]
+  \item multiple linear regression
+  \item logistic regression
+  \item linear/quadratic discriminant analysis
+  \item decision trees
+  \item support vector machines
+  \end{itemize}
+\end{block}
+\pause
+
+\begin{alertblock}{Unsupervised}
+  Goal: exploration (e.g.\ grouping, pattern discovery, dimensional analysis)
+  \begin{itemize}[<+->]
+  \item dimensionality reduction
+  \item clustering
+  \end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Dimensionality reductoin}
+  \pe
+  Dimensionality reduction seeks to learn a suitable mapping from a high-dimensional feature space $\bm x \in\mb R^D$ to a low-dimensional \textbf{latent space} $\bm z\in \mb R^L$. \pe
+  \begin{itemize}
+  \item \textbf{Parametric approach:} estimate $\bm z = f(\bm x;\bm\th)$\pe
+  \item \textbf{Nonparametric approach:} compute embedding $\bm z_n$ for each input $\bm x_n$\pe
+  \item Uses:\pe
+    \begin{itemize}
+    \item data pre-processing
+    \item model simplification
+    \end{itemize}
+    \pe
+  \item Algorithms: \pe
+    \begin{itemize}
+    \item principal components analysis (PCA)\pe
+    \item factor analysis (FA)\pe
+    \item autoencoders
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Principal components analysis (PCA)}
+  \pause
+  PCA is a dimensionality reduction technique that seeks an $L$-dimensional basis that best captures the variance in a $D$-dimensional dataset
+  \pause
+    \begin{itemize}[<+->]
+    \item The direction with the largest projected variance is the \textit{first principal component}
+    \item The orthogonal direction capturing the second largest projected variance is the \textit{second principal component}
+    \item The direction that maximizes the variance is that which also minimizes the mean squared error
+    \end{itemize}
+  \end{frame}
+  
+
+    
+\section{Background}
+% \begin{frame}
+%   \frametitle{Eigenvectors and eigenvalues (review)}
+%   A vector $\bm v$ is an eigenvector of a matrix $A$ if its transformation by $A$ scales rather than changes the direction of $\bm v$:\pause
+%   \begin{equation}
+%     \label{eq:5}
+%     \bm A \bm v = \pause \la \bm v
+%   \end{equation}\pause
+%   where $\la$ is the \textbf{eigenvalue} (a scalar).
+% \pause
+%   \begin{tikzpicture}[]\small
+%     \begin{axis}[no markers, domain=-40:0, %samples=100,
+%       axis x line=center,
+%       axis y line=center,
+%       %xlabel=$z$, ylabel=$f_X(x)$,,
+%       height=7cm, width=13cm,
+%       % xtick={-6,0,6},
+%       % xticklabels={$z_{\alpha/2}$,$0$,$z_{(1-\alpha/2)}$},
+%       ymax=12,ymin=0,xmax=-0.5, xmin=-37,
+%       % ytick=\empty,
+%       % x label style={anchor=west},
+%       % y label style={anchor=south},
+%       %
+%       enlargelimits=true, clip=false, %axis on top,
+%       grid style={line width=.1pt, draw=gray},
+%       % yticklabel style={
+%       % /pgf/number format/fixed,
+%       % /pgf/number format/fixed zerofill,
+%       % /pgf/number format/precision=2
+%       % },        
+%       grid = both
+%       ]
+%       \visible<+->{
+%         \draw[->, thick, blue] (axis cs: 0,0) -- (axis cs:  -0.95, 0.31) node[left] {$\bm v$};
+%       \node[blue] (a) at (axis cs: -35, 7.5) {\small$\bm v =
+%         \begin{pmatrix}
+%           -0.95 \\ 0.31
+%         \end{pmatrix}
+%         $};        
+%     }
+%       \visible<+->{
+%       \node[red,below=of a] (b) {\small$\bm A =
+%         \begin{pmatrix}
+%           111 & 222 \\
+%           222 & 720
+%         \end{pmatrix}
+%         $} ;}
+%     \visible<+->{
+%       \draw[->, thick, dashed, purple] (axis cs:  0,0) -- (axis cs: -36.8, 11.98) node[above] {$\bm{Av}$};
+%       \node[purple, right=of b] (c) {\small$\bm {Av} = \la \bm v =
+%         \begin{pmatrix}
+%           -36.80 \\ 11.98
+%         \end{pmatrix}
+%         $};
+%     }
+%   \end{axis}
+%   \end{tikzpicture}
+% \end{frame}
+
+
+\begin{frame}
+  \frametitle{Interpreting principal components}
+  \pause
+  The first principal component of a design/feature matrix $\bm X$ can be considered as the ``best-fit'' (closest) line to all the datapoints.
+
+  \pause
+
+  \visible<3->{  \begin{figure}[h!]
+      \centering
+      \includegraphics[width=.7\textwidth, trim = {2cm 10cm 2cm 7cm}, clip]{ESL14-20}
+      \caption{First principal component (PC) of a dataset.
+        The PC minimizes the total squared distance from each point to its orthogonal projection onto the line}
+    \end{figure}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Interpreting principal components (cont.)}
+  \pause
+
+  The first two principal components of a dataset span the [2D] plane closest to the data.
+
+  \visible<3->{  \begin{figure}[h!]
+      \centering
+      \includegraphics[align=c,width=.27\textwidth, trim = {4.5cm 10cm 4.5cm 8cm}, clip]{ESL14-15}\quad\pause
+      \includegraphics[align=c,width=.25\textwidth, trim = {2cm 11.8cm 11cm 7cm}, clip]{ESL14-21}\quad\pause
+      \includegraphics[align=c,width=.3\textwidth, trim = {10.7cm 12cm 2cm 7cm}, clip]{ESL14-21}
+      \caption{(L) Simulated dataset near surface of half-sphere. (C) Best 2-dimensional representationof data.
+        (R) Projected points on the plane ($\bm U_2\bm \Gamma_2$) }
+    \end{figure}}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sample covariance matrix (review)}
+  \pause
+  The sample covariance matrix is given by:\pause
+  \begin{equation}
+    \label{eq:11}
+    \widehat{\bm \Sigma} = E[(\bm X - \hat{\bm\mu})(\bm X - \hat{\bm\mu})^{T}] = \pause
+    \begin{pmatrix}
+      \hat\si_{1}^{2 } &       \hat\si_{12}& \cdots  &       \hat\si_{1D} \\[2mm] \pause
+      \hat\si_{21} &       \hat\si_{2}^{2 }& \cdots  &       \hat\si_{2D} \\[2mm]\pause
+      \cdots & \cdots & \cdots & \cdots \\[2mm]\pause
+      \hat\si_{D1} &       \hat\si_{D2}& \cdots  &       \hat\si_{D}^{2 } 
+    \end{pmatrix}
+  \end{equation}
+  \pause If $\bm X$ is mean centered, then we can write:\pause
+  \begin{equation}
+    \label{eq:12}
+    \widehat{\bm \Sigma} = \fr1N(\bm X^{T}\bm X) = \fr1n
+    \begin{pmatrix}
+      \bm x_1^T \bm x_1 & \bm x_1^T \bm x_2  &  \cdots & \bm x_1^T \bm x_D  \\[2mm]\pause
+      \bm x_2^T \bm x_1 & \bm x_2^T \bm x_2  &  \cdots & \bm x_2^T \bm x_D  \\[2mm]\pause
+      \vdots   & \vdots    & \ddots & \vdots \\[2mm]\pause
+      \bm x_D^T \bm x_1 & \bm x_D^T \bm x_2  &  \cdots & \bm x_D^T \bm x_D  
+    \end{pmatrix}
+  \end{equation}\pause
+  The sample covariance matrix is given as the pairwise inner/dot products of the
+  centered atrribute/feature vectors, normalized by the sample size $N$.
+\end{frame}
+
+
+\section{Max variance approach}
+%   \begin{frame}
+
+%   \frametitle{Orthonormal basis expansion}
+%   Given an input data matrix (design matrix) $\bm X$:
+%   \begin{itemize}[<+->]
+%   \item Each point $x_1, \ldots, x_D$ is a column vector in $D$-dimensional vector space spanned by the $p$ standard
+%     basis vectors $\bm e_1$, $\bm e_2, \ldots, \bm e_D$, where $\bm e_j$ corresponds to the $j$th attribute $\bm x_j$
+%   \item The standard basis is an \textbf{\bl orthonormal} ({\bl pairwise orthogonal}) basis for the data space:
+%     $\bm e_i^T\bm e_j = 0$ \pause and $||\bm e_i|| = 1$
+%   \item Thus, given any other set of $D$ orthonormal vectors $\bm v_1, \bm v_2, \ldots, \bm v_D$ with
+%     $\bm v_j^T\bm v_k = 0$ and $||\bm v_j|| = \bm v_j^T\bm v_j = 1$, we can write each $X_j$ as the linear combination
+%     \pause
+    
+%     \begin{equation}
+%       x_j = a_{j1}\bm v_1 + a_{j2}\bm v_2 + \cdots + a_{jp}\bm v_p = \pause \bm V\bm a_j
+%     \end{equation}
+%     \pause
+%     \begin{itemize}[<+->]
+%     \item where $\bm V$ is a $D\times D$ \textbf{orthogonal} matrix whose $j$th column comprises the $j$th basis vector $\bm v_j$
+%     \item and the vector $\bm a_j$ represents the coordinates of $X_j$ in the new basis
+%   \end{itemize}
+
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}
+%   \frametitle{Transforming a dataset to a new basis}
+%   \pause
+%   Since $\bm V$ is orthogonal:
+%   \begin{itemize}[<+->]
+%   \item its columns are orthonormal \textit{basis vectors} of unit length:\pause
+%     \begin{equation}
+%       \bm v_j^T\bm v_k =
+%       \begin{cases}
+%         1 & \text{ if } j = k \\
+%         0 & \text{ if } j \ne k
+%       \end{cases}
+%     \end{equation}
+%   \item its inverse equals its transpose:\pause
+%     \begin{equation}
+%       \bm V^{-1} = \bm V^T
+%     \end{equation}
+%     \pause and
+%     \begin{equation}
+%       \bm V^T\bm V = \bm I_{D\times D}
+%     \end{equation}
+%     \pause
+%     Finally, we can compute the coordinates of $X_j$ in the new basis as follows:\pause
+%     \begin{align}
+%       \bm V^T X_j &= \bm V^T\bm{Va}_j\\
+%       \bm a_j &= \bm V^TX_j
+%     \end{align}
+% \end{itemize}
+% \end{frame}
+
+
+% \begin{frame}
+%   \frametitle{Finding an optimal basis}
+%   \pause
+%   Potentially infinite choices exist for the set of orthonomal basis vectors
+
+%   \pause
+
+%   \begin{alertblock}{Questions and considerations}
+%     \begin{itemize}[<+->]
+%     \item Is there an optimal basis?
+%     \item In a high dimensional dataset (large $D$), can we find a reduced dimensionality subspace (size $L$) that preserves essential characteristics of the data?
+%     \item In this case, we might want to find an optimal representation of $\bm X$ with $L \ll D$
+%     \end{itemize}
+%   \end{alertblock}
+%   \pause
+%   Assuming the basis vectors were sorted in decreasing order of importance, we can truncate the linear expansion of $X_j$ in the new basis:\pause
+%   \begin{equation}
+%     \widetilde X_j = a_{j1}\bm v_1 + a_{j2}\bm v_2 + \cdots + a_{jM}\bm v_L = \sum_{m=1}^M a_{jm}\bm{v}_m
+%   \end{equation}
+% \end{frame}
+
+\begin{frame}
+  \frametitle{Projection of $\bm X$ onto first $L$ basis vectors}
+  \pause
+
+  The expression $\widetilde {\bm x}_j = \sum_{k=1}^L a_{jk}\bm v_{k}$ is a projection of
+  $\bm x_j$ onto the first $L$ basis vectors.
+
+  \bigskip
+  \pause
+
+  We derive a compact representation as follows:
+
+  \begin{eqnarray*}
+    \widetilde {\bm x_j}   &=& \bm V_L\bm a_{L} \\\pause
+    \bm a_L &=& \bm V_L^T{\bm x_j} \\\pause
+    \implies \quad \pause \widetilde {\bm x_j} &=& \bm V_L \bm V_L^T {\bm x_j} = \bm P_L {\bm x_j} 
+  \end{eqnarray*}
+  \pause
+  where $\bl \bm P_L = \bm V_L\bm V_L^T$ is the orthogonal \textbf{\bl projection matrix} for the subspace spanned by the first $L$ basis vectors. \pause
+  \begin{itemize}
+  \item   We can compute the error vector as the projection of ${\bm x_j}$ onto the subspace spanned by the remaining basis vectors:\pause
+  \begin{equation}
+    \bm \epsilon_j = \sum_{k=L+1}^D a_{jk}\bm v_k = \pause {\bm x_j} - \widetilde {\bm x_j}
+  \end{equation}
+  \end{itemize}
+\end{frame}
+
+ 
+\begin{frame}
+  \frametitle{Direction of max variance}
+  \pause
+  We seek the unit vector $\bm v$ that maximizes the projected variance of the points. \\
+  \medskip
+  \pause
+  If $\bm X$ is centered and $\bm\Sigma$ its covariance matrix, then
+  the {\gr projection of $X_j$ on $\bm v$} is:\pause
+  \begin{equation}\gr
+    X_j = \lt( \fr{\bm v^T \bm X_j}{\bm v^T\bm v}\rt) \bm v = (\bm v^T \bm X_j)\bm v = a_j\bm v
+  \end{equation}
+  Across all points, the \textbf{\rd projected variance} along $\bm v$ is:\pause
+  \begin{equation}\rd
+    \sigma_{\bm v}^2= \fr1n\sum_{j=1}^n (a_j - \mu_{\bm v})^2 = \fr1n\sum_{j}\bm v^T (X_j X_j^T)\bm v
+    = \bm v^T\bm{\Sigma v}
+  \end{equation}
+  The optimal basis that maximizes the projected variance $\sigma_{\bm v}^2$ subject to $\bm v^T\bm v =1$ is:
+  \begin{equation}
+    \max_{\bm v}J(\bm v) =\pause  \bm v^T \bm{\Sigma v} - \lambda(\bm v^T \bm v - 1)
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Direction of max variance (cont.)}
+  \pause
+  Taking the derivative of $J(\bm v)$ w.r.t. $\bm v$ and setting to zero, we obtain:\pause
+  \begin{align*}
+    \pd{(\bm v^T\bm\Sigma\bm v - \al(\bm v^T\bm v - 1))}{\bm v} &= \bm 0 \\
+    \implies 2\bm\Sigma \bm v - 2\lambda \bm v &= \bm 0 \\\pause
+    \bm{\Sigma\bm v} &= \bl \lambda \bm v
+  \end{align*}
+  \pause
+  Thus $\lambda$ is an eigenvalue of $\bm\Sigma$ and $\bm v$ the eigenvector.\\ \pause
+  \medskip
+  
+  Recall that the projected variance is given by $\sigma_{\bm v}^2 = \bm v^T{\bl \bm{\Sigma v}}$. Thus:
+  \begin{equation}
+    \sigma_{\bm v}^2 = \bm v^T {\bl \lambda \bm v} = \lambda
+  \end{equation}
+  \pause
+  To maximize $\sigma_{\bm v}^2$ we set $\lambda$ to the largest eigenvalue $\la_1$ of $\bm \Sigma$; $\bm v_1$ indicates the direction of max variance (first principal component).
+\end{frame}
+
+\begin{frame}
+  \frametitle{Iris dataset: first principal component}
+  \begin{figure}[h!]
+    \centering
+    \includegraphics<2->[width=.4\textwidth,trim={0 .8cm 6cm 0},clip]{DMA7-1}\quad
+    \includegraphics<3->[width=.34\textwidth]{DMA7-2}
+    \caption{(Left) Iris dataset showing original basis: sepal length ($X_1$), sepal width ($X_2$) and petal length ($X_3$). (Right) First principal component $\bm u_1$ superimposed }
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Two dimensions}
+  \pause
+  If we solve a similar optimization problem for two basis vectors $\bm u_1$ and $\bm u_2$, we obtain the first and second principal components whose total projected variance is $\la_1 + \la_2$.
+  \pause
+
+    \begin{figure}[h!]
+    \centering
+    \includegraphics<2->[width=.6\textwidth,trim={0 .3cm 0 0},clip]{DMA7-3}
+    \caption{(Left) Optimal two-dimensional basis for Iris data. (Right) Non-optimal basis}
+  \end{figure}
+\end{frame}
+
+
+
+
+\section{SVD approach}
+
+\begin{frame}
+  \frametitle{Singular value decomposition (SVD)}
+  Recall the singular value decomposition of $\bm X$:
+
+  \begin{equation}
+    {\bl \bm X} = \bm {{\rd U}{\gr S} {\pl V}}^T 
+  \end{equation}
+
+  \pause
+
+  where:
+  \begin{itemize}[<+->]
+  \item   $\bm X$ is an $N\times D$ data matrix, whose entries have been centered ($x_{nj} \leftarrow x_{nj} - \ol{x}_j$)
+  \item $\bm U$ is an $N\times D$ orthogonal\footnote{i.e.\ $\bm U^T\bm U = \bm I$ and $\bm U^T = \bm U^{-1}$} matrix. The columns of $\bm U$ are called \textit{\pl left singular vectors}
+  \item  $\bm S$ is a $D\times D$ diagonal matrix (whose elements are called \textit{\gr singular values})
+  \item  $\bm V$ is an $D\times D$ orthogonal\footnote{i.e.\ $\bm V^T\bm V= \bm I$  and  $\bm V^T = \bm V^{-1}$} matrix. The columns of $\bm V$ are called \textit{\pl right singular vectors}
+  \item The columns of $\bm{US}$ are called the \textbf{principal components} of $\bm X$.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{SVD (cont.)}
+
+  \begin{eqnarray}\pause
+    \bl
+  \overbrace{
+    \begin{pmatrix}
+      x_{11}   & \cdots & x_{1D} \\
+      \vdots  & \ddots & \vdots \\
+      x_{N1}   & \cdots & x_{ND} 
+    \end{pmatrix}
+  }^{\bm X}
+  &=&\pause
+{\rd  \overbrace{\begin{pmatrix}
+      u_{11}  & \cdots & u_{1D} \\
+       \vdots  & \ddots & \vdots \\
+      u_{N1}   & \cdots & u_{ND}     
+    \end{pmatrix}}^{\bm U: \text{ eigenvectors of } \bm{XX}^T}} \pause % & &
+  {\gr \overbrace{
+    \begin{pmatrix}
+      \sqrt{\la_1}              & \cdots & 0 \\
+       0                       & \ddots & 0 \\
+       0                       & \cdots & \sqrt{\la_D}
+    \end{pmatrix}
+  }^{\substack{\bm S: \text{ $\sqrt{\text{eigenvalues}}$ of $\bm{XX}^T$ }  \\ \text{also singular values of } \bm X }}} \notag \\ \pause & &\qquad\qquad\qquad\qquad
+{\pl \overbrace{\begin{pmatrix}
+      v_{11}   & \cdots & v_{1D} \\
+       \vdots  & \ddots & \vdots \\
+      v_{D1}   & \cdots & v_{DD}     
+    \end{pmatrix}}^{\bm V: \text{ eigenvectors of } \bm{X}^T\bm X}  
+}  \end{eqnarray}
+
+  \pause
+
+  \begin{itemize}[<+->]
+  \item The columns $\rd \bm u_1, \ldots, \bm u_D$ are the left singular vectors of $\bm X$
+  \item  The columns $\pl \bm v_1, \ldots, \bm v_D$ are the right singular vectors of $\bm X$
+  \item The elements $\gr \sqrt{\la_1} \ge \ldots \ge  \sqrt{\la_D} = 0$ are the singular values of $\bm X$
+  \item $\la_1\ge  \ldots \ge \la_D =0$ are the eigenvalues of $\bm {XX}^T$ and also of $\bm X^T \bm X$
+  \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{PCA via SVD}
+  \pause
+
+  \begin{itemize}[<+->]
+  % \item  The goal of PCA is to find a low-dimensional representation of a dataset that retains a reasonable amount of information (i.e.\ variance)
+
+  \item   In the SVD framework, this means we find the best number $L$ of principal components $\bm u_ks_k$, where $k = 1, \ldots, L, L + 1, \ldots,  D$.\footnote{Note that $s_k = \sqrt{\la_k}$ in our notation.}
+
+  \item The transformed (reduced)  dataset is given by:
+    \begin{equation}
+      {\bl \bm Z} = \pause \bm U_L \bm S_{L} = \pause \bm X \bm V_L
+    \end{equation}
+    where $\bl \bm Z\in\mb R^{N\times L}$ is the \textbf{\bl score matrix} and $\bm U_L$, $\bm S_L$ and $\bm V_L$ are the $L$-truncated matrix components of the SVD of $\bm X$\pe
+    \begin{itemize}
+    \item $\bm V_L$ is also referred to as the \textbf{weight matrix} $\bm W$\pe
+    \end{itemize}
+  \item The data matrix $\bm X$ can be approximately recovered from the transformation by:\pause
+    \begin{equation}
+      \widetilde{\bm X} = \pause \bm{Z} {\rd \bm V^T_L}
+    \end{equation}
+    where $\rd \bm V_L^T\in\mb R^{L\times D}$ ({\rd \bf loadings matrix}) is the transpose of the first $L$ columns of $\bm V$\pe
+  \item Thus, PCA is considered the $L$-truncated SVD approximation of $\bm X$: \pe
+    \begin{equation}
+      \widetilde{\bm X}  = \bm U_L\bm S_L \bm V_L\tr
+    \end{equation}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{PCA via SVD (cont.)}
+  \pause
+  Since $\bm Z = \bm {XV}_L$, we can also recover $\bm X$ by:\pause
+  \begin{equation}
+    \widetilde{\bm X} = \pause \bm{ZV}^T_L = \bm {X} {\gr \bm V_L\bm V^T_L}
+  \end{equation}
+  \pause
+  The matrix ${\gr \bm V_L\bm V^T_L}$ is called the \textbf{\gr projection matrix}.
+  \pause
+
+  
+\visible<5->{    \begin{figure}[h!]
+      \centering
+      \includegraphics[width=.9\textwidth]{pcex}
+      \caption{1D projection of dataset onto first PC and reconstruction}
+    \end{figure}}
+  
+  \begin{itemize}[<+->] 
+  \item When $L=D$, then ${\gr \bm V_L\bm V^T_L} = \bm I_D$ ($D\times D$ identity matrix) \pause and $\bm X$ is recovered exactly
+  \item A great illustration can be found \href{https://stats.stackexchange.com/a/140579/67841}{\bf\bl here}.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Proportion of variance explained}
+  \pause
+
+  The total variance present in the dataset (mean-centered) is given by:\pause
+  \begin{equation}
+    \sum_{j=1}^D \mb V(\bm x_j) = \sum_{j=1}^D\la_j
+  \end{equation}
+  \pause
+  That is, the eigenvalues of the covariance matrix $\bm X^T\bm X$ sum up to the total variance. \pause
+  Since  $\bm X^T\bm X$ is positive semidefinite, its eigenvalues are non-negative:\pause
+  \begin{equation}
+    \la_1 \ge \la_2 \cdots \la_L \ge \la_{L+1}\cdots\ge \la_D \ge 0
+  \end{equation} \pause  
+  The total projected variance in the $L$-dimensional subspace is given by:\pause
+  \begin{equation}
+    \mb V( \widetilde{\bm X} ) = \sum_{j=1}^L\la_j
+  \end{equation}
+  \pause
+  The {\bf \bl proportion of variance explained} by the $j$th PC is then given by:\pause
+  \begin{equation}\bl
+    PVE = \fr{\la_j}{\sum_{j=1}^D\la_j}
+  \end{equation}\pause
+  \begin{itemize}
+  \item $\sqrt{\la_j}$ are the diagonal (non-zero) elements of the singular value matrix $\bm S$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Selecting the ``best''  $L$-dimensional approximation}
+  \pause
+  For a given number of dimensions $L$, the {\pl cumulative PVE} is given by: \pause
+  \begin{equation}\pl
+    CVPE_L =\pause \fr{\sum_{j=1}^L\la_j}{\sum_{j'=1}^D\la_{j'}}
+  \end{equation}
+  \pause
+  
+  We choose $M$ (number of PCs) such that the CVPE  is greater than a reasonably large threshold:\pause
+    \begin{eqnarray}\pl 
+      L^{*} &=& \min L \\\pause
+      \text{s.t.} && CVPE_L \ge \tau
+    \end{eqnarray}
+    \pause
+    where $\tau$ is the desired threshold (e.g. 0.9)\pause
+    
+    \begin{itemize}
+    \item This can also be visualized using a \textbf{scree plot}
+  \end{itemize}
+ % \begin{alertblock}{Selecting $M$}
+ %   In order to choose $M$, we can compute the proportion of total variance explained by the first $M$ principal components:\pause
+    % \begin{equation}
+    %   f(M) = \fr{\sum_{m=1}^M \la_m}{\sum_{m=1}^p \la_m} = \fr{\sum_{m=1}^M \la_m}{\sum_{j=1}^p \si_j^2}
+    %   = \fr{\sum_{m=1}^M \la_m}{\mb V(\bm X)}
+    % \end{equation}
+    \pause
+
+ % \end{alertblock}
+\end{frame}
+
+\section{PCR and PLS}
+\begin{frame}
+  \frametitle{Dimensionality reduction for regression}
+  \pause
+
+  \begin{itemize}
+  \item Previous methods to control variance:
+    \begin{itemize}
+    \item Subset selection
+    \item Coefficient shrinkage
+    \end{itemize}
+  \item All used original predictors in dataset $\bm x_{1}, \bm x_{2}, \ldots, \bm x_{D}$.
+  \item We can also improve a fit by training a model on a transformation of the input space: $\bm z_{1}, \bm z_{2}, \ldots, \bm z_{L}$:
+    \begin{equation}
+      \label{eq:9}
+      \bm z_{j} = \sum_{j=1}^L\bm X v_{j}, \pause\quad L < D
+    \end{equation}
+    \pause
+    \begin{itemize}
+    \item if $L << D$, variance of coefficients can be signficantly reduced\pause
+    \item The estimation problem is thus reduced from estimating $D+1$ coefficients to $L+1$ coefficients
+    \end{itemize}\pause
+  \item Consider \textbf{principal components analysis (PCA)} as an approach for regression\pause
+    \begin{itemize}
+    \item In selecting the number of principal components as regressors, we can use cross-validation to choose the
+      $L$ which gives the lowest error estimate.
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Principal components regression (PCR)}
+  Let the columns $\bm z_{k}$ be the linear combinations (principal components) of the original inputs $X_{j}$ (or $\bm x_{j}$). \\ \pause
+  \medskip
+  
+  In PCR, we regress the response $\bm y$ onto the subspace spanned by $\bm z_{k} = \bm X v_k$, where
+  $L \le D$ and $\bm z_{k}$ are the principal components of $\bm X$:
+  \begin{equation}
+    \label{eq:8}
+    \hat{\bm{y}}^{pcr}_{(L)} = \ol y\bm 1 + \sum_{j=1}^{L}\hat\theta_{j}\bm{z}_{j}
+  \end{equation}
+  \pause
+  The coordinates of $\widetilde{\bm x}_{j}$ in the new $L$-dimensional basis are then given by:\\ \pause
+  \begin{equation}
+    \label{eq:20}
+    \bm z_{j} = \bm V^{T}_{L} \bm x_{j}
+  \end{equation}
+  and the estimates are:
+  \pause
+  \begin{equation}
+    \label{eq:21}
+    \hat\theta_{j} = \fr{\bm z_{j}^{T}\bm y}{\bm z_{j}^{T}\bm z_{j}}
+  \end{equation}
+  \pause
+  We can then express the solution in terms of PCR coefficients of $\bm x_{j}$:\pause
+  \begin{equation}
+    \label{eq:22}
+    \hat{\bm{y}}^{pcr}_{(L)} = \ol y\bm 1 + \bm X \hat{\bm w}^{pcr} 
+%    \ol y\bm 1 +  \sum_{m=1}^{M}\hat\theta_{m}
+  \end{equation}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Partial least squares regression}
+  \pause
+  This is a supervised and iterative form of PCR in which the construction of $\bm z_{j}$ is informed by the correlation of each $\bm x_{j}$ with $\bm y$.
+  \pause
+  \begin{figure}[h!]
+    \centering
+    \includegraphics<3->[width=.6\textwidth]{6-21}
+    \caption{An example showing the first PLS direction (solid line) and first PCR direction (dotted line)}
+  \end{figure}
+\end{frame}
+
+
+
+\section{Summary}
+\begin{frame}
+  \frametitle{Summary of PCA steps}
+  \pause
+  \begin{itemize}[<+->]
+  \item Perform singular value decomposition of $N\times D$ data matrix $\bm X$:
+      \begin{equation}
+    {\bl \bm X} = \bm {{\rd U}{\gr S} {\pl V}}^T 
+  \end{equation}
+\item Determine the number of principal components $M$ to extract/retain using the cumulative proportion of variance explained:\pause
+    \begin{equation}
+    CVPE_L =\pause \fr{\sum_{j=1}^L\la_j}{\sum_{j'=1}^D\la_{j'}}
+  \end{equation}\pause
+\item Get loadings matrix $\bm V_{L}^{T}$ by truncating $\bm V^{T}$
+ 
+\item Find score matrix $\bm Z = \bm X \bm V_{L} \pe = \bm X\bm W$ \pe (transformed data into reduced subspace). \pe
+   Use $ \bm Z$ for regression, clustering, etc
+ \item Approximation of original data matrix can be obtained via:
+   \begin{equation}
+    \widetilde{\bm X} = \pause \bm{Z} {\rd \bm V^T_L} \pe = \bm Z\bm W\tr
+  \end{equation}
+   \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Outlook}
+  \pause
+
+  \begin{block}{Key points}\pause
+      \begin{itemize}[<+->]
+      \item PCA is a technique used for reducing the dimensionality of a dataset and exploring underlying patterns in the
+        variables
+      \item PCA identifies a low-dimensional subspace that captures the largest fraction of the input data variance
+      \item Standardizing (mean centering and scaling by standard deviation) is desired to ensure that variances are not
+        dominated by features on a larger scale \end{itemize}
+\end{block}
+\pause
+
+\begin{exampleblock}{Reading}
+  \begin{itemize}[<+->]
+  \item  \textbf{PMLI} 20.1
+  \item \textbf{ESL} 14.5 (note that in the book $\bm D$ corresponds to the $\bm S$ used in this lecture)
+  \item \textbf{PMLCE} 10.2 %Problem Set 3, Problem 2 preamble 
+  % \item PCA tutorial: \url{https://www.cs.princeton.edu/picasso/mats/PCA-Tutorial-Intuition_jp.pdf}
+  \end{itemize}
+\end{exampleblock}
+\end{frame}
+
+
+
+\appendix\addtocounter{part}{-1}
+
+\section{Appendix: PCs and ridge regression}
+% \begin{frame}
+%   \frametitle{Singular value decomposition approach}
+%   We motivate principal components through the singular value decomposition (SVD) of $\bm X^T\bm X$:
+%   \begin{equation}
+%     \label{eq:0}
+%     \bm S = \fr1n \bm X^{T}\bm X
+%   \end{equation}
+%   \pause
+%   where $\bm S$ is the sample covariance matrix and $\bm X$ is the mean centered $p\times p$ input matrix.
+% \end{frame}
+\begin{frame}
+  \frametitle{Ridge estimates}
+  Recall the ridge regression estimate:\pause
+  \begin{equation}
+    \label{eq:1}
+    \hat{\bm w}^{R} = (\bm X^{T}\bm X + \la \bm I)^{-1} \bm X^{T}\bm y
+  \end{equation}
+  The \textbf{\bl singular value decomposition} of $\bm X$ can yield important insights into the nature of the solution:
+  \begin{equation}\bl
+    \bm X = \bm{UDV}^{T}\quad  \label{eq:2}    
+  \end{equation}
+  where $\bm U_{N\times D}$   and $\bm V_{D \times D}$ are orthogonal matrices. Recall that an orthogonal matrix is one whose columns/rows are orthogonal unit vectors (i.e. all rows and columns have only one non-zero element: $\pm 1$); $\bm U^{T}\bm U =  \bm I$
+  \begin{align*}
+    \intertext{$\bm D$ is a $D\times D$ diagonal matrix; $d_{j}\ge 0$}
+  \pause \hat{\bm y} =  \bm X\hat{\bm w}^{OLS} &= \bm X(\bm X ^{T}\bm X)^{-1}\bm X^{T}\bm y \\
+                         &= \bm{USDV}^{T} (\bm{VDU}^{T} \bm{USV}^{T} )^{-1} \bm{VSU}^{T}\bm{y}\\
+                         &=\bm{U}(\bm S^{2})^{-1}\bm{S}^{2}\bm U^{T}\bm y\\
+                         &= \bm{UU}^{T}\bm y
+  \end{align*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ridge estimate decomposition}
+  We can then write the ridge solutions as:
+  \begin{align*}
+    \bm X \hat{\bm w}^{R} &= \bm X(\bm X^{T}\bm X + \la\bm I)^{-1}\bm X^{T}\bm y\\
+    &= \bm{U S} (\bm{S}^{2} + \la\bm{I})^{-1}\bm{S U}^{T}\bm{y}\\
+    &= \sum_{j=1}^{p}\bm{u}_{j}\fr{d_{j}^{2}}{d_{j}^{2}+\la}\bm{u}_{j}^{T}\bm{y}
+  \end{align*}
+  where $\bm{u}_{j}$ are the columns of $\bm U$.
+
+  \bigskip
+  Thus, we see that ridge regression shrinks the coordinates of $\bm y$ in the basis $\bm U$ by $\fr{d_{j}^{2}}{d_{j}^{2}+ \la}$.
+  \begin{itemize}
+  \item As $d_{j}$ decreases, the term $\fr{d_{j}^{2}}{d_{j}^{2}+ \la}$ increases.
+  \item Thus, more shrinkage is applied to the coordinates whose basis vectors correspond to smaller $d_{j}$.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Principal components}
+  Keeping in mind that $\bm X$ is a centered matrix, then the sample covariance matrix is given by:
+  \begin{equation}
+    \label{eq:3}
+    \bm S = \fr{\bm X^{T}\bm X}{N}
+  \end{equation}
+  Substituting $\bm X$ with its SVD we obtain:
+  \begin{equation}
+    \label{eq:4}
+    \bm X^{T}\bm X = (\bm{UDV}^{T})^{T}\bm{UDV}^{T} = \bm{VDU}^{T}\bm{UDV}^{T} = \bm V\bm D^{2}\bm V^{T}
+  \end{equation}
+  \begin{itemize}
+  \item The columns $\bm v_{j}$ of $\bm V$ are the \textbf{eigenvectors} of $\bm X$ (or \textbf{principal components}).
+  \item The expression $\bm V\bm D^{2}\bm V^{T}$ is called the \textbf{eigendecomposition} of $\bm S$.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{First principal component}
+  Given the eigen decomposition:
+  \begin{equation}
+    \label{eq:6}
+    \bm{X}^{T}\bm{X} = \bm{V S}^{2}\bm V^{T}
+  \end{equation}
+  The first principal component\footnote{Also known as Karhunen-Loeve direction} of $\bm X$ satisfies the property:
+  \begin{equation}
+    \label{eq:7}
+    \mb V(\bm z_{1})  = \mb V(\bm X \bm v_{1}) = \fr{s_{1}^{2}}{N}  = \fr{\lambda_{1}}{N}
+  \end{equation}
+  % Generally, the principal components $\bm z_{j}$ have a maximum variance of $\fr {d_{j}^{2}}n$.
+  \pause
+  \begin{itemize}[<+->]
+  \item The variable $\bm z_{1}$ is the \textbf{first principal component} of $\bm X$:\pause
+    \begin{equation}
+      \label{eq:10}
+      \bm z_{1} = \bm X v_{1} \pause = \bm u_{1}s_{1}
+    \end{equation}
+  where the vector $\bm u_{1}$ is the normalized first principal component.
+  \item The last principal component has minimum variance.
+  \item  Since this corresponds to the lowest $s_{k}$, this corresponds to the direction shrunk the most by the ridge regression
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Principal components --- 2 dimensions}
+  \pause
+  
+  Ridge regression projects $\bm y$ onto the principal components, shrinking the coefficient of the low-variance component more than the high-variance component.
+
+  \begin{figure}[h!]
+    \centering
+    \includegraphics<3->[width=.6\textwidth,trim=2cm 12cm 2cm 4cm, clip]{ESL3-9}
+    \caption{Principal components of a two-dimensional input dataset. The largest principal component (PC) maximizes the variance of the projected data. The smallest PC minimizes that variance.}
+  \end{figure}
+  
+ 
+\end{frame}
+
+% \begin{frame}
+%   \frametitle{Further reading}
+%   \pause
+
+%   \begin{itemize}[<+->]
+%   \item For a derivation of the ordinary least squares (OLS) estimates and relevant statistics,
+%     see ESL pp.\ 11--12, 43--50
+%   \item A good introduction to weighted least squares (WLS) and two-stage estimation: \url{https://ms.mcmaster.ca/canty/teaching/stat3a03/Lectures7.pdf}
+%   \end{itemize}
+% \end{frame}
+
+%  \begin{frame}
+%   \frametitle{Iteratively reweighted least squares}\pause
+%   The update for the logistic regression coefficient is given by:
+%   \begin{eqnarray}
+%     \label{eq:34}
+%     \begin{split}
+%       \bm w_{k+1} 
+%         &=&&&(\bm X^T \bm W \bm X)^{-1} \bm X^T \bm W {\gr \bm z}
+%     \end{split}
+%   \end{eqnarray}
+%   \pause
+%   where the adjusted response $\bm z$ is given as:
+%   \begin{equation}
+%     \label{eq:35}
+%     \gr\bm z = \bm X\bm w_k + \bm W^{-1} (\bm y - \bm p)
+%   \end{equation}
+%   \begin{alertblock}{OLS, WLS and IRLS}\pause
+%     \begin{itemize}
+%     \item  Recall the OLS estimate: $\hat{\bm w} = (\bm X^T\bm X)^{-1}\bm X^T\bm z $ \pause if $\bm z$ is the response.\pause
+
+%     \item The weighted least squares (WLS) is given by: $\hat{\bm w} = (\bm X^T\bm W \bm  X)^{-1}\bm X^T \bm W z $. \pause
+
+%     \item In the logistic regression case, $\bm W$ and $\bm z$ change in each step, \pause hence it is called
+%       \textit{iteratively reweighted least squares (IRLS)}.
+%   \end{itemize}
+%   \end{alertblock}
+
+% \end{frame}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -1,0 +1,202 @@
+%\documentclass[smaller,handout, dvipsnames]{beamer}
+\def\bmode{0} % Mode 0 for presentation, mode 1 for a handout with notes, mode 2 fo% r handout without notes
+\if 0\bmode
+\documentclass[usenames,dvipsnames,smaller]{beamer}
+\else \if 1\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout-Notes\space\jobname}
+\documentclass[usenames,dvipsnames,smaller,handout]{beamer}
+\usepackage{handoutWithNotes}
+\pgfpagesuselayout{2 on 1 with notes}[letterpaper, landscape, border shrink=4mm]
+\else \if 2\bmode
+\immediate\write18{pdflatex -jobname=\jobname-Handout\space\jobname}
+\documentclass[usenames,dvipsnames,smaller,handout]{beamer}
+\fi
+\fi
+\fi
+
+
+%\setbeamertemplate{section in head/foot}{}
+%\setbeamertemplate{section in head/foot shaded}{\textcolor{white}{\insertsectionhead}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\coursetitle}{CEE 697M: Probabilistic Machine Learning}
+\newcommand{\longlecturetitle}{M5 Unsupervised Learning:\\ L5b:  Factor Analysis}
+\newcommand{\shortlecturetitle}{L5b: FA}
+\newcommand{\instructor}{Jimi Oke}
+\newcommand{\lecturedate}{Wed, May 10, 2023}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{course-macros.tex}
+%\setbeamercolor{local structure}{fg=white}
+
+\begin{document}
+\maketitle
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+
+ 
+
+\section{Introduction}
+
+\begin{frame}
+  \frametitle{Hidden factors}
+  \pe
+
+  \begin{itemize}
+  \item Basic idea: there are \textbf{common factors} $\bm z$ underlying some multivariate observations $\bm x_{n} \in \mb R^{D}$
+
+  \end{itemize}
+  
+\end{frame}
+\begin{frame}
+  \frametitle{Factor analysis model}
+  \pe
+  FA is a latent variable generative model specified as:\pe
+
+  \begin{eqnarray}
+    p(\bm z) &=& \mc{N}(\bm z|\bm \mu_{0},\bm\Sigma_{0}) \\\pe
+    p(\bm x|\bm z,\bm\th) &=& \mc N(\bm x|\bm W\bm z + \bm\mu, \bm \Psi)
+  \end{eqnarray}\pe
+  where:
+  \begin{itemize}
+  \item $\bm z$: latent vector \pe
+  \item $\bm W$: factor loading matrix, $D\times L$\pe
+  \item $\bm \Psi$: diagonal covariance matrix, $D\times D$\pe
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Induced marginal distribution}
+  \pe
+
+  \begin{eqnarray}
+    p(\bm x|\bm \th) &=&\pe
+                         \int \mc{N}(\bm x|\bm W\bm z  + \bm\mu, \bm\Psi)\mc{N}(\bm z|\bm\mu_{0},\bm\Sigma_{0})d\bm z \\\pe
+                     &=& \mc{N}(\bm x|\underbrace{\bm W{\rd\bm\mu_{0}} + \bm \mu}_{\text{mean}} ,
+                         \underbrace{\bm\Psi + \bm W{\bl\bm\Sigma_{0}}\bm W\tr}_{\text{variance}})
+  \end{eqnarray}
+
+  \pe
+  Simplifications:
+  \begin{itemize}
+  \item $\rd\bm\mu_{0} \to \bm 0$ \pe
+  \item $\bl\bm\Sigma_{0} \to \bm I$
+  \end{itemize}
+  \pe
+  The simplified marginal distribution then becomes:\pe
+  \begin{equation}
+    p(\bm x|\bm\th) = \mc{N}(\bm x|\bm \mu, \bm{WW}\tr+\bm\Psi)
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Generative model simplified}
+
+  \begin{eqnarray}
+    \text{[Prior]}\quad   p(\bm z) &=& \mc{N}(\bm z|\bm 0, \bm I) \\\pe
+    \text{[Likelihood]}\quad   p(\bm x|\bm z) \pe &=& \mc{N}(\bm x|\bm {Wz} + \bm\mu, \bm\Psi) \\\pe
+    \text{[Evidence/marginal]}\quad   p(\bm x) \pe &=& \mc{N}(\bm x|\bm \mu, \bm{WW}\tr + \bm\Psi)
+  \end{eqnarray}
+\end{frame}
+
+\begin{frame}
+  \frametitle{What FA does}
+  \pe
+
+  It approximates the covariance matrix of the visible/observed vector $\bm x$ using a low-rank decomposition:\pe
+
+  \begin{equation}
+    \bm C = \text{Cov}[\bm x] = \underbrace{\bm{WW}\tr + \bm\Psi}_{\text{low-rank decomp}}
+  \end{equation}
+  \pe
+  \begin{itemize}
+  \item $\bm{WW}\tr$ is $D\times D$\pe
+  \item $\bm\Psi$ is $D\times D$ (restricted to be diagonal) \pe
+  \item For each variable $x_{d}$, the \textbf{marginal variance} (each diagonal term in $\bm C$) is given by: \pe
+    \begin{equation}
+      \mb{V}[x_{d}] = \sum_{k=1}^{L}\underbrace{w_{dk}^{2}}_{\text{common}} + \underbrace{\psi_{d}}_{\text{unique}}
+    \end{equation}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Parameters to be estimated}
+  \pe
+  The unknown parameters in FA are:
+  \pe
+  \begin{itemize}
+  \item $\bm W$: factor loading matrix \pe
+  \item $\bm \Psi$: covariance matrix
+  \end{itemize}
+
+  \pe
+  Once estimated, the \textbf{posterior} of latent embeddings is given by:\pe
+  \begin{equation}
+    p(\bm z|\bm x) = \mc{N}(\bm z|\bm W\tr \bm C^{-1}(\bm x - \bm\mu),\bm I - \bm{W}\tr\bm{C}^{-1}\bm{W})
+  \end{equation}
+  \pe
+  \begin{itemize}
+  \item Posterior has closed-form solution under Gaussian distribution
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{FA model summary}
+  \pe
+    \begin{eqnarray}
+    \text{[Prior]}\quad   p(\bm z) &=& \mc{N}(\bm z|\bm 0, \bm I) \\\pe
+    \text{[Likelihood]}\quad   p(\bm x|\bm z) \pe &=& \mc{N}(\bm x|\bm {Wz} + \bm\mu, \bm\Psi) \\\pe
+    \text{[Evidence/marginal]}\quad   p(\bm x) \pe &=& \mc{N}(\bm x|\bm \mu, \bm C) \\\pe
+     \text{[Posterior]}\quad p(\bm z|\bm x) &=& \mc{N}(\bm z|\bm W\tr \bm C^{-1}(\bm x - \bm\mu),\bm I - \bm{W}\tr\bm{C}^{-1}\bm{W})  
+    \end{eqnarray}
+    \pe
+
+    \begin{itemize}
+    \item $\bm z$: latent vector, length $L$ (assumed to be zero-mean, unit variance) \pe
+    \item $\bm x$: observed vector \pe
+    \item $\bm W$: $D\times L$ factor loading matrix\pe
+    \item $\bm \Psi$: $D\times D$ diagonal covariance matrix or \textbf{matrix of unique variances} \pe
+    \item $\bm C = \bm{WW}\tr + \bm\Psi$
+    \end{itemize}
+\end{frame}
+  
+\section{Estimation}
+\begin{frame}
+  \frametitle{Unidentifiability of FA parameters}
+
+  \pe
+
+  The parameters $\bm W$ and $\bm\Psi$ are unidentifiable. \pe This can be addressed via: \pe
+
+  \begin{itemize}
+  \item Constrain $\bm W$ to have orthonormal columns [PCA] \pe
+  \item Constrain $\bm W$ to be lower triangular \pe
+  \item Informative rotation: $\tilde{\bm W} = \bm{WR}$, where $\bm R$ is th erotation matrix \pe
+  \item Sparsity-promoting priors on $\bm W$ \pe
+  \item Non-Gaussian priors for latent factors
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Rotation}
+  \pe
+  We rotate factors for identifiability and interpretability of factors:
+  
+  \begin{itemize}
+  \item Varimax
+  \item Promax
+  \item Oblimin
+  \item Geomin
+  \item Thurstone
+  \item Equamax
+  \end{itemize}
+\end{frame}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

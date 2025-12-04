@@ -1,0 +1,1025 @@
+\documentclass[12pt,twoside]{article}
+\usepackage{etex}
+
+\raggedbottom
+
+%geometry (sets margin) and other useful packages
+\usepackage{geometry}
+\geometry{top=1in, left=1in,right=1in,bottom=1in}
+\usepackage{graphicx,booktabs,ragged2e,calc}
+\graphicspath{{./images/}}
+
+\usepackage{listings}
+\lstset{ %
+  language=R,                     % the language of the code
+  % basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  % numbers=left,                   % where to put the line-numbers
+  % numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  % stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+  %                                 % will be numbered
+  % numbersep=5pt,                  % how far the line-numbers are from the code
+  % backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  % showspaces=false,               % show spaces adding particular underscores
+  % showstringspaces=false,         % underline spaces within strings
+  % showtabs=false,                 % show tabs within strings adding particular underscores
+  % frame=single,                   % adds a frame around the code
+  % rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  % tabsize=2,                      % sets default tabsize to 2 spaces
+  % captionpos=b,                   % sets the caption-position to bottom
+  % breaklines=true,                % sets automatic line breaking
+  % breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  % title=\lstname,                 % show the filename of files included with \lstinputlisting;
+  %                                 % also try caption instead of title
+  % keywordstyle=\color{blue},      % keyword style
+  % commentstyle=\color{dkgreen},   % comment style
+  % stringstyle=\color{mauve},      % string literal style
+  % escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  % morekeywords={*,...}            % if you want to add more keywords to the set
+} 
+
+
+% Marginpar width
+%Marginpar width
+\newcommand{\pts}[1]{\marginpar{ \small\hspace{0pt} \textit{[#1]} } } 
+\setlength{\marginparwidth}{.5in}
+%\reversemarginpar
+%\setlength{\marginparsep}{.02in}
+
+ 
+%\usepackage{cmbright}lstinputlisting
+%\usepackage[T1]{pbsi}
+
+%\renewcommand{\baselinestretch}{1.5}
+
+\usepackage{chngcntr,mathtools}
+%\counterwithin{figure}{section}
+%\numberwithin{equation}{section}
+
+%\usepackage{listings}
+
+%AMS-TeX packages
+\usepackage{amssymb,amsmath,amsthm} 
+\usepackage{bm}
+\usepackage[mathscr]{eucal}
+\usepackage{colortbl}
+\usepackage{color}
+
+
+\usepackage{subcaption,hyperref,enumerate,polynom,polynomial}
+\usepackage{multirow,minitoc,fancybox,array,multicol}
+
+\definecolor{slblue}{rgb}{0,.3,.62}
+\hypersetup{
+    colorlinks,%
+    citecolor=blue,%
+    filecolor=blue,%
+    linkcolor=blue,
+    urlcolor=slblue
+}
+
+%%%TIKZ
+\usepackage{tikz}
+
+\usepackage{pgfplots,pgfplotstable}
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{arrows,shapes,positioning}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shadows}
+\usetikzlibrary{patterns}
+%\usetikzlibrary{circuits.ee.IEC}
+\usetikzlibrary{decorations.text}
+% For Sagnac Picture
+\usetikzlibrary{%
+    decorations.pathreplacing,%
+    decorations.pathmorphing%
+}
+
+\usetikzlibrary{calc}
+
+\tikzstyle arrowstyle=[black,scale=2]
+\tikzstyle directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrow[arrowstyle]{stealth}}}}]
+\tikzstyle reverse directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrowreversed[arrowstyle]{stealth};}}}]
+\tikzstyle dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrow[arrowstyle]{latex}}}}]
+\tikzstyle rev dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrowreversed[arrowstyle]{latex};}}}]
+
+\usepackage{ctable}
+
+%
+%Redefining sections as problems
+%
+\makeatletter
+\newenvironment{exercise}{\@startsection 
+	{section}
+	{1}
+	{-.2em}
+	{-3.5ex plus -1ex minus -.2ex}
+    	{1.3ex plus .2ex}
+    	{\pagebreak[3]%forces pagebreak when space is small; use \eject for better results
+	\large\bf\noindent{Exercise 1.\hspace{-1.5ex} }
+	}
+	}
+	%{\vspace{1ex}\begin{center} \rule{0.3\linewidth}{.3pt}\end{center}}
+	%\begin{center}\large\bf \ldots\ldots\ldots\end{center}}
+\makeatother
+
+%
+%Fancy-header package to modify header/page numbering 
+%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\addtolength{\headwidth}{\marginparsep} %these change header-rule width
+%\addtolength{\headwidth}{\marginparwidth}
+%\fancyheadoffset{30pt}
+%\fancyfootoffset{30pt}
+\fancyhead[LO,RE]{\small Prof.\ Oke}
+\fancyhead[RO,LE]{\small Page \thepage} 
+\fancyfoot[RO,LE]{\small Midterm Exam 1} 
+\fancyfoot[LO,RE]{\small \scshape CEE 697M} 
+\cfoot{} 
+\renewcommand{\headrulewidth}{0.1pt} 
+\renewcommand{\footrulewidth}{0.1pt}
+%\setlength\voffset{-0.25in}
+%\setlength\textheight{648pt}
+
+
+\usepackage{paralist}
+
+\newcommand{\osn}{\oldstylenums}
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+\newcommand{\pt}{\phantom}
+\newcommand{\tf}{\therefore}
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\fr}{\frac}
+\newcommand{\dfr}{\dfrac}
+\newcommand{\ul}{\underline}
+\newcommand{\tn}{\tabularnewline}
+\newcommand{\nl}{\newline}
+\newcommand\relph[1]{\mathrel{\phantom{#1}}}
+\newcommand{\cm}{\checkmark}
+\newcommand{\ol}{\overline}
+\newcommand{\rd}{\color{red}}
+\newcommand{\bl}{\color{blue}}
+\newcommand{\pl}{\color{purple}}
+\newcommand{\og}{\color{orange!90!black}}
+\newcommand{\gr}{\color{green!40!black}}
+\newcommand{\nin}{\noindent}
+\newcommand{\la}{\lambda}
+\renewcommand{\th}{\theta}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,thick,inner sep=1pt] (char) {\small #1};}}
+
+\newcommand{\bc}{\begin{compactenum}[\quad--]}
+\newcommand{\ec}{\end{compactenum}}
+
+\newcommand{\n}{\\[2mm]}
+%% GREEK LETTERS
+\newcommand{\al}{\alpha}
+\newcommand{\gam}{\gamma}
+\newcommand{\eps}{\epsilon}
+\newcommand{\sig}{\sigma}
+
+\newcommand{\p}{\partial}
+\newcommand{\pd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpd}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\pdd}[2]{\frac{\partial^2{#1}}{\partial{#2}^2}}
+\newcommand{\mr}{\mathbb{R}}
+\newcommand{\xs}{x^{*}}
+\newenvironment{solution}
+{\medskip\par\quad\quad\begin{minipage}[c]{.8\textwidth}}{\medskip\end{minipage}}
+
+\newcommand{\nmfr}[3]{\Phi\left(\frac{{#1} - {#2}}{#3}\right)}
+
+% https://tex.stackexchange.com/questions/198383/drawing-cumulative-distribution-function-for-a-discrete-variable
+\makeatletter
+\long\def\ifnodedefined#1#2#3{%
+    \@ifundefined{pgf@sh@ns@#1}{#3}{#2}%
+}
+
+\pgfplotsset{
+    discontinuous/.style={
+    scatter,
+    scatter/@pre marker code/.code={
+        \ifnodedefined{marker}{
+            \pgfpointdiff{\pgfpointanchor{marker}{center}}%
+             {\pgfpoint{0}{0}}%
+             \ifdim\pgf@y>0pt
+                \tikzset{options/.style={mark=*, fill=white}}
+                \draw [densely dashed] (marker-|0,0) -- (0,0);
+                \draw plot [mark=*] coordinates {(marker-|0,0)};
+             \else
+                \tikzset{options/.style={mark=none}}
+             \fi
+        }{
+            \tikzset{options/.style={mark=none}}        
+        }
+        \coordinate (marker) at (0,0);
+        \begin{scope}[options]
+    },
+    scatter/@post marker code/.code={\end{scope}}
+    }
+}
+
+\makeatother
+
+
+\newcommand{\mb}{\mathbb}
+\newcommand{\mc}{\mathcal}
+\newcommand{\tr}{^{\top}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here's where you edit the Class, Exam, Date, etc.
+\newcommand{\class}{CEE 697M: Data Mining and Machine Learning for Engineers}
+\newcommand{\term}{Spring 2023}
+\newcommand{\examnum}{Midterm Exam 1}
+%\newcommand{\examdate}{03/04/2022}
+%\newcommand{\timelimit}{120 Minutes}
+
+
+\newcolumntype{R}[1]{>{\RaggedLeft\arraybackslash}p{#1}}
+
+\pgfmathdeclarefunction{poiss}{1}{%
+  \pgfmathparse{(#1^x)*exp(-#1)/(x!)}%
+  }
+
+\pgfmathdeclarefunction{gauss}{2}{%
+  \pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+\pgfmathdeclarefunction{expo}{2}{%
+  \pgfmathparse{#1*exp(-#1*#2)}%
+}
+
+\usetikzlibrary{math}
+
+% https://tex.stackexchange.com/questions/461758/asymmetric-distribution-gauss-curve
+\tikzmath{%
+  function h1(\x, \lx) { return (9*\lx + 3*((\lx)^2) + ((\lx)^3)/3 + 9); };
+  function h2(\x, \lx) { return (3*\lx - ((\lx)^3)/3 + 4); };
+  function h3(\x, \lx) { return (9*\lx - 3*((\lx)^2) + ((\lx)^3)/3 + 7); };
+  function skewnorm(\x, \l) {
+    \x = (\l < 0) ? -\x : \x;
+    \l = abs(\l);
+    \e = exp(-(\x^2)/2);
+    return (\l == 0) ? 1 / sqrt(2 * pi) * \e: (
+      (\x < -3/\l) ? 0 : (
+      (\x < -1/\l) ? \e / (8 * sqrt(2 * pi)) * h1(\x, \x*\l) : (
+      (\x <  1/\l) ? \e / (4 * sqrt(2 * pi)) * h2(\x, \x*\l) : (
+      (\x <  3/\l) ? \e / (8 * sqrt(2 * pi)) * h3(\x, \x*\l) : (
+      sqrt(2/pi) * \e)))));
+  };
+}
+
+\begin{document}
+
+%\begin{flushright}
+%  \noindent \begin{tabular}{p{2.8in} r l}
+\title{\vspace{-5ex}{\sc \examnum}}
+\author{\bf \class}
+\date{March 31, 2023\\[4mm]
+   {\sc time limit:} {\bf \sc 24 Hours}
+}
+% \end{tabular}\\
+%\end{flushright}
+%
+\clearpage
+\maketitle
+% \noindent\rule[1ex]{\textwidth}{.1pt}
+% \subsection*{Name}
+% Please print your name clearly in the box below.\\
+% \begin{center}
+%   \framebox(300,40){\Huge\phantom{t}} \\
+%   \vspace{2ex}
+% \end{center}
+
+% \vspace{40ex}
+%{\it Turn to the next page to read the instructions.}
+\thispagestyle{empty}
+
+
+%\eject
+\subsection*{Instructions}
+This exam contains \textbf{10 pages} (including the front and back pages) and
+\textbf{6 problems}, the last of which includes an extra credit subproblem). You have {\bf 24 hrs} to complete the exam from the time you download the PDF.
+There are \textbf{90} regular points available (along with \textit{6 extra credit points}).\\
+% Check to see if any pages are missing.
+%Make sure you have written your name on the front page.
+%If you have any loose pages, put your initials on the top of these pages.
+
+% \noindent You may use \textit{only} \textbf{writing materials} and a \textbf{calculator} on this exam, along with a \textbf{cheat sheet}
+% with formulas/equations/brief notes as a memory aid.
+% However, you may not consult \textit{lecture notes, slides, homework, phones, computers,
+%   tablets or other electronic device}. If you have any of the disallowed items, please bring them to the front of the lecture room before you begin your exam. 
+
+ The following rules apply: 
+% \begin{minipage}[t]{3.7in}
+% \vspace{0pt}
+\begin{itemize}
+\item This is an open-resource examination, so you are free to consult any resource at your disposal. 
+
+\item Submit your completed examination as a PDF. You may type, typeset or write your answers and scan.% (you can also use the spaces provided in this document and submit an edited version of this PDF).
+
+\item Name your file as \texttt{LASTNAME\_FIRSTNAME\_Midterm1.pdf}.
+  
+%\item \textbf{If you use a ``fundamental theorem'' you must indicate this} and explain
+%why the theorem may be applied.
+
+\item \textbf{Organize your work}, in a reasonably neat and coherent way, in
+the space provided. Work scattered all over the page without a clear ordering will
+receive very little credit.
+
+\item \textbf{Show ALL your work where appropriate}.
+  The work you show will be evaluated as well as your final answer.
+  Thus, provide ample justification for each step you take.
+  Indicate when you have used a probability table to obtain a result.
+  In the long response questions, simply putting down an answer without showing your steps  will not merit full credit.
+  {\bf EXCEPTION:} For short response or ``True/False'' questions, \textit{no explanations are required}.
+  Generally, however, the more work you show, the greater your chance of receiving partial credit if your final answer is incorrect.
+
+\item If you need more space, use the blank pages at the end, and clearly indicate when and where you have done this.
+
+% \item Questions are roughly in order of the lectures, so later questions may not necessarily be harder.
+%   If you are stuck on a problem, it may be better to skip it and get to it later.
+
+% \item Manage your time wisely. Do not spend too much time on problems with fewer points.
+%\item Do not write anything on the next page.
+
+\end{itemize}
+\bigskip
+
+{\it Please note the total amount of time you spent completing this exam: \boxed{\phantom{\Huge JIMI \\[2mm] !!!!!~~  OKE}}}
+
+% \thispagestyle{empty}
+% %\noindent{\it Do not write anything on this page. Please turn over.}
+
+% \begin{table*}[h!]
+%   \center
+%   \large
+%   \renewcommand{\arraystretch}{1}
+%   \quad
+%   \begin{tabular}{R{1.5in} R{1.5in} R{1.5in} }\toprule 
+%     \bf \it Problem  & \bf Points & \bf EC \\\midrule
+%     \it 1 &  \bf /10 &         \\\midrule
+%     \it 2 &  \bf /3  &          \\\midrule
+%     \it 3 &  \bf /4  &          \\\midrule
+%     \it 4 &  \bf /3  &  \bf /2  \\\midrule % 20
+%     \it 5 &  \bf /4  &          \\\midrule
+%     \it 6 &  \bf /4  & \bf /1\\\midrule
+%     \it 7 &  \bf /3  &    \\\midrule
+%     \it 8 &  \bf /5  &   \\\midrule
+%     \it 9 &  \bf /4  &  \\\midrule
+%     \it 10 & \bf /4  &       \\\midrule
+%     \it 11 & \bf /3  & \bf /1  \\\midrule
+%     \it 12 & \bf /5  &         \\\midrule % 52
+%     \it 13 & \bf /3  & \bf    \\\midrule
+%     \it 14 & \bf /6  & \bf /2  \\\midrule % 61 
+%     \it 15 & \bf /5  &         \\\midrule % 66
+%     \it 16 & \bf /4  &         \\\midrule % 70
+%     \it 17 & \bf     & \bf /4   \\\midrule 
+%     \bf \it TOTAL & \bf /70 &   \\\bottomrule
+%   \end{tabular}
+
+%   \end{table*}
+% \newpage
+
+ 
+\eject
+\section*{Problem 1 \quad {\it True/False questions (15 points)}}
+Respond ``T'' ({\it True})  or  ``F'' (\textit{False}) to the following statements.  Each response is worth 1 point. %Use the boxes provided.
+
+\bigskip
+
+\begin{enumerate}[\bf (i)]
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    A random variable with more than two outcomes from a single trial is Bernoulli distributed.
+  \end{minipage}
+
+  \smallskip
+
+  
+  \item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %T
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    In a gradient descent to find the $\bm\th^*$ that minimizes an objective, the second derivative is required to compute the update $\bm\th_{k+1}$.
+  \end{minipage}
+
+  \smallskip
+
+   
+  \item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %T
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    BFGS is an example of a second-order optimization method.
+  \end{minipage}
+
+  \smallskip
+ 
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Ordinary least squares (OLS) estimation assumes that the error terms are heteroskedastic.
+  \end{minipage}
+
+ 
+    \smallskip
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %T
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    In logistic regression, the logit function is nonlinear in the parameters $\bm w$.
+  \end{minipage}
+  
+  
+    \smallskip
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    In assessing a classifier, the receiver operating characteristics (ROC) curve is generated by plotting recall
+    versus specificity for different threshold values.
+  \end{minipage}
+
+  \smallskip
+    
+  \item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %T
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    The coefficient of determination $R^2$ does not penalize for model complexity.
+  \end{minipage}
+
+  \smallskip
+  
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %$T$
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Linear discriminant analysis cannot be used to approximate a nonlinear boundary in a classification problem.
+  \end{minipage}
+
+  \smallskip
+  
+% \item \hfill
+%   \begin{minipage}{.1\linewidth}
+%     \framebox(40,40){} %T
+%   \end{minipage}\quad
+%   \begin{minipage}{.85\linewidth}
+%     The least squares regression line always passes through the  centroid of a dataset $(\ol{X},\ol{Y})$.
+%   \end{minipage}
+
+%   \smallskip
+  
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Eigenvalue decomposition can be performed on any type of matrix.
+  \end{minipage}
+
+  \smallskip
+  
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+A rank deficient matrix is nonsingular.  \end{minipage}
+
+  \smallskip
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){}%T
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    If you perform 5-fold CV using a training set with 6,000 observations, then you need to train 300 models to obtain your CV error estimate.
+  \end{minipage}
+
+\smallskip
+
+
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %T
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    If the entropy of a random variable is computed using the natural logarithm, then the units are \textit{bits}.
+  \end{minipage}
+
+    
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+A positive definite matrix strictly has nonnegative eigenvalues.  \end{minipage}
+
+  \smallskip
+  
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Ridge regression employs $\ell_1$ regularization.
+  \end{minipage}
+
+  \item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} %F
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Lasso regression estimates are obtained from maximum a posteriori (MAP) estimation assuming a Gaussian prior on the weight vector.
+  \end{minipage}
+
+  \smallskip  
+
+\end{enumerate}
+
+ 
+
+% \section*{Problem 2 \quad {\it Bayes Theorem (9 points)}}
+% Given an earthquake of intensity
+% \begin{equation}
+%   \label{eq:10}
+%   X : x \in \{\text{light } (L), \text{moderate } (M), \text{important } (I)\}
+% \end{equation}
+% and a structure that can be in a state
+% \begin{equation}
+%   \label{eq:11}
+%   Y : y \in \{\text{damage} (D), \text{undamaged} (\ol{D})\}
+% \end{equation}
+% The likelihood of damage given earthquake intensity is
+% \begin{equation}
+%   \label{eq:12}
+%   p(D|x) =
+%   \begin{cases}
+%     \Pr(Y=D|x = L) &= 0.01 \\
+%     \Pr(Y=D|x = M) &= 0.10 \\
+%     \Pr(Y=D|x = I) &= 0.60 \\
+%   \end{cases}
+% \end{equation}
+% and the prior probability of each intensity is given by
+% \begin{equation}
+%   \label{eq:13}
+%   p(x) =
+%   \begin{cases}
+%     \Pr(X=L) &= 0.90 \\
+%     \Pr(X=M) &= 0.08 \\
+%     \Pr(X=I) &= 0.02 
+%   \end{cases}
+% \end{equation}
+% An earthquake has just occurred and damaged buildings have been observed, i.e.\
+% \begin{equation}
+%   \label{eq:14}
+%   y = D
+% \end{equation}
+
+% \begin{enumerate}[\bf (a)]
+% \item Now, infer the posterior probabilities of each of the possible intensities of the earthquake, i.e. $P(X=L|Y=D)$ and so on. \pts{6}
+
+%   \eject
+
+%   ~
+%   \vspace{70ex}
+  
+% \item  Draw and label a Venn diagram  \pts{3}illustrating the sample space of the random variables given in \eqref{eq:10} and
+%   \eqref{eq:11}.
+% \end{enumerate}
+% \eject
+
+% \section*{Problem 2 \quad {\it Short answer: classification (3 points)}}
+% \begin{enumerate}[\bf (a)]
+% \item Three methods were used to estimate a classifier for a three-class dataset. \pts{3pts} The resulting decision boundaries are shown.
+%   Use a line to match each listed method to its corresponding decision boundary.
+
+%   \begin{minipage}[p]{.7\linewidth}
+%     \includegraphics[width=.5\textwidth]{qda}
+%   \end{minipage}
+%   \begin{minipage}[p]{.2\linewidth}\hfill
+%     \framebox(40,40){\Large LDA}
+%   \end{minipage}
+  
+%   \begin{minipage}[p]{.7\linewidth}
+%     \includegraphics[width=.5\textwidth]{knn5}
+%   \end{minipage}
+%   \begin{minipage}[p]{.2\linewidth}
+%     \hfill
+%     \framebox(40,40){\Large QDA}
+%   \end{minipage}
+  
+%   \begin{minipage}[p]{.7\linewidth}
+%     \includegraphics[width=.5\textwidth]{lda}
+%   \end{minipage}
+%   \begin{minipage}[p]{.2\linewidth}\hfill
+%     \framebox(40,40){\Large KNN}
+%   \end{minipage}
+% \end{enumerate}
+
+% \eject
+
+
+\bigskip
+\section*{Problem 2 \quad {\it Short answer questions (24 points)}}
+\begin{enumerate}[\bf (a)]
+
+\item The \pts{1} correlation coefficient is a measure of the linear dependence between two random variables. Which measure provides a more robust measure of the dependency between two random variables?
+  
+\item Briefly explain or show why the determinant of a positive semidefinite matrix can be zero. \pts{2}
+
+\item In the linear model \pts{2} $\bm y = \bm X\bm w$, we will not have a unique solution if $\bm X\tr \bm X$ is singular. How can this issue be addressed?
+
+\item Write the likelihood $p(y|\bm x, \bm \th)$ of an outcome $y$ \pts{2} which is governed by a Gaussian distribution with parameters $\bm\th = (\bm w, \sigma^{2})$. Note that the mean of the Gaussian is $\bm w\tr \bm x$, its variance is $\sigma^{2}$ and $\bm x = [1, x_{1}, \ldots, x_{D}]$.
+
+
+\item What is a quantity that is used \pts{2} to measure the dissimilarity between two distributions $p$ and $q$? Write its equation in terms of $p$ and $q$ (either discrete or continuous case is acceptable).
+
+\item Briefly state the fundamental difference \pts{2} between the linear discriminant analysis and the quadratic discrimant analysis models.
+
+\item In ordinary least squares (OLS), \pts{2} what is the \textit{hat matrix}? Write an equation for this in terms of the design/data matrix $\bm X$.
+
+  
+\item How \pts{1} many basis functions are required for a regression spline with $K=5$ knots and order $M=2$?
+
+\item A smoothing \pts{1} spline is a regression spline fitted with a roughness penalty. Under certain assumptions, this constraint ensures that the solution is a regularized natural cubic spline. If there are $N$ unique observations in the dataset, how many knots are in the smoothing spline fit?
+
+\item List two differences between ridge regression and lasso regression. \pts{2}
+  
+\item In a 2D binary \pts{3} logistic regression (i.e.\ $y\in\{0,1\}$), the mean response (i.e.\ probability that $y=1$) is given by:
+  \begin{equation}
+   p(y=1|\bm x,\bm w) = \fr{1}{1 + e^{-(w_0 + w_1x_1 + w_2x_2)}}
+  \end{equation}
+  If a threshold of $\tau=0.5$ is used to assign predictions, derive the equation of the decision boundary. Your final answer should only have $x_2$ on the LHS.
+
+\item Write the equation for \pts{4} the ridge regression estimate $\hat{\bm w}^{\text{ridge}}$ in matrix form using the standard symbols $\bm X$, $\bm y$ and $\la$. Is the intercept term included in the ridge estimate? Why or why not? State the dimensions of $\bm X$ in this case, assuming $N$ observations and $D$ features.
+  
+  
+\end{enumerate}
+\section*{Problem 3 \quad {\it  Bayes  (7 points)}}
+The posterior \pts{3} distribution $p(\bm\th|\mc{D})$ of parameters $\bm\th$ in a model estimated on a dataet $\mc{D}$, given by Bayes rule as:
+  \begin{equation}
+    \label{eq:bayes}
+    p(\bm\th|\mc D) = \fr{p(\mc D|\bm \th)p(\bm \th)}{p(\mc D)}
+  \end{equation}
+  
+\begin{enumerate}[\bf (a)]
+
+\item 
+  Write the names/labels for each of the terms on the RHS of the above equation. (For example, the name of the term on the LHS is the \textbf{posterior}.
+
+\item Which term(s) in \autoref{eq:bayes} \pts{2} need(s) to be optimized to find the MLE estimate  $\hat{\bm \th}_\text{mle}$. Briefly justify your response.
+
+\item Which term(s) in \autoref{eq:bayes} \pts{2} need(s) to be optimized to find the MAP estimate of $\hat{\bm \th}_\text{map}$. Briefly justify your response.
+
+\end{enumerate}
+
+
+
+ \section*{Problem 4 \quad {\it Classifier performance  (18 points) }}
+ A binary classification model is estimated to predict targets $y \in \{\text{PCC}, \text{CC}\}$, where the positive class is CC (``crash characteristics'') and the negative class is PCC (``possible crash characteristics''). The confusion matrix based on test set performance is shown in \autoref{fig:conf}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=.4\textwidth]{confusion_matrix_etc_th_085}
+  \caption{Confusion matrix}
+  \label{fig:conf}
+\end{figure}
+
+Answer the following questions on the test set performance.
+
+\begin{enumerate}[\bf (a)]
+ \item What is \pts{1} the number of true positives?%\\
+
+\item What is \pts{1} the number of false positives?%\\
+
+\item What is \pts{1} the number of true negatives?%\
+
+\item What is \pts{1} the number of false negatives?%\\
+
+\item What is \pts{1} the number of positive observations  ($P$)?%\\
+ % \vspace{4ex}
+
+\item What is \pts{1} the number of negative observations ($P$)?%\\
+ % \vspace{4ex}
+  
+\item What is \pts{1} the number of positive predictions ($\hat{P}$)?%\\
+  %\vspace{4ex}
+\item What is \pts{1} the number of negative predictions ($\hat N$)? %\\
+  %\vspace{4ex}
+  
+  
+\item Compute the  \pts{2}  accuracy of the classifier.%\\
+%  \vspace{8ex}
+  
+\item Compute the  precision $\mc P$ of the classifier. \pts{2}% \\
+ % \vspace{8ex}
+  
+\item Compute the  recall $\mc R$ of the classifier. \pts{2} %\\
+ % \vspace{8ex}
+
+\item Compute the $F_{1}$ score of the classifier. \pts{2} %\\
+ % \vspace{8ex}
+
+  
+% \item Do you think the accuracy alone \pts{2} is a good indicator of the performance of this classifier across both classes? Briefly provide a reasoning for your answer. \\ 
+%   \vspace{8ex}
+  
+\item The threshold used to generate this confusion matrix was $\tau =0.85$. If you \pts{2} are more interested in correctly predicting the positive observations, how  
+would you improve the performance of the classifier without estimating a new model?
+\end{enumerate}
+
+
+\section*{Problem 5 \quad {\it Linear regression (16 points)}}
+A model is estimated (using the \texttt{ols} function from the \texttt{statsmodels.formula.api} library in Python) to predict the median house value at the block group level in California based on a number of attributes. Data are from the year 1990. The model equation is as follows:
+\begin{quote}\footnotesize\bl
+\begin{verbatim}
+model_equation = `np.log(median_house_value) ~ longitude + latitude 
+                 +  np.log(total_bedrooms)  + np.log(total_rooms) 
+                  + np.log(median_income) + np.log(housing_median_age) 
+                   + np.log(households) +  np.log(population) + ocean_proximity'
+\end{verbatim}
+\end{quote}
+
+The model summary is shown below.
+\begin{quote}\scriptsize\bl
+\begin{verbatim}
+                                OLS Regression Results                                
+======================================================================================
+Dep. Variable:     np.log(median_house_value)   R-squared:                       0.688
+Model:                                    OLS   Adj. R-squared:                  0.688
+Method:                         Least Squares   F-statistic:                     3381.
+Date:                        Thu, 30 Mar 2023   Prob (F-statistic):               0.00
+Time:                                17:46:00   Log-Likelihood:                -4999.0
+No. Observations:                       18389   AIC:                         1.002e+04
+Df Residuals:                           18376   BIC:                         1.013e+04
+Df Model:                                  12                                         
+Covariance Type:                    nonrobust                                         
+=================================================================================================
+                                    coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------------------------
+Intercept                        -2.3577      0.437     -5.390      0.000      -3.215      -1.500
+ocean_proximity[T.INLAND]        -0.2683      0.009    -30.985      0.000      -0.285      -0.251
+ocean_proximity[T.ISLAND]         0.4601      0.184      2.505      0.012       0.100       0.820
+ocean_proximity[T.NEAR BAY]      -0.0379      0.009     -4.111      0.000      -0.056      -0.020
+ocean_proximity[T.NEAR OCEAN]    -0.0524      0.008     -6.786      0.000      -0.067      -0.037
+longitude                        -0.1677      0.005    -33.205      0.000      -0.178      -0.158
+latitude                         -0.1675      0.005    -33.528      0.000      -0.177      -0.158
+np.log(total_bedrooms)            0.4107      0.020     20.156      0.000       0.371       0.451
+np.log(total_rooms)              -0.1886      0.016    -11.820      0.000      -0.220      -0.157
+np.log(median_income)             0.7528      0.009     87.862      0.000       0.736       0.770
+np.log(housing_median_age)        0.0470      0.005     10.197      0.000       0.038       0.056
+np.log(households)                0.1889      0.018     10.301      0.000       0.153       0.225
+np.log(population)               -0.4002      0.009    -43.276      0.000      -0.418      -0.382
+==============================================================================
+Omnibus:                     1941.103   Durbin-Watson:                   2.004
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            11362.495
+Skew:                           0.338   Prob(JB):                         0.00
+Kurtosis:                       6.791   Cond. No.                     2.35e+04
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 2.35e+04. This might indicate that there are
+strong multicollinearity or other numerical problems.
+
+Note: All the coefficients are statistically significant, but the low R2
+indicates that more variables are required to explain the median house value.
+\end{verbatim}
+\end{quote}
+``Ocean proximity'' is a categorical variable with the levels: \texttt{['NEAR BAY' '<1H OCEAN' 'INLAND' 'NEAR OCEAN' 'ISLAND']}. For greater clarity, these are plotted on a map (\autoref{fig:camap}). Assume that \texttt{'<1H OCEAN'} means ``less than 1 hour from ocean.''
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width =.6\textwidth]{ca_ocean_prox}
+  \caption{Ocean proximity locations}
+  \label{fig:camap}
+\end{figure}
+
+
+\begin{enumerate}[\bf (a)]
+\item What is the number of observations used in estimating this model? \pts{1}
+%  \vspace{2ex}
+
+\item How many quantitative explanatory variables are there? \pts{1}
+  %\vspace{2ex}
+
+ % \eject
+\item How many qualitative explanatory variables are \pts{1} there? 
+ % \vspace{2ex}
+
+\item How many dummy variables are used in this model? \pts{1}
+ % \vspace{3ex}
+
+\item Are there any \pts{2}  statistically insignificant explanatory variables in this model? Give a reason for your answer.
+   % \vspace{5ex}
+
+\item The summary \pts{2} apparently indicates that both  $R^2$ and $R^2_{\text{adj}}$ are equal. Is this true? Explain your answer.
+
+ % \vspace{4ex}
+
+
+\item Predictions are plotted against observations \pts{2} in \autoref{fig:predvobs}. In the dataset, observations with median housing values over \$500,000 were censored (i.e.\ they were clipped at this value; $\ln(500,000) = 13.12$). How would you describe the performance of the model based on this plot (qualitative terminology is fine here)?
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[width=.5\textwidth]{pred_v_obs}
+    \caption{Predictions versus observations}
+    \label{fig:predvobs}
+  \end{figure}
+
+
+
+\item One of the diagnostic plots generated for this model is shown in \autoref{fig:resid}. \pts{2}
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[width=.7\textwidth]{resid_v_fitted}
+    \caption{Residuals versus fitted values (i.e.\ predicted log median housing values)}
+    \label{fig:resid}
+  \end{figure}
+  Does this indicate that any OLS assumption is violated? Discuss.
+
+ % \eject
+
+\item Based on the estimated coefficients, \pts{2} how would you expect the median housing value to change the further south you go in California? Briefly justify your response.
+  % \vspace{12ex}
+
+\item What is the \pts{1} impact on the median housing value  of a block group located on an \textit{island} compared to one that is \textit{less than an hour away from the ocean}?
+
+\item What is the \pts{1} impact on on the median housing value  of a block group located \textit{inland} compared to one that is \textit{near the ocean}?
+%    \vspace{12ex}
+    
+  % \begin{minipage}[]{.1\linewidth}
+  %   {\bf Answer:}
+  % \end{minipage}\qquad
+  % \begin{minipage}[]{.8\linewidth}
+  %   \framebox(400,100){\Huge\phantom{t}}     
+  % \end{minipage}
+
+
+
+ % \begin{minipage}[]{.1\linewidth}
+ %    {\bf Answer:}
+ %  \end{minipage}\qquad
+ %  \begin{minipage}[]{.8\linewidth}
+ %    \framebox(300,50){}     
+ %  \end{minipage}
+
+
+\end{enumerate}
+
+% \bigskip
+% \bigskip
+ 
+
+
+ 
+\section*{Problem 6 \quad {\it Logistic regression (10 points; 6 points EC) }}
+%%% Page 187 deVore #72
+
+The binary logistic regression model is given by:
+  \begin{equation}
+    p(y=1|\bm x,\bm\th) = \text{Ber}(y|\bm\sigma(\bm w\tr \bm x))
+  \end{equation}
+  where $\bm\sigma(\cdot)$ is the logistic sigmoid function given by:
+  \begin{equation}
+    \bm\sigma(\bm w\tr \bm x) = \fr 1 {1 + e^{-\bm w\tr\bm x}}
+  \end{equation}
+  and $\bm w$ is the weight or coefficient vector:
+  \begin{equation}
+    \bm w = [w_{0}, w_{1}, \ldots, w_{D}]
+  \end{equation}
+  $y_{1:N}$ are the binary targets, $y_{n}\in \{0,1\}$ and $\bm x_{1:N}$ are the input vectors,
+  $\bm x_{n} = [1, x_{n1}, \ldots x_{nD}]$ (including the intercept term). 
+  
+  \begin{enumerate}[\bf (a)]
+
+  \item Make a \pts{3} 3-dimensional (3D) sketch of $\bm\sigma(\bm w\tr \bm x)$ for the case where $D=2$ (i.e. the inputs are $x_1$ and $x_2$). Clearly label all three axes.
+  
+\item Recall that the likelihood of the
+  $n$th Bernoulli observation is given by: $\mu_{n}^{y_{n}}(1-\mu_{n})^{1-y_{n}}$.  In the logistic regression
+  model, $\mu_{n} = \bm\sigma(\bm w\tr \bm x_{n})$ (the probability of class 1). Now, write the \pts{4} likelihood function $\mathcal{L}(\bm w)$ for the binary logistic regression model (i.e.\ the product of the likelihoods of all $N$ observations). Simplify your final answer as much as possible and show all your work.
+
+\item Derive the \pts{3} negative log-likelihood function $\text{NLL}(\bm w)$ from your result in part (b). Simplify your final answer as much as possible.
+  
+  % The log-likelihood for the binary logistic regression in one dimension is given by:
+  % \begin{equation}
+  %   \mathcal{L}(\bm\beta) = \sum_{n=1}^{N}y_{n} \lt[- \log(1 + e^{\beta_{0} + \beta_{1}x_{i}})\rt]
+  % \end{equation}
+  %  Name one method you \pts{1} can use to find the MLE estimate $\hat {\bm\beta}$.
+  % \vspace{6ex}
+
+\item[\bf Extra Credit] Derive \pts{6} the gradient vector $\nabla\text{NLL}(\bm w)$.
+
+% \item Write the gradient descent \pts{2} update for $\bm w_{k+1}$.
+%   \begin{equation}
+%     \bm w_{k+1} = \bm w_{k} + \la \nabla\ell(\bm\beta_{k})
+%   \end{equation}
+%   What is $\la$ and how does it impact the update?
+
+%   \vspace{7ex}
+
+
+\end{enumerate}
+%\eject
+
+
+ 
+ 
+ 
+% \section*{Extra Credit  \quad {\it (5 points) }}
+% Given that the logistic sigmoid function is given by:
+% \begin{equation}
+%   \sigma(z) = \fr{1}{1 + e^{-z}}
+% \end{equation}
+% Show that its derivative is given by
+% \begin{equation}
+%   \sigma'(z) = \lt[1 - \sigma(z)\rt]\sigma(z)
+% \end{equation}
+ 
+% \section*{Problem 8 \quad {\it Extra credit (5 points) }}
+% %%% Page 187 deVore #72
+% The log-likelihood for the binomial logistic regression in one dimension is given by:
+%   \begin{equation}
+%     \ell(\beta) = \sum_{i}\lt[y_{i}(\beta_{0} + \beta_{1}x_{i}) - \log(1 + e^{\beta_{0} + \beta_{1}x_{i}})\rt]
+%   \end{equation}
+
+% \begin{enumerate}[\bf (a)]
+  
+
+% \item The gradient ascent update for $\beta_{k+1}$ is given by: \pts{1pt}
+%   \begin{equation}
+%     \beta_{k+1} = \beta_{k} + \la \nabla\ell(\beta_{k})
+%   \end{equation}
+%   What is the significance of $\la$?
+
+%   \vspace{6ex}
+
+% \item Write/derive the two elements of $\nabla\ell(\beta_{k})$ \pts{4pts}
+
+% \end{enumerate}
+
+% \eject
+% \section*{Problem 9 \quad {\it Extra credit (5 points)}}
+% Derive the ordinary least squares estimate $\hat\beta$ in matrix form.
+
+%\newpage
+
+% \vfill
+% \begin{center}
+%   BLANK PAGE
+% \end{center}
+% % \newpage
+
+% % \vfill
+% % \begin{center}
+% %   BLANK PAGE
+% % \end{center}
+
+% % \newpage
+% % \vfill
+% % \begin{center}
+% %   BLANK PAGE
+% % \end{center}
+
+\newpage
+~
+\thispagestyle{empty}
+\vfill
+\begin{center}
+  \includegraphics[width=1in]{umass_seal}
+  
+  {\sc
+    CEE 697M $|$ J.\  Oke $|$ Spring 2023\\
+    Department of Civil and Environmental Engineering \\
+    University of Massachusetts Amherst
+  }
+\end{center}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

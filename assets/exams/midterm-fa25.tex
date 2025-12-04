@@ -1,0 +1,724 @@
+\documentclass[12pt]{article}
+\usepackage{etex}
+\usepackage{setspace}
+\onehalfspacing
+\raggedbottom
+
+%geometry (sets margin) and other useful packages
+\usepackage{geometry}
+\geometry{top=1in, left=1in,right=1in,bottom=1in}
+\usepackage{graphicx,booktabs,ragged2e,calc}
+\graphicspath{{./images/}}
+\usepackage{sidecap}
+
+\usepackage{listings}
+\lstset{ %
+  language=R,                     % the language of the code
+  % basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  % numbers=left,                   % where to put the line-numbers
+  % numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  % stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+  %                                 % will be numbered
+  % numbersep=5pt,                  % how far the line-numbers are from the code
+  % backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  % showspaces=false,               % show spaces adding particular underscores
+  % showstringspaces=false,         % underline spaces within strings
+  % showtabs=false,                 % show tabs within strings adding particular underscores
+  % frame=single,                   % adds a frame around the code
+  % rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  % tabsize=2,                      % sets default tabsize to 2 spaces
+  % captionpos=b,                   % sets the caption-position to bottom
+  % breaklines=true,                % sets automatic line breaking
+  % breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  % title=\lstname,                 % show the filename of files included with \lstinputlisting;
+  %                                 % also try caption instead of title
+  % keywordstyle=\color{blue},      % keyword style
+  % commentstyle=\color{dkgreen},   % comment style
+  % stringstyle=\color{mauve},      % string literal style
+  % escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  % morekeywords={*,...}            % if you want to add more keywords to the set
+} 
+
+
+% Marginpar width
+% Marginpar width
+\newcommand{\pts}[1]{\leavevmode\marginpar{\hfill\small\textit{[#1]}\hfill}} 
+%\newcommand{\pts}[1]{\marginpar{ \small\hspace{0pt} \textit{[#1]} } } 
+\setlength{\marginparwidth}{.5in}
+%\reversemarginpar
+%\setlength{\marginparsep}{.02in}
+
+ 
+%\usepackage{cmbright}lstinputlisting
+%\usepackage[T1]{pbsi}
+
+%\renewcommand{\baselinestretch}{1.5}
+
+\usepackage{chngcntr,mathtools}
+%\counterwithin{figure}{section}
+%\numberwithin{equation}{section}
+
+%\usepackage{listings}
+
+%AMS-TeX packages
+\usepackage{amssymb,amsmath,amsthm} 
+\usepackage{bm}
+\usepackage[mathscr]{eucal}
+\usepackage{colortbl}
+\usepackage{color}
+
+
+\usepackage{subcaption,hyperref,enumerate,polynom,polynomial}
+\usepackage{multirow,minitoc,fancybox,array,multicol}
+
+\definecolor{slblue}{rgb}{0,.3,.62}
+\hypersetup{
+    colorlinks,%
+    citecolor=blue,%
+    filecolor=blue,%
+    linkcolor=blue,
+    urlcolor=slblue
+}
+
+%%%TIKZ
+\usepackage{tikz}
+
+\usepackage{pgfplots,pgfplotstable}
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{arrows,shapes,positioning}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shadows}
+\usetikzlibrary{patterns}
+%\usetikzlibrary{circuits.ee.IEC}
+\usetikzlibrary{decorations.text}
+% For Sagnac Picture
+\usetikzlibrary{%
+    decorations.pathreplacing,%
+    decorations.pathmorphing%
+}
+
+\usetikzlibrary{calc}
+
+\tikzstyle arrowstyle=[black,scale=2]
+\tikzstyle directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrow[arrowstyle]{stealth}}}}]
+\tikzstyle reverse directed=[postaction={decorate,decoration={markings,
+    mark=at position .65 with {\arrowreversed[arrowstyle]{stealth};}}}]
+\tikzstyle dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrow[arrowstyle]{latex}}}}]
+\tikzstyle rev dir=[postaction={decorate,decoration={markings,
+    mark=at position .98 with {\arrowreversed[arrowstyle]{latex};}}}]
+
+\usepackage{ctable}
+
+%
+%Redefining sections as problems
+%
+\makeatletter
+\newenvironment{exercise}{\@startsection 
+	{section}
+	{1}
+	{-.2em}
+	{-3.5ex plus -1ex minus -.2ex}
+    	{1.3ex plus .2ex}
+    	{\pagebreak[3]%forces pagebreak when space is small; use \eject for better results
+	\large\bf\noindent{Exercise 1.\hspace{-1.5ex} }
+	}
+	}
+	%{\vspace{1ex}\begin{center} \rule{0.3\linewidth}{.3pt}\end{center}}
+	%\begin{center}\large\bf \ldots\ldots\ldots\end{center}}
+\makeatother
+
+%
+%Fancy-header package to modify header/page numbering 
+%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\addtolength{\headwidth}{\marginparsep} %these change header-rule width
+%\addtolength{\headwidth}{\marginparwidth}
+%\fancyheadoffset{30pt}
+%\fancyfootoffset{30pt}
+\fancyhead[LO,RE]{\small Prof.\ Oke}
+\fancyhead[RO,LE]{\small Page \thepage} 
+\fancyfoot[RO,LE]{\small Midterm Exam} 
+\fancyfoot[LO,RE]{\small \scshape CEE 616} 
+\cfoot{} 
+\renewcommand{\headrulewidth}{0.1pt} 
+\renewcommand{\footrulewidth}{0.1pt}
+%\setlength\voffset{-0.25in}
+%\setlength\textheight{648pt}
+
+
+\usepackage{paralist}
+
+\newcommand{\osn}{\oldstylenums}
+\newcommand{\lt}{\left}
+\newcommand{\rt}{\right}
+\newcommand{\pt}{\phantom}
+\newcommand{\tf}{\therefore}
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\fr}{\frac}
+\newcommand{\dfr}{\dfrac}
+\newcommand{\ul}{\underline}
+\newcommand{\tn}{\tabularnewline}
+\newcommand{\nl}{\newline}
+\newcommand\relph[1]{\mathrel{\phantom{#1}}}
+\newcommand{\cm}{\checkmark}
+\newcommand{\ol}{\overline}
+\newcommand{\rd}{\color{red}}
+\newcommand{\bl}{\color{blue}}
+\newcommand{\pl}{\color{purple}}
+\newcommand{\og}{\color{orange!90!black}}
+\newcommand{\gr}{\color{green!40!black}}
+\newcommand{\nin}{\noindent}
+\newcommand{\la}{\lambda}
+\renewcommand{\th}{\theta}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,thick,inner sep=1pt] (char) {\small #1};}}
+
+\newcommand{\bc}{\begin{compactenum}[\quad--]}
+\newcommand{\ec}{\end{compactenum}}
+
+\newcommand{\n}{\\[2mm]}
+%% GREEK LETTERS
+\newcommand{\al}{\alpha}
+\newcommand{\gam}{\gamma}
+\newcommand{\eps}{\epsilon}
+\newcommand{\sig}{\sigma}
+
+\newcommand{\p}{\partial}
+\newcommand{\pd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\dpd}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\pdd}[2]{\frac{\partial^2{#1}}{\partial{#2}^2}}
+\newcommand{\mr}{\mathbb{R}}
+\newcommand{\xs}{x^{*}}
+\newenvironment{solution}
+{\medskip\par\quad\quad\begin{minipage}[c]{.8\textwidth}}{\medskip\end{minipage}}
+
+\newcommand{\nmfr}[3]{\Phi\left(\frac{{#1} - {#2}}{#3}\right)}
+
+% https://tex.stackexchange.com/questions/198383/drawing-cumulative-distribution-function-for-a-discrete-variable
+\makeatletter
+\long\def\ifnodedefined#1#2#3{%
+    \@ifundefined{pgf@sh@ns@#1}{#3}{#2}%
+}
+
+\pgfplotsset{
+    discontinuous/.style={
+    scatter,
+    scatter/@pre marker code/.code={
+        \ifnodedefined{marker}{
+            \pgfpointdiff{\pgfpointanchor{marker}{center}}%
+             {\pgfpoint{0}{0}}%
+             \ifdim\pgf@y>0pt
+                \tikzset{options/.style={mark=*, fill=white}}
+                \draw [densely dashed] (marker-|0,0) -- (0,0);
+                \draw plot [mark=*] coordinates {(marker-|0,0)};
+             \else
+                \tikzset{options/.style={mark=none}}
+             \fi
+        }{
+            \tikzset{options/.style={mark=none}}        
+        }
+        \coordinate (marker) at (0,0);
+        \begin{scope}[options]
+    },
+    scatter/@post marker code/.code={\end{scope}}
+    }
+}
+
+\makeatother
+
+
+\newcommand{\mb}{\mathbb}
+\newcommand{\mc}{\mathcal}
+\newcommand{\tr}{^{\top}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here's where you edit the Class, Exam, Date, etc.
+\newcommand{\class}{CEE 616: Probabilistic Machine Learning}
+\newcommand{\term}{Fall 2025}
+\newcommand{\examnum}{Midterm Exam}
+%\newcommand{\examdate}{03/04/2022}
+%\newcommand{\timelimit}{120 Minutes}
+
+
+\newcolumntype{R}[1]{>{\RaggedLeft\arraybackslash}p{#1}}
+
+\pgfmathdeclarefunction{poiss}{1}{%
+  \pgfmathparse{(#1^x)*exp(-#1)/(x!)}%
+  }
+
+\pgfmathdeclarefunction{gauss}{2}{%
+  \pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+\pgfmathdeclarefunction{expo}{2}{%
+  \pgfmathparse{#1*exp(-#1*#2)}%
+}
+
+\usetikzlibrary{math}
+
+% https://tex.stackexchange.com/questions/461758/asymmetric-distribution-gauss-curve
+\tikzmath{%
+  function h1(\x, \lx) { return (9*\lx + 3*((\lx)^2) + ((\lx)^3)/3 + 9); };
+  function h2(\x, \lx) { return (3*\lx - ((\lx)^3)/3 + 4); };
+  function h3(\x, \lx) { return (9*\lx - 3*((\lx)^2) + ((\lx)^3)/3 + 7); };
+  function skewnorm(\x, \l) {
+    \x = (\l < 0) ? -\x : \x;
+    \l = abs(\l);
+    \e = exp(-(\x^2)/2);
+    return (\l == 0) ? 1 / sqrt(2 * pi) * \e: (
+      (\x < -3/\l) ? 0 : (
+      (\x < -1/\l) ? \e / (8 * sqrt(2 * pi)) * h1(\x, \x*\l) : (
+      (\x <  1/\l) ? \e / (4 * sqrt(2 * pi)) * h2(\x, \x*\l) : (
+      (\x <  3/\l) ? \e / (8 * sqrt(2 * pi)) * h3(\x, \x*\l) : (
+      sqrt(2/pi) * \e)))));
+  };
+}
+
+\begin{document}
+
+%\begin{flushright}
+%  \noindent \begin{tabular}{p{2.8in} r l}
+\title{\vspace{-5ex}{\sc \examnum}}
+\author{\bf \class}
+\date{November 24, 2025\\[4mm]
+   {\sc time limit:} {\bf \sc 24 Hours}
+}
+% \end{tabular}\\
+%\end{flushright}
+%
+\clearpage
+\maketitle
+% \noindent\rule[1ex]{\textwidth}{.1pt}
+% \subsection*{Name}
+% Please print your name clearly in the box below.\\
+% \begin{center}
+%   \framebox(300,40){\Huge\phantom{t}} \\
+%   \vspace{2ex}
+% \end{center}
+
+% \vspace{40ex}
+%{\it Turn to the next page to read the instructions.}
+\thispagestyle{empty}
+
+
+%\eject
+\subsection*{Instructions}
+This exam contains  
+\textbf{8 problems} worth a total of \textbf{81 points} worth \textbf{7 points}. You have {\bf 24 hrs} to complete the exam from the time you download the PDF.\\
+% Check to see if any pages are missing.
+%Make sure you have written your name on the front page.
+%If you have any loose pages, put your initials on the top of these pages.
+
+% \noindent You may use \textit{only} \textbf{writing materials} and a \textbf{calculator} on this exam, along with a \textbf{cheat sheet}
+% with formulas/equations/brief notes as a memory aid.
+% However, you may not consult \textit{lecture notes, slides, homework, phones, computers,
+%   tablets or other electronic device}. If you have any of the disallowed items, please bring them to the front of the lecture room before you begin your exam. 
+
+ The following rules apply: 
+% \begin{minipage}[t]{3.7in}
+% \vspace{0pt}
+\begin{itemize}
+\item This is an open-resource examination, so you are free to consult any resource at your disposal. 
+
+\item Submit your completed examination as a \textbf{PDF}. You may type, typeset or write your answers and scan (you can also use the spaces provided in this document and submit an edited version of this PDF).
+
+\item Name your file as \texttt{LASTNAME\_FIRSTNAME\_Midterm.pdf}.
+  
+%\item \textbf{If you use a ``fundamental theorem'' you must indicate this} and explain
+%why the theorem may be applied.
+
+\item \textbf{Organize your work}, in a reasonably neat and coherent way, in
+the space provided. Work scattered all over the page without a clear ordering will
+receive very little credit.
+
+\item \textbf{Show ALL your work where appropriate}.
+  The work you show will be evaluated as well as your final answer.
+  Thus, provide ample justification for each step you take.
+  Indicate when you have used a probability table to obtain a result.
+  In the long response questions, simply putting down an answer without showing your steps  will not merit full credit.
+  {\bf EXCEPTION:} For short response or ``True/False'' questions, \textit{no explanations are required}.
+  Generally, however, the more work you show, the greater your chance of receiving partial credit if your final answer is incorrect.
+
+\item If you need more space, use the blank pages at the end, and clearly indicate when and where you have done this.
+
+% \item Questions are roughly in order of the lectures, so later questions may not necessarily be harder.
+%   If you are stuck on a problem, it may be better to skip it and get to it later.
+
+% \item Manage your time wisely. Do not spend too much time on problems with fewer points.
+%\item Do not write anything on the next page.
+
+\end{itemize}
+\bigskip
+
+% {\it Please note the total amount of time you spent completing this exam: \boxed{\phantom{\Huge JIMI \\[2mm] !!!!!~~  OKE}}}
+
+% \thispagestyle{empty}
+% %\noindent{\it Do not write anything on this page. Please turn over.}
+
+% \begin{table*}[h!]
+%   \center
+%   \large
+%   \renewcommand{\arraystretch}{1}
+%   \quad
+%   \begin{tabular}{R{1.5in} R{1.5in} R{1.5in} }\toprule 
+%     \bf \it Problem  & \bf Points & \bf EC \\\midrule
+%     \it 1 &  \bf /10 &         \\\midrule
+%     \it 2 &  \bf /3  &          \\\midrule
+%     \it 3 &  \bf /4  &          \\\midrule
+%     \it 4 &  \bf /3  &  \bf /2  \\\midrule % 20
+%     \it 5 &  \bf /4  &          \\\midrule
+%     \it 6 &  \bf /4  & \bf /1\\\midrule
+%     \it 7 &  \bf /3  &    \\\midrule
+%     \it 8 &  \bf /5  &   \\\midrule
+%     \it 9 &  \bf /4  &  \\\midrule
+%     \it 10 & \bf /4  &       \\\midrule
+%     \it 11 & \bf /3  & \bf /1  \\\midrule
+%     \it 12 & \bf /5  &         \\\midrule % 52
+%     \it 13 & \bf /3  & \bf    \\\midrule
+%     \it 14 & \bf /6  & \bf /2  \\\midrule % 61 
+%     \it 15 & \bf /5  &         \\\midrule % 66
+%     \it 16 & \bf /4  &         \\\midrule % 70
+%     \it 17 & \bf     & \bf /4   \\\midrule 
+%     \bf \it TOTAL & \bf /70 &   \\\bottomrule
+%   \end{tabular}
+
+%   \end{table*}
+% \newpage
+
+ 
+\eject
+\section*{Problem 1 \quad {\it True/False questions (10 points)}}
+Respond ``T'' ({\it True})  or  ``F'' (\textit{False}) to the following statements. % Each response is worth 1 point. %Use the boxes provided.
+
+\bigskip
+
+\begin{enumerate}[\bf (i)]
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} 
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    In exemplar-based methods, the ``effective'' number of parameters remains the same for each test observation.
+  \end{minipage}
+
+  \smallskip
+
+  
+  \item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} 
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Cost-complexity pruning can mitigate overfitting in decision trees.
+  \end{minipage}
+
+  \smallskip
+
+   
+  \item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} 
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Mercer kernels are symmetric functions.
+  \end{minipage}
+
+  \smallskip
+ 
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} 
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    A softmax activation function can be used in the output layer of an ANN for a regression problem.
+  \end{minipage}
+
+ 
+    \smallskip
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} 
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Bagging reduces stability in decision tree predictions.
+  \end{minipage}
+  
+  
+    \smallskip
+
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} 
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Boosting can be considered an ensemble learning method.
+  \end{minipage}
+
+  \smallskip
+    
+  \item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} 
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Gaussian process regression is a parametric modeling approach.
+  \end{minipage}
+
+  \smallskip
+  
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} 
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    In principal components analysis, the extracted principal components are pairwise orthogonal.
+  \end{minipage}
+
+  \smallskip
+  
+ 
+  
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} 
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    Clustering is a supervised learning approach.
+  \end{minipage}
+
+  \smallskip
+  
+\item \hfill
+  \begin{minipage}{.1\linewidth}
+    \framebox(40,40){} 
+  \end{minipage}\quad
+  \begin{minipage}{.85\linewidth}
+    The decision boundary of a fitted support vector classifier is linear.
+  \end{minipage}
+
+
+\end{enumerate}
+
+  
+
+\section*{Problem 2 \quad {\it Short response: nonparametric methods (12 points)}}
+\begin{enumerate}[\bf (a)]
+\item\pts{2}Name the [hyper]parameters required for a K-nearest neighbor classification model.
+  
+\item\pts{2}Provide two examples of nonparametric modeling methods that use the kernel trick.
+
+\item\pts{2}Name two density kernels.
+
+\item\pts{2}Briefly state Mercer's theorem.
+
+\item \pts{2}Name two Mercer kernels.
+
+\item \pts{2}Briefly explain the key distinction between Gaussian Process estimation with noise-free and noisy observations.
+\end{enumerate}
+
+\section*{Problem 3 \quad {\it Short answer questions (22 points)}}
+\begin{enumerate}[\bf (a)]
+
+\item The \pts{1} correlation coefficient is a measure of the linear dependence between two random variables. Which measure provides a more robust measure of the dependency between two random variables?
+  
+\item Briefly explain or show why the determinant of a positive semidefinite matrix can be zero. \pts{2}
+
+\item In the linear model \pts{2} $\bm y = \bm X\bm w$, we will not have a unique solution if $\bm X\tr \bm X$ is singular. How can this issue be addressed?
+
+\item Write the likelihood $p(y|\bm x, \bm \th)$ of an outcome $y$ \pts{2} which is governed by a Gaussian distribution with parameters $\bm\th = (\bm w, \sigma^{2})$. Note that the mean of the Gaussian is $\bm w\tr \bm x$, its variance is $\sigma^{2}$ and $\bm x = [1, x_{1}, \ldots, x_{D}]$.
+
+
+\item What is a quantity that is used \pts{2} to measure the dissimilarity between two distributions $p$ and $q$? Write its equation in terms of $p$ and $q$ (either discrete or continuous case is acceptable).
+
+\item Briefly state the fundamental difference \pts{2} between the linear discriminant analysis and the quadratic discrimant analysis models.
+
+\item In ordinary least squares (OLS), \pts{2} what is the \textit{hat matrix}? Write an equation for this in terms of the design/data matrix $\bm X$.
+
+  
+% \item How \pts{1} many basis functions are required for a regression spline with $K=5$ knots and order $M=2$?
+
+% \item A smoothing \pts{1} spline is a regression spline fitted with a roughness penalty. Under certain assumptions, this constraint ensures that the solution is a regularized natural cubic spline. If there are $N$ unique observations in the dataset, how many knots are in the smoothing spline fit?
+
+\item List two differences between ridge regression and lasso regression. \pts{2}
+  
+\item In a 2D binary \pts{3} logistic regression (i.e.\ $y\in\{0,1\}$), the mean response (i.e.\ probability that $y=1$) is given by:
+  \begin{equation}
+   p(y=1|\bm x,\bm w) = \fr{1}{1 + e^{-(w_0 + w_1x_1 + w_2x_2)}}
+  \end{equation}
+  If a threshold of $\tau=0.5$ is used to assign predictions, derive the equation of the decision boundary. Your final answer should only have $x_2$ on the LHS.
+
+\item Write the equation for \pts{4} the ridge regression estimate $\hat{\bm w}^{\text{ridge}}$ in matrix form using the standard symbols $\bm X$, $\bm y$ and $\la$. Is the intercept term included in the ridge estimate? Why or why not? State the dimensions of $\bm X$ in this case, assuming $N$ observations and $D$ features.
+  
+  
+\end{enumerate}
+
+\section*{Problem 4 \quad {\it  Bayes  (7 points)}}
+The posterior \pts{3} distribution $p(\bm\th|\mc{D})$ of parameters $\bm\th$ in a model estimated on a dataet $\mc{D}$, given by Bayes rule as:
+  \begin{equation}
+    \label{eq:bayes}
+    p(\bm\th|\mc D) = \fr{p(\mc D|\bm \th)p(\bm \th)}{p(\mc D)}
+  \end{equation}
+  
+\begin{enumerate}[\bf (a)]
+
+\item 
+  Write the names/labels for each of the terms on the RHS of the above equation. (For example, the name of the term on the LHS is the \textbf{posterior}.
+
+\item Which term(s) in \autoref{eq:bayes} \pts{2} need(s) to be optimized to find the MLE estimate  $\hat{\bm \th}_\text{mle}$. Briefly justify your response.
+
+\item Which term(s) in \autoref{eq:bayes} \pts{2} need(s) to be optimized to find the MAP estimate of $\hat{\bm \th}_\text{map}$. Briefly justify your response.
+
+\end{enumerate}
+
+\section*{Problem 5 \quad {\it Short response: neural networks (11 points)}}
+\begin{enumerate}[\bf (a)]
+   
+\item \pts{1}What kind of RNN is used for sequence classification?
+  
+\item \pts{1}What is the basic algorithm used for training RNNs?
+  
+\item \pts{2}What are two approaches for handling the vanishing/exploding gradient problem in RNN training?
+  
+%\item \pts{2}List two approaches for regularization in autoencoders.
+  
+  
+\item \pts{2}What is semantic segmentation? Name a neural net architecture that can tackle this problem.
+  
+\item \pts{2}What is the advantage of the mini-batch approach over the plain stochastic gradient descent?
+
+
+\item \pts{3}Write the equation for the mini-batch $\mathcal B_{t}$ gradient update $\bm\th_{\ell,t+1}$. Define all the symbols in your equation.
+
+
+
+\end{enumerate}
+
+\section*{Problem  6 \quad {\it CNN  (6 points)}}
+Consider a CNN trained for a classification problem (shown in \autoref{fig:vgg}).
+  
+    \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=.8\textwidth]{vgg}
+    \caption{Diagram of a convolutional neural network architecture}
+    \label{fig:vgg}
+  \end{figure}
+  
+\begin{enumerate}[\bf (a)]
+\item What are the dimensions of the input image?
+  
+\item How many filters are specified in the first convolutional layer?
+  
+\item What is the kernel size of the pooling layers used in this model?
+  
+\item How many filters are specified in the third convolutional layer?
+  
+\item What is the kernel size in all the convolutional layers?
+  
+\item How many class labels are in the dataset?
+  
+\end{enumerate}
+
+
+\section*{Problem  7 \quad {\it  SVM  (8 points)}}
+\begin{enumerate}[\bf (a)]
+
+\item\pts{1}In a binary classification problem, a maximal margin classifier can only be fitted if the observations are \underline{\hspace{25ex}} separable.
+  
+\item\pts{1}What is another term for the support vector classifer (SVC)?
+  
+\item\pts{1}The SVC optimization problem allows for margin-overlapping observations through the use of \underline{\hspace{25ex}} variables.
+  
+\item\pts{1}In SVC/SVM, the number of margin-overlapping observations is controlled via the \underline{\hspace{25ex}} parameter.
+  
+\item \pts{1}The estimated decision boundary $\hat f$ in SVC is given by
+  \begin{equation}
+    \label{eq:svc}
+    \hat f(\bm x) = \hat{w}_0 + \sum_{n=1}^N\hat\alpha_n\tilde{y}_n\bm x_n\tr\bm x
+  \end{equation}
+  Identify the inner product term in the equation.
+
+\item\pts{3}Describe the modification to \autoref{eq:svc} that would result in an SVM decision boundary and write the new equation. (Hint: Your equation should include the symbol $\mc K$.)
+
+\end{enumerate}
+
+\section*{Problem 8 \quad {\it  Trees and Ensemble learning (5 points)}}
+\begin{enumerate}[\bf (a)]
+\item You are tasked with fitting a regression tree to predict the median housing values in Boston suburbs based on two predictors: (1) 
+  the proportion of non-retail business acres per town, and (2)  per capita crime rate by town. You want to choose the best tree $T$ via cost-complexity pruning, where the cost $C_\alpha(T)$ is given by:
+  \begin{equation}
+        C_\alpha(T) = \lt[ \sum_{m = 1}^{|T|}  |x_i\in R_m| \sum_{x_i\in R_m} (y_i - \ol y_m)^2 \rt]  + \alpha |T| 
+  \end{equation}
+  where: $\alpha$ is a hyperparameter, $m$ is the index of terminal nodes (leaves), $|x_i\in R_m|$ is the number of observations in each terminal region/node $R_m$ and $\ol y_m$ is the average response in each terminal node.
+
+  \begin{enumerate}[\bf (i)]
+  \item You use cross-validation \pts{1} to find the cost-complexity-pruned tree with the lowest CV error. The resulting plot is shown below.
+    \begin{figure}[h!]
+      \centering
+      \includegraphics[width=.7\textwidth]{cvtree}
+    \end{figure}
+    
+    What is the size (number of terminal nodes) of the best-fitting tree? %\underline{\hspace{8ex}}.
+
+    \eject
+    \item The terminal regions \pts{1}  of the best-fit pruned tree are shown in the figure below. The resulting predictions for each node are given in thousands of US\$.
+    \begin{figure}[h!]
+      \centering
+      \includegraphics[width=.85\textwidth]{partitions}
+    \end{figure}
+    
+    What is the predicted median housing value (to 2 significant figures) for a suburb with a crime rate of 40
+    per-capita and proportion of non-retail business acres of 5\% ? % \underline{\hspace{16ex}}.
+    
+
+  \end{enumerate}
+
+%\end{enumerate}
+
+  \medskip
+  
+%\subsection*{Ensemble methods}
+%\begin{enumerate}[\bf (a)]
+\item Trees are inherently high-variance models. \pts{1} Which approach might you use to address this?% \underline{\hspace{20ex}}.
+
+    \medskip
+
+\item The out-of-bag (OOB) error rate in bagging or random forests  \pts{1} is an estimate of the \underline{\hspace{20ex}} error.
+
+    \medskip
+
+\item The expected proportion of observations that not in a bootstrap sample \pts{1} is  \underline{\hspace{15ex}}. \textit{(An approximate answer is fine here.)}
+
+\end{enumerate}
+
+\eject
+
+
+ 
+
+
+\newpage
+~
+\thispagestyle{empty}
+\vfill
+\begin{center}
+  \includegraphics[width=1in]{umass_seal}
+  
+  {\sc
+    CEE 616 $|$ J.\  Oke $|$ Fall 2025\\
+    Department of Civil and Environmental Engineering \\
+    University of Massachusetts Amherst
+  }
+\end{center}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

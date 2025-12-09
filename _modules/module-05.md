@@ -8,3 +8,6 @@ Tue, Dec 2
 
 Thu, Dec 4
 : **LECTURE 5B**{: .label .label-blue }[Factor Analysis and Autoencoders](/assets/lectures/M5-Unsupervised-Learning/L5b-FA-AE-Handout.pdf)
+
+Tue, Dec 9
+: **LECTURE 5C**{: .label .label-blue }[Clustering](/assets/lectures/M5-Unsupervised-Learning/L5c-Clustering-Handout.pdf)
